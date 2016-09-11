@@ -2,7 +2,8 @@
 layout: post
 title:  "Building a mock location app for Android."
 date:   2016-09-02 15:30:00 +0800
-categories: jekyll update
+categories: android
+tags: [android, gps, location, spoofing]
 ---
 <p>Recently I've been asked to test the android app I'm developing for my client.
 The app is called SurveyBods and owned by the company called Researchbods and it is only available in the UK.
