@@ -17,7 +17,7 @@ The layout will contain the required input for latitude,longitude and accuracy.<
 
 <h4>activity_main.xml</h4>
 
-{% highlight xml linenos %}
+{% highlight xml %}
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
@@ -29,9 +29,11 @@ The layout will contain the required input for latitude,longitude and accuracy.<
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.emmanuelcorrales.locationspoofer.MainActivity">
+
     <android.support.design.widget.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+
         <EditText
             android:id="@+id/latitude"
             android:layout_width="match_parent"
@@ -39,10 +41,13 @@ The layout will contain the required input for latitude,longitude and accuracy.<
             android:ems="10"
             android:hint="@string/latitude"
             android:inputType="numberDecimal|numberSigned" />
+
     </android.support.design.widget.TextInputLayout>
+
     <android.support.design.widget.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+
         <EditText
             android:id="@+id/longitude"
             android:layout_width="match_parent"
@@ -50,10 +55,13 @@ The layout will contain the required input for latitude,longitude and accuracy.<
             android:ems="10"
             android:hint="@string/longitude"
             android:inputType="numberDecimal|numberSigned" />
+
     </android.support.design.widget.TextInputLayout>
+
     <android.support.design.widget.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+
         <EditText
             android:id="@+id/accuracy"
             android:layout_width="match_parent"
@@ -61,19 +69,22 @@ The layout will contain the required input for latitude,longitude and accuracy.<
             android:ems="10"
             android:hint="@string/accuracy"
             android:inputType="numberDecimal" />
+
     </android.support.design.widget.TextInputLayout>
+
     <Button
         android:id="@+id/mock_location"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="OK" />
+        
 </LinearLayout>
 {% endhighlight %}
 
 <p>Next we create our MainActivity.</p>
 
 <h4>MainActivity.java</h4>
-{% highlight java linenos %}
+{% highlight java %}
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     private LocationManager mLocationManager;
