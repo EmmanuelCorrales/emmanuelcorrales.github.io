@@ -24,7 +24,7 @@ Card Flipping
 
 <b>activity_main.xml</b>
 
-{% highlight xml linenos %}
+{% highlight xml %}
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
@@ -75,9 +75,8 @@ Card Flipping
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:onClick="onClick"
-            android:text="@string/alpha" />
+            android:text="@string/alpha" />  
     </LinearLayout>
-
 </RelativeLayout>
 {% endhighlight %}
 
