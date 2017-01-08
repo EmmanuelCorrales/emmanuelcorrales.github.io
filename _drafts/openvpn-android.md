@@ -28,7 +28,7 @@ To demonstrate how to use Tunnel, I built a <a href="https://github.com/Emmanuel
 On your project build.gradle file add the repository for
 <a href="https://emmanuelcorrales.github.io/tunnel/">Tunnel</a> like below.
 
-{% highlight %}
+{% highlight groovy %}
 allprojects {
     repositories {
         jcenter()
@@ -41,6 +41,6 @@ allprojects {
 
 Add as dependency on your app module build.gradle file.
 
-{% highlight %}
+{% highlight groovy %}
 compile 'com.emmanuelcorrales:tunnel:1.0.0'
 {% endhighlight %}
