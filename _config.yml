@@ -21,6 +21,8 @@ url: "http://emmanuelcorrales.com" # the base hostname & protocol for your site
 twitter_username: emcorrales22
 github_username:  EmmanuelCorrales
 google_analytics: UA-80537045-1
+disqus:
+    shortname: emmanuel-corrales
 
 # Build settings
 markdown: kramdown
