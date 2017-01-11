@@ -15,13 +15,16 @@ ways to upload images on Rails, I stumbled upon two gems that simplifies this ta
 I tried Paperclip first because there's a good documentation on how to use it on
 the Heroku website, however a senior colleague of mine recommended
 <a href="https://github.com/carrierwaveuploader/carrierwave">Carrierwave</a>
-because it is much simpler and cleaner.</p>
-
-<h2>Setup Amazon S3</h2>
-<p>This article does not cover setting up S3 bucket.</p>
+because it is much simpler and cleaner to implement.</p>
 <br/>
 
-<h2>Rails Photos app</h2>
+<h2>Setup Amazon S3</h2>
+<p>This article does not cover setting up an Amazon S3 bucket. This article assumes that you have
+already setup your Amazon S3 bucket and familiar with your AWS credentials. You should
+know your bucket's name, host name, AWS access id, AWS secret access key and AWS region.</p>
+<br/>
+
+<h2>Photos app</h2>
 <p>I'll demonstrate how to upload files to S3 with
 <a href="https://github.com/carrierwaveuploader/carrierwave">Carrierwave</a>
 on Rails by building a simple photos app. First create a new rails project by
@@ -38,6 +41,53 @@ executing the command below.</p>
 rails g model photo name:string image:string
 rake db:migrate
 {% endhighlight %}
+
+<br/>
+
+<h3>Setup Figaro</h3>
+
+<p>Use the gem <a href="https://github.com/laserlemon/figaro">Figaro</a> to
+make it easy to securely configure Rails applications.</p>
+<p>Add figaro gem to your Gemfile.</p>
+
+{% highlight ruby %}
+gem 'figaro'
+{% endhighlight %}
+
+<p>Install figaro.</p>
+
+{% highlight shell %}
+bundle install
+bundle exec figaro install
+{% endhighlight %}
+
+<p>This will generate an <b>application.yml</b> file at the config directory.
+The file's content should look like the code below. Replace the value with your
+Amazon S3 bucket's credentials.</p>
+
+<b>config/application.yml</b>
+{% highlight ruby %}
+S3_BUCKET_NAME: "mybucketname"
+AWS_ACCESS_KEY_ID: "AKI84JDHFYRKW80Q43RQ"
+AWS_SECRET_ACCESS_KEY: "HJD348asd3dgdj3ysdjshHDSJ39DSH393D"
+AWS_REGION: "ap-southeast-1"
+{% endhighlight %}
+
+<p>This file contains the credentials for your S3 bucket and shouldn't be added
+to your git repository, fortunately figaro adds this file to your <b>.gitignore</b>
+file upon installation. A good practice for using figaro is adding an
+<b>application.yml.template</b> file to your repository's config directory so that
+other users can just copy its contents when setting up their application.yml on
+their new development environment.</p>
+
+<b>config/application.yml.template</b>
+{% highlight ruby %}
+S3_BUCKET_NAME: ""
+AWS_ACCESS_KEY_ID: ""
+AWS_SECRET_ACCESS_KEY: ""
+AWS_REGION: ""
+{% endhighlight %}
+
 <br/>
 <h3>Setup Carrierwave</h3>
 
@@ -92,10 +142,11 @@ and <a href="https://github.com/rmagick/rmagick">RMagick</a> for photo resizing.
 In this case I chose to use <a href="https://github.com/minimagick/minimagick">MiniMagick</a>
 because it is more lightweight compared to <a href="https://github.com/rmagick/rmagick">RMagick</a>.
 Set fog as the storage option instead of file, because we are gonna use Amazon S3 for storage.
-The method <b>stor_dir</b> returns the url where the file should be uploaded.</p>
+The method <b>stor_dir</b> sets where the file should be uploaded.</p>
 
-<p>Mount the image uploader by modifying the Photo model at
-<b>app/models/photo.rb</b> to look like this:</p>
+<br/>
+<p>Mount the image uploader on the Photo model.</p>
+<b>app/models/photo.rb</b>
 
 {% highlight ruby %}
 class Photo < ActiveRecord::Base
@@ -103,8 +154,11 @@ class Photo < ActiveRecord::Base
 end
 {% endhighlight %}
 
+<br/>
 <p>Configure <a href="https://github.com/carrierwaveuploader/carrierwave">Carrierwave</a>
-to use S3 credentials by creating a the file at <b>config/initializers/carrierwave.rb</b>.</p>
+to use S3 credentials and stop it from using SSL when accessing the bucket.<p>
+
+<b>config/initializers/carrierwave.rb</b>
 
 {% highlight ruby %}
 CarrierWave.configure do |config|
@@ -115,15 +169,17 @@ CarrierWave.configure do |config|
       :region                 => ENV['AWS_REGION']
   }
   config.fog_directory  = ENV['S3_BUCKET_NAME']
+  config.fog_use_ssl_for_aws = false
 end
 {% endhighlight %}
 
+<br/>
 <br/>
 <h3>Controller and views</h3>
 <p>Create a Photo controller by executing the command below.</p>
 
 {% highlight shell %}
-rails g controller photo
+rails g controller photos
 {% endhighlight %}
 
 <p>Modify the PhotosController to
@@ -221,7 +277,7 @@ reference to the resized version of the image.</p>
 <p>Create a partial form for our <b>new</b> and <b>edit</b> actions. The <b>file_field</b> will
 be used for selecting a file to upload. Take note of <b>:html => {:multipart => true}</b>,
 this is necessary to upload the image in multiple chunks.</p>
-<b>app/views/photos/form.html.erb</b>
+<b>app/views/photos/_form.html.erb</b>
 
 {% highlight rhtml %}
 <%= form_for(@photo,:html => {:multipart => true}) do |f| %>
@@ -260,50 +316,34 @@ size of the uploaded.</p>
 
 {% highlight rhtml %}
 <p id="notice"><%= notice %></p>
-<td><%= image_tag photo.name %></td>
-<td><%=  image_tag photo.image %></td>
+<td><%= @photo.name %></td>
+<td><%=  image_tag @photo.image %></td>
 <%= link_to 'Edit', edit_photo_path(@photo) %> |
 <%= link_to 'Back', photos_path %>
-
 {% endhighlight %}
 
-<br/>
+<b>app/views/photos/new.html.erb</b>
 
-<h3>Setup Figaro.</h3>
-
-<p>The last thing we will do is setup the environment variables.
-We will use the gem <a href="https://github.com/laserlemon/figaro">Figaro</a> to
-make it easy to securely configure Rails applications.</p>
-<p>Add figaro gem to your Gemfile.</p>
-
-{% highlight ruby %}
-gem 'figaro'
+{% highlight rhtml %}
+<h1>New Photo</h1>
+<%= render 'form' %>
+<%= link_to 'Back', photos_path %>
 {% endhighlight %}
 
-<p>Install figaro.</p>
+<b>app/views/photos/edit.html.erb</b>
 
-{% highlight shell %}
-bundle install
-bundle exec figaro install
+{% highlight rhtml %}
+<h1>Editing Photo</h1>
+<%= render 'form' %>
+<%= link_to 'Show', @photo %> |
+<%= link_to 'Back', photos_path %>
 {% endhighlight %}
 
-<p>This will generate an <b>application.yml</b> file at the config directory.
-This file will contain the credentials for your S3 bucket and shouldn't be added
-to your git repository, fortunately figaro adds this file to your .gitignore upon
-installation. A good practice for using figaro is adding an <b>application.yml.template</b>
-file to your repository's config directory so that other users can just copy its
-contents when setting up their application.yml on their new development environment.</p>
+<p>The photos app is now finished. Now execute the code below.</p>
 
-<b>config/application.yml.template</b>
-{% highlight ruby %}
-S3_BUCKET_NAME: ""
-S3_HOST_NAME: ""
-AWS_ACCESS_KEY_ID: ""
-AWS_SECRET_ACCESS_KEY: ""
-AWS_REGION: ""
-{% endhighlight %}
-
-<p>The photos app is now finished. Now execute the code below and see if it works.</p>
 {% highlight shell %}
 rails s
 {% endhighlight %}
+
+<p>Now go to <a href="http://localhost:3000/photos">http://localhost:3000/photos</a>
+ and see the rails photo app work. Happy coding!</p>
