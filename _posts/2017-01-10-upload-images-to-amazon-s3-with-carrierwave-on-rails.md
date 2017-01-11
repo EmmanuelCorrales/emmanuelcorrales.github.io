@@ -16,7 +16,6 @@ I tried Paperclip first because there's a good documentation on how to use it on
 the Heroku website, however a senior colleague of mine recommended
 <a href="https://github.com/carrierwaveuploader/carrierwave">Carrierwave</a>
 because it is much simpler and cleaner to implement.</p>
-<br/>
 
 <h2>Setup Amazon S3</h2>
 <p>This article does not cover setting up an Amazon S3 bucket. This article assumes that you have
