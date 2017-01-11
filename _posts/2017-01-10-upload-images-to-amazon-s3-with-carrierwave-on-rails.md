@@ -26,8 +26,10 @@ know your bucket's name, host name, AWS access id, AWS secret access key and AWS
 <h2>Photos app</h2>
 <p>I'll demonstrate how to upload files to S3 with
 <a href="https://github.com/carrierwaveuploader/carrierwave">Carrierwave</a>
-on Rails by building a simple photos app. First create a new rails project by
-executing the command below.</p>
+on Rails by building a simple photos app. You can download the source code
+<a href="https://github.com/EmmanuelCorrales/rails-carrierwave-s3-sample">here</a>.</p>
+
+<p>Create a new rails project by executing the command below.</p>
 
 {% highlight shell %}
 rails new photos
