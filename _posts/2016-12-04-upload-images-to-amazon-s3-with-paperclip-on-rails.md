@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "Upload images to Amazon S3 with Paperclip on Rails"
-date:   2016-12-10 00:22:33 +0800
+date:   2016-12-04 00:22:33 +0800
 categories: ruby rails s3 amazon web services
 tags: [ ruby, rails, s3, amazon web services, figaro, imagemagick, fog, paperclip ]
 ---
