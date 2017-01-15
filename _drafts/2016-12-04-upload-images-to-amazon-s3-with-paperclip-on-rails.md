@@ -5,18 +5,23 @@ date:   2016-12-10 00:22:33 +0800
 categories: ruby rails s3 amazon web services
 tags: [ ruby, rails, s3, amazon web services, figaro, imagemagick, fog, paperclip ]
 ---
-<p>Sometimes uploading files to your server's local filesystem is not enough due to some constraints like a limited disk space or bandwidth and potential security issues caused by allowing users to upload files to your server. Most developers prefer to upload their files to Amazon S3.</p>
+<p>Sometimes uploading files to your server's local filesystem is not enough due
+to some constraints like a limited disk space and potential security issues caused
+by allowing users to upload files to your server. Using third party services like
+Amazon S3 for file storage is a good way to solve these issues. I decided to use the
+<a href="https://github.com/thoughtbot/paperclip">Paperclip</a> gem to implement
+this functionality on my Rails app.</p>
 
 <h2>Setup Amazon S3</h2>
 <p>This article does not cover setting up an Amazon S3 bucket. This article assumes that you have
 already setup your Amazon S3 bucket and familiar with your AWS credentials. You should
-know your bucket's name, host name, AWS access id, AWS secret access key and AWS region.</p>
+know your Amazon S3 bucket's name, access id, secret access key and region.</p>
 <br/>
 
-<h2>Products app</h2>
+<h2>Demo app</h2>
 <p>I'll demonstrate how to upload files to S3 with
 <a href="https://github.com/thoughtbot/paperclip">Paperclip</a>
-on Rails by building a simple photos app. You can download the source code
+on Rails by building a simple demo app. You can download the source code
 <a href="https://github.com/EmmanuelCorrales/rails-paperclip-s3-example">here</a>.</p>
 
 <p>Create a new rails project by executing the command below.</p>
@@ -25,27 +30,19 @@ on Rails by building a simple photos app. You can download the source code
 rails new paperclip-s3-example
 {% endhighlight %}
 
-<p>Generate and migrate a Product model with an attribute "name"  by
-executing the command below.</p>
-
-{% highlight shell %}
-rails g model product name:string
-rake db:migrate
-{% endhighlight %}
-
 <br/>
 
 <h3>Setup Figaro</h3>
 
 <p>Use the gem <a href="https://github.com/laserlemon/figaro">Figaro</a> to
-make it easy to securely configure Rails applications.</p>
-<p>Add figaro gem to your Gemfile.</p>
+make it easy to securely configure the rails demo application.</p>
+<p>Add this line to your Gemfile.</p>
 
 {% highlight ruby %}
 gem 'figaro'
 {% endhighlight %}
 
-<p>Install figaro.</p>
+<p>Install figaro by executing the commands below.</p>
 
 {% highlight shell %}
 bundle install
@@ -80,13 +77,15 @@ AWS_REGION: ""
 {% endhighlight %}
 
 <br/>
-<h3>Configure Paperclip</h3>
+<h3>Configure Paperclip to use Amazon S3</h3>
+<p>Use the official <a href="https://github.com/aws/aws-sdk-ruby">AWS</a> and
+<a href="https://github.com/thoughtbot/paperclip">Paperclip</a> gems.</p>
 
 <p>Add these lines to the Gemfile.</p>
 
 {% highlight ruby %}
-gem "paperclip", "~> 5.0.0"
-gem 'aws-sdk', '~> 2.3'
+gem 'paperclip', '~> 5.0.0'
+gem 'aws-sdk', '~> 2'
 {% endhighlight %}
 
 <p>Install these gems by executing the code below.</p>
@@ -106,28 +105,47 @@ config.paperclip_defaults = {
       access_key_id: ENV.fetch('AWS_ACCESS_KEY_ID'),
       secret_access_key: ENV.fetch('AWS_SECRET_ACCESS_KEY'),
       s3_region: ENV.fetch('AWS_REGION'),
-      s3_host_name: ENV.fetch('S3_HOST_NAME'),
     }
 }
 {% endhighlight %}
 
-<p>Create a migration that adds an image attribute to the product model.</p>
+<br/>
+
+<h3>Product model</h3>
+
+<p>Generate a Product model with an attribute "name"  by executing the command below.</p>
 
 {% highlight shell %}
-rails g migration add_image_to_products
+rails g model product name:string
 {% endhighlight %}
 
-<p>Modify the generated migration to look like the code below.</p>
+<p>Add an image attachment attribute by execute the command below.</p>
+
+{% highlight shell %}
+rails g paperclip product image
+{% endhighlight %}
+
+<p>This will generate a migration like the code below.</p>
+
+<b>db/migrate/20161203110020_add_attachment_image_to_products.rb</b>
 {% highlight ruby %}
-class AddImageToProducts < ActiveRecord::Migration
+class AddAttachmentImageToProducts < ActiveRecord::Migration
   def self.up
-    add_attachment :products, :image
+    change_table :products do |t|
+      t.attachment :image
+    end
   end
 
   def self.down
     remove_attachment :products, :image
   end
 end
+{% endhighlight %}
+
+<p>Execute the migration by running the code below.
+
+{% highlight shell %}
+rake db:migrate
 {% endhighlight %}
 
 <p>Modify the Product model to add attachment functionality. Use the Paperclip
@@ -148,7 +166,7 @@ end
 
 <br/>
 
-<h3>Controller and views</h3>
+<h3>Products controller</h3>
 
 <p>Generate a controller for products.</p>
 
@@ -212,6 +230,10 @@ class ProductsController < ApplicationController
     end
 end
 {% endhighlight %}
+
+<br/>
+
+<h3>Diplaying the image on your views</h3>
 
 <p>Create an index file for our homepage. Its content should look like the code
 below and take note of the <b>product.image.url(:thumb)</b>. It is the
@@ -312,11 +334,22 @@ size of the uploaded.</p>
 <%= link_to 'Back', products_path %>
 {% endhighlight %}
 
-<p>The photos app is now finished. Now execute the code below.</p>
+<br/>
+
+<p>Make sure we have configured our routes properly.</p>
+<b>config/routes.rb</b>
+
+{% highlight ruby %}
+Rails.application.routes.draw do
+  resources :products
+end
+{% endhighlight %}
+
+<p>The photos app is finished. Execute the code below.</p>
 
 {% highlight shell %}
 rails s
 {% endhighlight %}
 
-<p>Now go to <a href="http://localhost:3000/photos">http://localhost:3000/photos</a>
+<p>Go to <a href="http://localhost:3000/photos">http://localhost:3000/photos</a>
  and see the rails photo app work. Happy coding!</p>
