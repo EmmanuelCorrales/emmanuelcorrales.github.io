@@ -1,21 +1,21 @@
 ---
 layout: post
-title:  "Upload images to Amazon S3 with Carrierwave on Rails."
+title:  "Upload images to Amazon S3 with Carrierwave on Rails"
 date:   2017-01-10 00:22:33 +0800
 categories: ruby rails s3 amazon web services
 tags: [ ruby, rails, s3, amazon web services, figaro, carrierwave, mini_magick, fog, paperclip ]
 ---
-<p>Sometimes uploading files to your server's local filesystem is not enough due
-to some constraints like a limited disk space or bandwidth and potential security
-issues caused by allowing users to upload files to your server.
-Most developers prefer to upload their files to Amazon S3. While searching for
-ways to upload images on Rails, I stumbled upon two gems that simplifies this task,
+<p>While searching for ways to upload images to Amazon S3 on Rails, I stumbled
+upon two gems that simplifies this task,
 <a href="https://github.com/thoughtbot/paperclip">Paperclip</a> and
 <a href="https://github.com/carrierwaveuploader/carrierwave">Carrierwave</a>.
-I tried Paperclip first because there's a good documentation on how to use it on
-the Heroku website, however a senior colleague of mine recommended
-<a href="https://github.com/carrierwaveuploader/carrierwave">Carrierwave</a>
-because it is much simpler and cleaner to implement.</p>
+I tried <a href="https://github.com/thoughtbot/paperclip">Paperclip</a> first and
+made an article about it <a href="http://emmanuelcorrales.com/posts/upload-images-to-amazon-s3-with-paperclip-on-rails">here</a>.
+A senior colleague of mine recommended
+<a href="https://github.com/carrierwaveuploader/carrierwave">Carrierwave</a>, so
+I tried to give it a shot and it was worth it.
+It is much cleaner to implement because it requires the user to create a helper class for uploading.
+The model just needs to mount the helper class. This separates the code for uploading unlike on <a href="https://github.com/thoughtbot/paperclip">Paperclip</a> where the code for uploading is included in the model and requires the user to create a migration.</p>
 
 <h2>Setup Amazon S3</h2>
 <p>This article does not cover setting up an Amazon S3 bucket. This article assumes that you have
