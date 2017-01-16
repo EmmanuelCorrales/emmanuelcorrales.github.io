@@ -345,11 +345,11 @@ Rails.application.routes.draw do
 end
 {% endhighlight %}
 
-<p>The photos app is finished. Execute the code below.</p>
+<p>The app is finished. Execute the code below.</p>
 
 {% highlight shell %}
 rails s
 {% endhighlight %}
 
-<p>Go to <a href="http://localhost:3000/photos">http://localhost:3000/photos</a>
- and see the rails photo app work. Happy coding!</p>
+<p>Go to <a href="http://localhost:3000/products">http://localhost:3000/products</a>
+ and see the rails app work. Happy coding!</p>
