@@ -340,11 +340,22 @@ size of the uploaded.</p>
 <%= link_to 'Back', photos_path %>
 {% endhighlight %}
 
-<p>The photos app is now finished. Now execute the code below.</p>
+<br/>
+
+<p>Make sure we have configured our routes properly.</p>
+<b>config/routes.rb</b>
+
+{% highlight ruby %}
+Rails.application.routes.draw do
+  resources :photos
+end
+{% endhighlight %}
+
+<p>The photos app is finished. Execute the code below.</p>
 
 {% highlight shell %}
 rails s
 {% endhighlight %}
 
-<p>Now go to <a href="http://localhost:3000/photos">http://localhost:3000/photos</a>
+<p>Go to <a href="http://localhost:3000/photos">http://localhost:3000/photos</a>
  and see the rails photo app work. Happy coding!</p>
