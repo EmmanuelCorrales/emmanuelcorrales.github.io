@@ -7,7 +7,7 @@ tags: [ ruby, rails, friendly_id ]
 ---
 <p>Rails by default uses a numeric id as a parameter for its URL. Sometimes when
 building a website such as this blog, instead of 'blog.emmmanuelcorrales.com/posts/4'
-we want our url to be like 'blog.emmmanuelcorrales.com/posts/pretty-urls-for-rails-with-friendlyid'.
+we want the url to be like 'blog.emmmanuelcorrales.com/posts/pretty-urls-for-rails-with-friendlyid'.
 We can achieve this by using the <a href="https://github.com/norman/friendly_id">FriendlyID</a>
 gem. In this tutorial I'll show you how to use <a href="https://github.com/norman/friendly_id">FriendlyID</a>.</p>
 
