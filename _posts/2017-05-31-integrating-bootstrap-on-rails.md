@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "Integrating Bootstrap on Rails"
-date:   2017-05-30 08:30:00 +0800
+date:   2017-05-31 08:30:00 +0800
 categories: ruby rails bootstrap
 tags: [ ruby, rails, bootstrap ]
 ---
