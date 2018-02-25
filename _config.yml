@@ -15,11 +15,11 @@
 # in the templates via {{ site.myvariable }}.
 title: Emmanuel Corrales
 email: contact@emmanuelcorrales.com
-description: "Hello, and welcome to my blog. My name is Emmanuel Corrales. I'm a
-software developer. I made this blog so I can share my knowledge to the world
-and help other software developers like me. If you are here then you must be looking
-for possible solutions to your programming problems. I hope some of my post can
-help you. If you have suggestions and comments please do not hesitate to contact me."
+description: "Emmanuel Corrales is a software engineer with a passion for developing software.
+ He has a degree in computer science and loves clean and well-tested code. Currently he is
+ working with Javascript and Ruby on Rails applications. His favorite tool is the terminal.
+ He works with it, lives with it and will probably not survive without it. He is a big fan of
+ open source and is always trying to learn something new."
 baseurl: "" # the subpath of your site, e.g. /blog
 url: "http://blog.emmanuelcorrales.com" # the base hostname & protocol for your site
 twitter_username: emcorrales22
