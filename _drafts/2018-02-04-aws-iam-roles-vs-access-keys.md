@@ -29,7 +29,7 @@ tags: [ aws, roles]
 <h3>Development Scenarios</h3>
 
 <p>EC2 intances with applications on them. The application need to access services like S3.
- Instead of manually assigning credentials and rotating them, use IAM Roles.
+ Instead of manually assigning credentials and rotating them, use IAM Roles.</p>
 
 <p>Mobile applications that access services like S3 require access keys.
  This is not secure because it can be decompiled and extracted.</p>
