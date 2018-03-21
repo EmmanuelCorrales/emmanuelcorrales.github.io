@@ -127,6 +127,8 @@ GEM
       jekyll (~> 3.3)
     jekyll-theme-hacker (0.0.3)
       jekyll (~> 3.3)
+    jekyll-theme-hyde (2.0.0)
+      jekyll (~> 3.3)
     jekyll-theme-leap-day (0.0.3)
       jekyll (~> 3.3)
     jekyll-theme-merlot (0.0.3)
@@ -196,7 +198,7 @@ PLATFORMS
 
 DEPENDENCIES
   github-pages
-  minima
+  jekyll-theme-hyde (~> 2.0)
 
 RUBY VERSION
    ruby 2.4.3p205

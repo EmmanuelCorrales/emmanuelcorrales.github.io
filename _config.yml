@@ -32,5 +32,5 @@ disqus:
 
 # Build settings
 markdown: kramdown
-theme: minima
+theme: jekyll-theme-hyde
 permalink: /posts/:title
