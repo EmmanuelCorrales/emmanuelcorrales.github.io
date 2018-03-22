@@ -14,10 +14,11 @@
 # You can create any custom variable you would like, and they will be accessible
 # in the templates via {{ site.myvariable }}.
 title: Emmanuel Corrales
+tagline: Software Engineer
 email: contact@emmanuelcorrales.com
 description: "Software Engineer"
 baseurl: "" # the subpath of your site, e.g. /blog
-url: "http://blog.emmanuelcorrales.com" # the base hostname & protocol for your site
+url: "https://emmanuelcorrales.com" # the base hostname & protocol for your site
 twitter_username: emcorrales22
 github_username:  EmmanuelCorrales
 google_analytics: UA-80537045-2
