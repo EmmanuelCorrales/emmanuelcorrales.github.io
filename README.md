@@ -1,1 +1,1 @@
-# https://blog.emmanuelcorrales.com/
+# https://emmanuelcorrales.com/
