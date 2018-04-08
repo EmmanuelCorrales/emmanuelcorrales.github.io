@@ -30,7 +30,7 @@ class User < ApplicationRecord
 end
 {% endhighlight %}
 
-Now generate the TransferModel by executing the command:
+Lets generate the TransferModel by executing the command:
 {% highlight shell %}
 # Generates a TransferRequest model
 rails g model TransferRequest sender:references receiver:references
@@ -61,20 +61,82 @@ class CreateTransferRequests < ActiveRecord::Migration[5.1]
 end
 {% endhighlight %}
 
-When I was new to Ruby on Rails, I would think that this is enough to setup the
-model TransferAsset and the association with its attributes. Let's run a
-migration and see what happens by executing the command below.
+Lets run a migration to apply the changes to our database.
 
 {% highlight shell %}
-rails db:migrate # Same as rake db:migrate
+rails db:migrate # rake db:migrate if using Rails 4 and below.
 {% endhighlight %}
 
-The command above would fail and show an error. At the CreateTransferRequest
-migration file, the table 'transfer_request' references its attribute 'sender'
-as a foreign key and because of this Rails assumed that a table called 'sender'
-exists which does not. The same is true for the attribute 'receiver'. To fix
-this, the value of the foreign_key should be false or we can just ommit the part
-where the foreign_key is passed since it is false by default like the code below.
+When I was new to Ruby on Rails, I would think that this is enough to setup the
+model TransferAsset and the association with its attributes.
+
+Lets write a unit test that checks the belongs_to association. If you are using
+Rspec with the 'Shoulda matchers' gem it would look like this:
+
+{% highlight ruby %}
+# spec/models/transfer_request_spec.rb
+require 'rails_helper'
+
+RSpec.describe TransferRequest, type: :model do
+  it { is_expected.to belong_to :sender }
+  it { is_expected.to belong_to :receiver }
+end
+{% endhighlight %}
+
+Now the run the test to check if the association was set up properly. Run the
+command below if you are using Rspec.
+
+{% highlight shell %}
+bundle exec rspec
+{% endhighlight %}
+
+The test will fail.
+
+Lets analyze how this happened by first looking at the CreateTransferRequest
+migration file and the changes it contributed to the 'db/schema.rb' file after
+running the migration. Running the migration modifies the db/schema.rb. This
+piece of code will be added to it. Take note of the last two lines on the code
+below.
+
+{% highlight ruby %}
+# db/schema.rb
+create_table "transfer_requests", force: :cascade do |t|
+  t.bigint "sender_id"
+  t.bigint "receiver_id"
+  t.datetime "created_at", null: false
+  t.datetime "updated_at", null: false
+  t.index ["receiver_id"], name: "index_transfer_requests_on_receiver_id"
+  t.index ["sender_id"], name: "index_transfer_requests_on_sender_id"
+end
+
+add_foreign_key "transfer_requests", "sender"
+add_foreign_key "transfer_requests", "receiver"
+{% endhighlight %}
+
+This instructs Rails Active Record to create the table 'tansfer_request' with
+columns 'sender_id' and 'receiver_id' which is represented by TransferRequest as
+a model. The last two lines call the method 'add_foreign_key' which takes a
+table where the foreign keys reside as the first argument and another table that
+will be references by the foreign key as the second argument. Because of this
+Rails assumes that a table called 'sender' and 'receiver' actually exists which
+isn't true.
+
+To fix this, we need to remove the last two lines on our code snippet to prevent
+Rails from referencing the tables that don't exist however we can't just remove
+the last two lines on the 'db/schema.rb' because it will be inconsistent with
+our migration file. We need to modify the CreateTransferRequest migration but
+before that we must undo some changes to the database by rolling it back to the
+state where the 'transfer_request' table doesn't exist. Execute the command
+below to revert the last migration and undo the changes to the databse.
+
+{% highlight ruby %}
+rails db:migrate # rake db:migrate if using Rails 4 and below.
+{% endhighlight %}
+
+This would revert the database and the 'db/schema.rb' file to its previous
+state. On the CreateTransferRequest migration file the value of the 'foreign_key'
+should be false or we can just ommit the part where the foreign_key is passed
+since it is false by default like the code below.
 
 {% highlight ruby %}
 # db/migrations/20180404063005_create_transfer_requests.rb
@@ -90,13 +152,13 @@ class CreateTransferRequests < ActiveRecord::Migration[5.1]
 end
 {% endhighlight %}
 
-Now lets run the migration which creates a table for User and TransferRequest.
+Now lets run the migration again.
 {% highlight shell %}
 rails db:migrate # Same as rake db:migrate
 {% endhighlight %}
 
-Running the migration will modify the db/schema.rb.
-This piece of code will be added to it.
+The 'db/schema.rb' should be appended with the code below. It is expected not to
+call the 'add_foreign_key' method.
 
 {% highlight ruby %}
 # db/schema.rb
@@ -109,10 +171,6 @@ create_table "transfer_requests", force: :cascade do |t|
   t.index ["sender_id"], name: "index_transfer_requests_on_sender_id"
 end
 {% endhighlight %}
-
-This instructs Rails Active Record to create the table 'tansfer_request' with
-columns 'sender_id' and 'receiver_id' which is represented by TransferRequest as
-a model.
 
 TransferRequest still doesn't know that its attributes 'sender' and 'receiver'
 are instances of User so we pass class_name: 'User' as an argument to the method
@@ -150,4 +208,4 @@ Active Record association. The second argument tells Rails that it is an
 instance of TranferRequest. The third argument specifies which the column of the
 of the table "transfer_request' is the foreign key.
 
-And thats it!
+If you run the test now then it would succeed.
