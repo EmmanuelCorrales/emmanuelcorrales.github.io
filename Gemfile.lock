@@ -1,3 +1,10 @@
+GIT
+  remote: git://github.com/EmmanuelCorrales/hyde-plus.git
+  revision: e0c72935df8a4d80459b7c19d8b917eee33ace67
+  specs:
+    hyde-plus (0.1.0)
+      jekyll (~> 3.7)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -155,8 +162,6 @@ GEM
     jekyll-theme-hacker (0.1.0)
       jekyll (~> 3.5)
       jekyll-seo-tag (~> 2.0)
-    jekyll-theme-hyde (2.0.0)
-      jekyll (~> 3.3)
     jekyll-theme-leap-day (0.1.0)
       jekyll (~> 3.5)
       jekyll-seo-tag (~> 2.0)
@@ -247,7 +252,7 @@ PLATFORMS
 
 DEPENDENCIES
   github-pages
-  jekyll-theme-hyde (~> 2.0)
+  hyde-plus!
 
 RUBY VERSION
    ruby 2.4.3p205
