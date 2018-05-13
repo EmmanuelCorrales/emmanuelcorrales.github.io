@@ -27,7 +27,7 @@ disqus:
 
 # Build settings
 markdown: kramdown
-theme: hyde-plus
+theme: jekyll-theme-hyde-plus
 permalink: /blog/:title
 
 # Social settings
