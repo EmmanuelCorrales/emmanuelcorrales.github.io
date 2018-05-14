@@ -15,25 +15,24 @@
 # in the templates via {{ site.myvariable }}.
 title: Emmanuel Corrales
 tagline: Software Engineer
-email: contact@emmanuelcorrales.com
 description: "Software Engineer"
-baseurl: "" # the subpath of your site, e.g. /blog
 url: "https://emmanuelcorrales.com" # the base hostname & protocol for your site
-twitter_username: em_corrales
-github_username:  EmmanuelCorrales
-google_analytics: UA-80537045-1
-disqus:
-    shortname: emmanuel-corrales
+baseurl: "" # the subpath of your site, e.g. /blog
 
 # Build settings
 markdown: kramdown
 theme: jekyll-theme-hyde-plus
 permalink: /blog/:title
 
-# Social settings
-twitter_username: em_corrales
-linkedin_username: emmanuelcorrales
-github_username: EmmanuelCorrales
-email: contact@emmanuelcorrales.com
-disqus_username: emmanuel-corrales
+social:
+  twitter:        em_corrales
+  linkedin:       emmanuelcorrales
+  github:         EmmanuelCorrales
+  disqus:         emmanuel-corrales
 
+google_analytics: UA-80537045-1
+
+author:
+  name:           'Emmanuel Corrales'
+  email:          contact@emmanuelcorrales.com
+  url:            https://emmanuelcorrales.com

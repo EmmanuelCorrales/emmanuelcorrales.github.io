@@ -13,7 +13,7 @@ ruby RUBY_VERSION
 
 # This is the default theme for new Jekyll sites. You may change this to anything you like.
 # gem "minima"
-gem "jekyll-theme-hyde-plus", "~> 0.2.0"
+gem "jekyll-theme-hyde-plus", "~> 0.3.0"
 # gem 'jekyll-theme-hyde-plus', git: "git://github.com/EmmanuelCorrales/hyde-plus.git", branch: "dev"
 
 # If you want to use GitHub Pages, remove the "gem "jekyll"" above and
