@@ -38,7 +38,7 @@ GEM
       sass (~> 3.4)
     jekyll-seo-tag (2.4.0)
       jekyll (~> 3.3)
-    jekyll-theme-hyde-plus (0.3.2)
+    jekyll-theme-hyde-plus (0.3.3)
       jekyll (~> 3.7)
       jekyll-feed (~> 0.9.3)
       jekyll-gist (~> 1.5.0)
