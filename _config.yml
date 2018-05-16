@@ -25,6 +25,7 @@ baseurl: "" # the subpath of your site, e.g. /blog
 markdown: kramdown
 theme: jekyll-theme-hyde-plus
 permalink: /blog/:title
+paginate: 5
 
 social:
   twitter:        em_corrales

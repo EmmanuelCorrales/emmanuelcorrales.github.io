@@ -6,7 +6,7 @@ title: Home
 <div class="home">
 
   <ul class="post-list">
-    {% for post in site.posts %}
+    {% for post in paginator.posts %}
       <li>
         <h2>
           <a class="post-link" href="{{ post.url | prepend: site.baseurl }}">{{ post.title | escape }}</a>
@@ -16,5 +16,22 @@ title: Home
       </li>
     {% endfor %}
   </ul>
+
+  <div class="pagination">
+    {% if paginator.next_page %}
+      <a class="pagination-item older" href="{{ site.url }}/page{{paginator.next_page}}">Older</a>
+    {% else %}
+      <span class="pagination-item older">Older</span>
+    {% endif %}
+    {% if paginator.previous_page %}
+      {% if paginator.page == 2 %}
+        <a class="pagination-item newer" href="{{ site.url }}">Newer</a>
+      {% else %}
+        <a class="pagination-item newer" href="{{ site.url }}/page{{paginator.previous_page}}">Newer</a>
+      {% endif %}
+    {% else %}
+      <span class="pagination-item newer">Newer</span>
+    {% endif %}
+  </div>
 
 </div>
