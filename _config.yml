@@ -15,7 +15,8 @@
 # in the templates via {{ site.myvariable }}.
 title: Emmanuel Corrales
 tagline: Software Engineer
-description: "Software Engineer"
+description: "Software Engineer · Blogger · Casual Gamer · Command Line Junkie ·
+Android · IOS · Java · NodeJS · Python · Ruby on Rails · Spring · .Net · Linux"
 url: "https://emmanuelcorrales.com" # the base hostname & protocol for your site
 baseurl: "" # the subpath of your site, e.g. /blog
 
