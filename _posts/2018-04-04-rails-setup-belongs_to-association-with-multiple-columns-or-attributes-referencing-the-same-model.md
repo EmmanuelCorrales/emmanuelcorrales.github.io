@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "Ruby on Rails: Setup a belongs_to association with multiple columns/attributes referencing the same model"
+title:  "Ruby on Rails: Setup associations referencing the same model"
 date:   2018-04-04 17:06:33 +0800
 categories: ruby rails
 tags: [ ruby, rails ]
