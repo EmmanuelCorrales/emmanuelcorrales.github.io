@@ -9,14 +9,14 @@ GEM
       eventmachine (>= 0.12.9)
       http_parser.rb (~> 0.6.0)
     eventmachine (1.2.7)
-    faraday (0.15.1)
+    faraday (0.15.2)
       multipart-post (>= 1.2, < 3)
     ffi (1.9.23)
     forwardable-extended (2.6.0)
     http_parser.rb (0.6.0)
     i18n (0.9.5)
       concurrent-ruby (~> 1.0)
-    jekyll (3.8.1)
+    jekyll (3.8.2)
       addressable (~> 2.4)
       colorator (~> 1.0)
       em-websocket (~> 0.5)
@@ -38,7 +38,7 @@ GEM
       sass (~> 3.4)
     jekyll-seo-tag (2.4.0)
       jekyll (~> 3.3)
-    jekyll-theme-hyde-plus (0.3.3)
+    jekyll-theme-hyde-plus (0.3.5)
       jekyll (~> 3.7)
       jekyll-feed (~> 0.9.3)
       jekyll-gist (~> 1.5.0)
@@ -88,7 +88,7 @@ DEPENDENCIES
   jekyll-theme-hyde-plus (~> 0.3.0)
 
 RUBY VERSION
-   ruby 2.4.2p198
+   ruby 2.4.3p205
 
 BUNDLED WITH
    1.16.1
