@@ -84,7 +84,7 @@ Run the migration for creating the table for articles.
 php artisan migrate
 {% endhighlight %}
 
-## Creating for the Article model.
+## Creating tests for the Article model.
 
 Our Article model is now ready for testing and we'll be making integration tests
 but before that let's make a factory.
