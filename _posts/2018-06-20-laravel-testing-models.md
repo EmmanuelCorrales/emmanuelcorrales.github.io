@@ -5,13 +5,13 @@ date:   2018-06-20 16:30:33 +0800
 categories: laravel php eloquent tdd
 tags: [ laravel, php, eloquent, tdd ]
 ---
-These past few weeks I've been using Laravel at work. I've been studying how to
-apply *Test Driven Development* for Laravel and the first thing I learned is how
-to test models in which I'll demonstrate using Laravel 5.6 by creating a new
-project which has an Article model with attributes *title*, *content* and
+This past week I've been using Laravel at work and has been trying to apply
+*Test Driven Development*. My first step was to learn how to test the models
+which I'll be demonstrating in this tutorial using Laravel 5.6. We'll create a
+new project which has an Article model with attributes *title*, *content* and
 *views*.
 
-Let's start by creating a new Laravel project with:
+Let's start creating a new Laravel project with:
 
 {% highlight bash %}
 laravel new blog
@@ -46,9 +46,9 @@ class Article extends Model
 {% endhighlight %}
 
 
-The articles table should have columns *title*, *content* and *views*. The
-generated migration file will be at
-*database/migrations/2018_06_18_065913_create_articles_table.php*.
+The articles table should have columns *title*, *content* and *views* so we'll
+add those columns on our migration file at
+*database/migrations/create_articles_table.php*.
 
 {% highlight php %}
 <?php
@@ -78,7 +78,7 @@ class CreateArticlesTable extends Migration
 }
 {% endhighlight %}
 
-Run the migration for creating the table for articles.
+Then run the migration for creating the table for articles.
 
 {% highlight bash %}
 php artisan migrate
@@ -144,11 +144,12 @@ class ArticleTest extends TestCase
 {% endhighlight %}
 
 Our test creates 5 articles with 0 views, another article with 100 views and the
-most viewed article with 200 views.
+most viewed article with 200 views. It checks if the method
+*Articke::mostViewed()* returns the same id as the most viewed article.
 
 ## Running the test and adjusting the model based on the results.
 
-Run phpunit.
+Now we run phpunit:
 
 {% highlight bash %}
 phpunit tests/Integration/ArticleTest
