@@ -19,20 +19,22 @@ stores the database by default. Moving the database to the RAM can dramatically
 increase the input and output speed of database operations.
 
 ## Drawbacks!
+
 RAM is a volatile memory which means it requires power to retain the data it
 stores. This means that the data stored on the RAM will perish once the computer
 is turned off. In my case, I use the database only for testing and development
-on my local machine. If I ever needed to retain the data for testing, I'll just
+on my local machine. If I ever need to retain the data for testing, I'll just
 backup the database then restore it the next time I need it.
 
-## Moving the database to the RAM.
+## Moving the databases to the RAM.
+
 Now that you know the advantages and disadvantages of moving the MySQL databases
 on the RAM disk, I'll be walking you through the steps on how to achieve this.
 
-First we backup all our databases.
+First backup all the databases. We'll copy it to **/var/lib/mysql.bak**.
 
 {% highlight bash %}
-mysqldump -u root -p --all-databases > alldb_backup.sql
+sudo cp -pRL /var/lib/mysql /var/lib/mysql.bak
 {% endhighlight %}
 
 Create a directory for the RAM disk.
@@ -42,7 +44,7 @@ sudo mkdir /tmp/ramdisk
 {% endhighlight %}
 
 Mount it. I assigned a size of 2GB for the ramdisk. Its up to you how much space
-you want, just make sure it can accomodate all the data you will write to the
+you want, just make sure it can accommodate all the data you will write to the
 database.
 
 {% highlight bash %}
@@ -72,22 +74,48 @@ Restart MySQL to apply the changes.
 sudo /etc/init.d/mysql restart
 {% endhighlight %}
 
-Now we're finished! After moving the databases to the RAM disk running the
+Now we're finished! After moving the databases to the RAM disk, running the
 migrations and seeders took only a minute to finish compared to almost an hour
 when using the hard disk.
 
+## Restoring the databases.
 
-## Restoring the database.
+Since the databases are saved at the RAM disk, they will be gone everytime the
+computer is turned off. Here are the steps to restore it.
 
-Since the database is saved in the RAM disk the database will be gone everytime
-the device is turned off.
-
-Delete symlink to mysql ramdisk.
+Delete previously created symlink to mysql ramdisk.
 {% highlight bash %}
 sudo rm -rf /var/lib/mysql
 {% endhighlight %}
 
-Copy the database from the backup.
+Copy and restore the databases from the backup.
 {% highlight bash %}
-sudo cp -pRL /var/lib/mysql_backup/mysql /var/lib/
+sudo cp -pRL /var/lib/mysql.bak /var/lib/mysql
 {% endhighlight %}
+
+
+## Scripts for convenience.
+
+Running all the commands above every time I turn on my computer is a very
+tedious task so I created scripts for restoring and moving the databases to
+the RAM for my convenience.
+
+Here is the script for restoring the database.
+
+{% gist 69a43f75f45a8024d4b3986dcdb941ec mysql-ramdisk-restore.sh %}
+
+Here is the script for moving the database to the RAM.
+
+{% gist 69a43f75f45a8024d4b3986dcdb941ec mysql-ramdisk.sh %}
+
+This is what I execute everytime I turn on my computer.
+
+{% highlight bash %}
+# Restore the data first.
+./mysql-ramdisk-restore.sh
+# then move it to the RAM.
+./mysql-ramdisk.sh
+{% endhighlight %}
+
+Just make sure that you have backed up your databases to **/var/lib/mysql.bak**
+before executing these commands.
