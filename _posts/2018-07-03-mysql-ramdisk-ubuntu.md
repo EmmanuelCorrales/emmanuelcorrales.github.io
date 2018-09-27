@@ -62,7 +62,7 @@ Create a symlink to the RAM disk.
 sudo ln -s /tmp/ramdisk/mysql /var/lib/mysql
 {% endhighlight %}
 
-Change the permission to allow MySQL to access it.
+Change the ownenrship to MySQL to allow access.
 
 {% highlight bash %}
 sudo chown mysql:mysql /tmp/ramdisk/mysql
