@@ -8,7 +8,8 @@ tags: [ aws, iam ]
 This article is a compilation of what every developer learning AWS should do
 with their new account. I'll demonstrate how to secure the root account by
 locking away the root user and applying all the best practices recommended by
-Amazon Web Services.
+Amazon Web Services. I'll also demonstrate how to install and configure the AWS
+Command Line Interface for development.
 
 ### Table of Contents
 - [Delete the root access keys.](#delete_access_keys)
@@ -110,7 +111,10 @@ click the **Next: Review** button.
 secure place. This will be used to access your AWS account programatically.
 
 ## <a name="setup_aws_cli" />Setup the AWS command line interface.
-Install the command line interface.
+After downloading the access keys, the CLI should be configured to properly
+access AWS services programmatically.
+
+Install AWS CLI from the command line.
 
 {% highlight bash %}
 pip install awscli --upgrade --user
@@ -123,6 +127,7 @@ aws --version
 {% endhighlight %}
 
 Configure the AWS CLI with the downloaded access keys.
+
 {% highlight bash %}
 aws configure
 {% endhighlight %}
@@ -131,7 +136,6 @@ It will ask for the *Access Key ID*, *Secret Access Key*, *default region* and
 the output format like below.
 
 {% highlight bash %}
-$ aws configure
 AWS Access Key ID [None]: AKIAIOSFODNN7IWANHEL
 AWS Secret Access Key [None]: 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
 Default region name [None]: ap-southeast-1
@@ -142,3 +146,26 @@ The **access key id** and **secret access key** above are not real access keys
 so nobody can use those. The default region should be the region nearest to you,
 see [Regions and Endpoints](https://docs.aws.amazon.com/general/latest/gr/rande.html).
 The output format can be be left blank since json is the default format.
+
+Run the command below to confirm if the AWS CLI was configured correctly.
+
+{% highlight bash %}
+aws iam get-user
+{% endhighlight %}
+
+The result should be similar to the code below.
+
+{% highlight json %}
+{
+    "User": {
+        "UserName": "Admin",
+        "PasswordLastUsed": "2018-02-23T12:41:36Z",
+        "CreateDate": "2018-02-24T09:56:39Z",
+        "UserId": "UIRAIDNQRCOCONJBWUSHI",
+        "Path": "/",
+        "Arn": "arn:aws:iam::123456789012:user/admin"
+    }
+}
+{% endhighlight %}
+
+Now we can develop applications using the AWS services.
