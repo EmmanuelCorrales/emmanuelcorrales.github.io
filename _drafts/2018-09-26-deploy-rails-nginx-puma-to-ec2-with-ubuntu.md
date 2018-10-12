@@ -8,8 +8,55 @@ tags: [ rails, ruby, ubuntu, capistrano, puma, nginx ]
 
 Deploying a Rails application to an EC2 instance with Capistrano.
 
+
+## Create an EC2 instance.
+Find the latest AMI(Amazon Machine Image) of ubuntu 16.04.
+
 {% highlight bash %}
-laravel new blog
+aws ec2 describe-images --owners 099720109477 \
+  --filters 'Name=name,Values=ubuntu/images/hvm-ssd/ubuntu-xenial-16.04-amd64-server-????????' \
+            'Name=state,Values=available' \
+  --output json \
+| jq -r '.Images | sort_by(.CreationDate) | last(.[]).ImageId'
+{% endhighlight %}
+
+Create a VPC.
+
+{% highlight bash  %}
+aws ec2 create-vpc --cidr-block 10.0.0.0/16
+{% endhighlight %}
+
+It should return this:
+{% highlight json  %}
+{
+  "Vpc": {
+      "VpcId": "vpc-ff7bbf86",
+      "InstanceTenancy": "default",
+      "Tags": [],
+      "CidrBlockAssociations": [
+          {
+              "AssociationId": "vpc-cidr-assoc-6e42b505",
+              "CidrBlock": "10.0.0.0/16",
+              "CidrBlockState": {
+                  "State": "associated"
+              }
+          }
+      ],
+      "Ipv6CidrBlockAssociationSet": [],
+      "State": "pending",
+      "DhcpOptionsId": "dopt-38f7a057",
+      "CidrBlock": "10.0.0.0/16",
+      "IsDefault": false
+  }
+}
+{% endhighlight %}
+
+Create a security group for our new VPC.
+
+{% highlight bash %}
+aws ec2 create-security-group --group-name rails-deploy-ec2 \
+  --description "Security group for deploying a Rails application on an EC2 instance." \
+  --vpc-id vpc-ff7bbf86
 {% endhighlight %}
 
 ## Setup Capistrano
