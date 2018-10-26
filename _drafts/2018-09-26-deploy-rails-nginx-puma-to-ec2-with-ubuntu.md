@@ -21,18 +21,17 @@ Deploying a Rails application to an EC2 instance with Capistrano.
 Create an S3 bucket to store the private keys. Make sure that the bucket name is
 globally unique.
 {% highlight bash %}
-$ aws s3api create-bucket --bucket my-bucket --region ap-southeast-1 \
-  --create-bucket-configuration LocationConstraint=ap-southeast-1
-{
-      "Location": "http://my-bucket.s3.amazonaws.com/"
-}
+aws s3api create-bucket --bucket my-bucket --region ap-southeast-1 \
+  --create-bucket-configuration LocationConstraint=ap-southeast-1 \
+  | jq -r '.Location'
+# http://my-bucket.s3.amazonaws.com/
 {% endhighlight %}
 
 
 Check if your bucket was succesfully created.
 {% highlight bash %}
-$ aws s3 ls
-2018-10-26 17:36:38 my-bucket
+aws s3 ls
+# 2018-10-26 17:36:38 my-bucket
 {% endhighlight %}
 
 The command above will include the creation date and name of your bucket to its
@@ -55,8 +54,8 @@ We add **github_key.pub** as the SSH key to our Github account. Please refer
 Upload it to the bucket we created earlier
 
 {% highlight bash %}
-$ aws s3 cp github_key s3://my-bucket/
-upload: ./github_key to s3://my-bucket/github_key
+aws s3 cp github_key s3://my-bucket/
+# upload: ./github_key to s3://my-bucket/github_key
 {% endhighlight %}
 
 The EC2 instance of the Ubuntu server can download it upon launch with the
