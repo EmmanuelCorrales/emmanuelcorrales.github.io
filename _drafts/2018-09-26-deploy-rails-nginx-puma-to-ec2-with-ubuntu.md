@@ -120,6 +120,22 @@ aws ec2 create-subnet --vpc-id vpc-046ea804c737b0734 --cidr-block 10.0.0.0/28 \
 # subnet-0b9e54cc7752c940e
 {% endhighlight %}
 
+By default the subnet is configured to not auto-assign a public ip after
+launching a new EC2 instance. Modify the subnet attribute to auto-assign a
+public ip whenever an EC2 instance is launched.
+
+{% highlight bash %}
+aws ec2 modify-subnet-attribute --map-public-ip-on-launch \
+  --subnet-id subnet-0b9e54cc7752c940e
+{% endhighlight %}
+
+By default EC2 instances launched in non-default VPC don't get hostnames.
+We need to modify the vpc attribute to allow dns hostnames.
+{% highlight bash %}
+aws ec2 modify-vpc-attribute --vpc-id vpc-a01106c2 \
+  --enable-dns-hostnames "{\"Value\":true}"
+{% endhighlight %}
+
 Create an internet gateway.
 {% highlight bash %}
 aws ec2 create-internet-gateway | jq -r '.InternetGateway.InternetGatewayId'
