@@ -10,14 +10,16 @@ Deploying a Rails application to an EC2 instance with Capistrano.
 
 ### Table of Contents
 - [Setup infrastructure.](#setup_infrastructure)
-- [Activate MFA on the root account.](#activate_mfa)
-- [Prefer an admin user over a root user.](#replace_root_user)
-- [Setup the AWS CLI](#setup_aws_cli)
-
+  - [Setup S3.](#setup_s3)
+  - [Setup SSH with Github.](#setup_ssh)
+  - [Bootstrap Rails setup.](#bootstrap_rails)
+  - [Allow EC2 to access S3.](#ec2_s3)
+  - [Launch EC2.](#launch_ec2)
+- [Setup the Rails app.](#setup_rails)
 
 ## <a name="setup_infrastructure" />Setup the infrastructure
 
-### Setup S3 bucket
+### <a name="setup_s3" />Setup S3 bucket
 Create an S3 bucket to store the private keys. Make sure that the bucket name is
 globally unique.
 {% highlight bash %}
@@ -37,7 +39,7 @@ aws s3 ls
 The command above will include the creation date and name of your bucket to its
 output if it was created successfully.
 
-### Setup SSH with Github.
+### <a name="setup_ssh" />Setup SSH with Github.
 The Ubuntu server we will launch on EC2 needs to have access on the Rails app's
 repository to be able to fetch updates. We are going to set up SSH credentials.
 We are going to assume that the repository is Github.
@@ -61,7 +63,7 @@ aws s3 cp github_key s3://my-bucket/
 The EC2 instance of the Ubuntu server can download it upon launch with the
 execution of the **bootstap script** which we will cover on the next section.
 
-### Bootstrap script
+### <a name="bootstrap_rails" />Bootstrap script
 A bootstrap script is a script that is executed after the initial launch of an EC2
 instance. We are going to create and use the bootstrap script to automatically
 configure the production environment for our Rails app everytime a new EC2
@@ -95,14 +97,82 @@ gem install rails -V --no-ri --no-rdoc
 gem install bundler -V --no-ri --no-rdoc
 
 # Download the ssh key to github
-curl https://s3.amazonaws.com/my-bucket/github_key
+
+curl https://my-bucket.s3.amazonaws.com/github_key
 
 # Add the ssh key to the ssh-agent.
 ssh-add github_key
 {% endhighlight %}
 
+### <a name="ec2_s3" />Allow EC2 to access S3 via roles.
+Create a json file for our trust policy called **RailsEC2S3-Trust-Policy.json**.
+Its contents should look like the code below.
+{% highlight json %}
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Principal": {
+        "Service": "ec2.amazonaws.com"
+      },
+      "Action": "sts:AssumeRole"
+    }
+  ]
+}
+{% endhighlight %}
 
-### Launch an EC2 instance of the Ubuntu Server
+Execute the command below to create the role **RailsEC2S3** and use the json
+file **RailsEC2S3-Trust-Policy.json** we created earlier.
+{% highlight bash %}
+aws iam create-role --role-name RailsEC2S3 \
+  --assume-role-policy-document file://RailsEC2S3-Trust-Policy.json
+{% endhighlight %}
+
+Create another json file called **mybucket-policy.json** that represents the
+inline policy for reading only from the bucket **my-bucket**. Its contents
+should look like the code below.
+{% highlight json %}
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Action": [
+                "s3:Get*",
+                "s3:List*"
+            ],
+            "Resource": [
+                "arn:aws:s3:::my-bucket/*"
+            ]
+        }
+    ]
+}
+{% endhighlight %}
+
+Execute the command below to create a policy and use the json file
+**mybucket-policy.json** we created earlier as the policy document. If
+successful the command will return ARN(AWS resource name) of the newly created
+policy.
+{% highlight bash %}
+aws iam create-policy --policy-name mybucket-policy \
+   --policy-document file://mybucket-policy.json | jq -r '.Policy.Arn'
+# arn:aws:iam::0123456789012:policy/mybucket-policy
+{% endhighlight %}
+
+Attach the policy to the role by providing the role name and the policy arn.
+{% highlight bash %}
+aws iam attach-role-policy --role-name RailsEC2S3 --policy-arn arn:aws:iam::0123456789012:policy/mybucket-policy
+{% endhighlight %}
+
+To attach the role we need to create an instance profile. The instance profile
+allows the EC2 to pass the IAM role, **RailsEC2S3**, to an EC2 instance.
+{% highlight bash %}
+aws iam create-instance-profile --instance-profile-name RailsEC2S3-Instance-Profile
+aws iam add-role-to-instance-profile --role-name RailsEC2S3 --instance-profile-name RailsEC2S3-Instance-Profile
+{% endhighlight %}
+
+### <a name="launch_ec2" />Launch an EC2 instance of the Ubuntu Server
 
 Create a VPC.
 {% highlight bash  %}
@@ -192,9 +262,7 @@ SSH.
 aws ec2 create-key-pair --key-name RailsEC2 | jq -r '.KeyMaterial' > RailsEC2.pem
 {% endhighlight %}
 
-
 Find the latest Ubuntu image.
-
 {% highlight bash %}
 aws ec2 describe-images --owners 099720109477 \
   --filters 'Name=state,Values=available' \
@@ -211,7 +279,8 @@ aws ec2 run-instances --count 1 --instance-type t2.micro \
   --image-id ami-0d97809b54a5f01ba \
   --security-group-ids sg-01b68dc626cc61562 \
   --user-data file://bootstrap.sh \
-  --subnet-id subnet-0b9e54cc7752c940e
+  --subnet-id subnet-0b9e54cc7752c940e \
+  --iam-instance-profile Name=RailsEC2S3-Instance-Profile
 {% endhighlight %}
 
 ## Setup Capistrano
