@@ -283,7 +283,9 @@ aws ec2 run-instances --count 1 --instance-type t2.micro \
   --iam-instance-profile Name=RailsEC2S3-Instance-Profile
 {% endhighlight %}
 
-## Setup Capistrano
+## <a name="setup_rails" />Setup Rails
+
+### Setup Capistrano
 
 Add these gems to your Gemfile.
 
