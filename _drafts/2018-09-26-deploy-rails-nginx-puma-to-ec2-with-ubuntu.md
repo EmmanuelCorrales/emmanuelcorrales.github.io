@@ -20,9 +20,10 @@ Deploying a Rails application to an EC2 instance with Capistrano.
   - [Create a key pair.](#create_key_pair)
   - [Launch EC2.](#launch_ec2)
   - [Accessing Ubuntu on EC2](#access_ec2)
-  - [Bootstrap script for Rails on the Ubuntu Server.](#bootstrap_rails)
-  - [Setup S3.](#setup_s3)
-  - [Setup SSH with Github.](#setup_ssh)
+  - [Automatically configure the Ubuntu Server on launch](#automatic_server_configuration)
+    - [Bootstrap script for Rails on the Ubuntu Server.](#bootstrap_rails)
+    - [Setup S3.](#setup_s3)
+    - [Setup SSH with Github.](#setup_ssh)
   - [Allow EC2 to access S3.](#ec2_s3)
 - [Setup the Rails app.](#setup_rails)
 
@@ -221,13 +222,30 @@ Run the command below and pass the location of the pem file we created earlier:
 ssh -i "RailsEC2.pem" ubuntu@ec2-13-251-103-23.ap-southeast-1.compute.amazonaws.com
 {% endhighlight %}
 
-If the command is successful then you would be logged in to your Ubuntu Server.
+If the command is successful then you'll be logged in to your Ubuntu Server and
+we can now manually setup the Ruby on Rails environment for deployment. The
+summary of steps for configuring the server are as follows:
 
-### <a name="bootstrap_rails" />Bootstrap script for Rails on the Ubuntu Server
+1. Get the latest updates for Ubuntu.
+2. Install Curl, Git and Nginx.
+3. Download and install RVM.
+4. Download and install Ruby via RVM.
+5. Install Rails.
+6. Install Bundler.
+7. Download the SSH keys then add it to the SSH agent.
+
+That looks simple and easy to configure. But what if we are launching twenty
+instances? Should we configure it twenty times as well? Of course not! That is
+extremely tedious! We are going to automate it.
+
+### <a name="automatic_server_configuration" />Automatically configure the Ubuntu Server on launch.
+
 A bootstrap script is a script that is executed after the initial launch of an EC2
 instance. We are going to create and use the bootstrap script to automatically
 configure the production environment for our Rails app everytime a new EC2
 instance of Ubuntu Server is launched.
+
+#### <a name="bootstrap_rails" />Bootstrap script for Rails on the Ubuntu Server
 
 Create a bootstrap script called **bootstrap.sh**.
 
@@ -256,16 +274,34 @@ rvm use 2.2.1 --default
 gem install rails -V --no-ri --no-rdoc
 gem install bundler -V --no-ri --no-rdoc
 
-# Download the ssh key to github
-
+# Download the ssh key for the git repository.
 curl https://my-bucket.s3.amazonaws.com/github_key
 
 # Add the ssh key to the ssh-agent.
 ssh-add github_key
 {% endhighlight %}
-### <a name="setup_s3" />Setup S3 bucket
+
+The comments on the script explains what each line does. There is one line in
+which the script requires us to use an additional AWS service called S3. The
+line that downloads the SSH keys stored on the S3 bucket called **my-bucket**:
+
+{% highlight bash %}
+# Download the ssh key for the git repository.
+curl https://my-bucket.s3.amazonaws.com/github_key
+{% endhighlight %}
+
+The reason why the Ubuntu server needs the ssh keys is because it fetches
+updates from the repo.
+
+S3 is AWS's main storage service for files and we are going to store the SSH
+key for our app's git repository there but before that we must create a bucket
+because it doesn't exist yet.
+
+#### <a name="setup_s3" />Setup S3 bucket
 Create an S3 bucket to store the private keys. Make sure that the bucket name is
-globally unique.
+globally unique. You can't use the name **my-bucket** because it has already
+been taken. Replace it with something else.
+
 {% highlight bash %}
 aws s3api create-bucket --bucket my-bucket --region ap-southeast-1 \
   --create-bucket-configuration LocationConstraint=ap-southeast-1 \
@@ -283,7 +319,7 @@ aws s3 ls
 The command above will include the creation date and name of your bucket to its
 output if it was created successfully.
 
-### <a name="setup_ssh" />Setup SSH with Github.
+#### <a name="setup_ssh" />Setup SSH with Github.
 The Ubuntu server we will launch on EC2 needs to have access on the Rails app's
 repository to be able to fetch updates. We are going to set up SSH credentials.
 We are going to assume that the repository is Github.
@@ -307,7 +343,7 @@ aws s3 cp github_key s3://my-bucket/
 The EC2 instance of the Ubuntu server can download it upon launch with the
 execution of the **bootstap script** which we will cover on the next section.
 
-### <a name="ec2_s3" />Allow EC2 to access S3 via roles.
+#### <a name="ec2_s3" />Allow EC2 to access S3 via roles.
 Create a json file for our trust policy called **RailsEC2S3-Trust-Policy.json**.
 Its contents should look like the code below.
 {% highlight json %}
