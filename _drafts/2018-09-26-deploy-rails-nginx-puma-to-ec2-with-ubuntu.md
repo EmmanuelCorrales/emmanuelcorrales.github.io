@@ -11,18 +11,30 @@ Deploying a Rails application to an EC2 instance with Capistrano.
 ### Table of Contents
 - [Setup the infrastructure with AWS Services.](#setup_infrastructure)
   - [Setup VPC(Virtual Private Cloud)](#setup_vpc)
+    - [Create a subnet.](#create_subnet)
     - [Allow internet access via Internet Gateway.](#allow_internet)
-    - [Allow HTTP and SSH traffic through security groups](#allow_http_ssh)
-  - [Bootstrap script for Rails on Ubuntu Server.](#bootstrap_rails)
+    - [Make the subnet public.](#public_subnet)
+    - [Enable public IP and DNS host names assignment on EC2 launch.](#enable_public_ip_dns_hostname)
+    - [Allow HTTP and SSH traffic through security groups.](#allow_http_ssh)
+  - [Find the latest image of Ubuntu 16.04 LTS.](#find_latest_ubuntu)
+  - [Create a key pair.](#create_key_pair)
+  - [Launch EC2.](#launch_ec2)
+  - [Accessing Ubuntu on EC2](#access_ec2)
+  - [Bootstrap script for Rails on the Ubuntu Server.](#bootstrap_rails)
   - [Setup S3.](#setup_s3)
   - [Setup SSH with Github.](#setup_ssh)
   - [Allow EC2 to access S3.](#ec2_s3)
-  - [Create a key pair](#create_key_pair)
-  - [Find the latest image](#create_key_pair)
-  - [Launch EC2.](#launch_ec2)
 - [Setup the Rails app.](#setup_rails)
 
 ## <a name="setup_infrastructure" />Setup the infrastructure with AWS Services
+Before we can deploy our Rails app we must first set up the AWS Services we are
+going to use. We will be deploying our Rails app to an EC2 instance of Ubuntu
+so well be launching one before deploying our Rails app. There are lots of
+prerequites to launch an EC2 instance like a subnet, a security group, and an
+image id. We will also automatically configure our server for deployment upon
+launch. The server configuration will involve using services like S3 to store
+our ssh keys for our git remote repository as well as setting up the Ruby on
+Rails environment.
 
 ### <a name="setup_vpc" />Setup VPC(Virtual Private Cloud)
 We are going to create a new VPC and use it for our Rails app instead of the
@@ -37,6 +49,8 @@ aws ec2 create-vpc --cidr-block 10.0.0.0/28 | jq -r '.Vpc.VpcId'
 # vpc-046ea804c737b0734
 {% endhighlight %}
 
+#### <a name="create_subnet" />Create a subnet.
+
 An EC2 instance needs a subnet to be launched. Create a subnet by executing the
 command below.
 {% highlight bash %}
@@ -45,13 +59,15 @@ aws ec2 create-subnet --vpc-id vpc-046ea804c737b0734 --cidr-block 10.0.0.0/28 \
 # subnet-0b9e54cc7752c940e
 {% endhighlight %}
 
-We have created a VPC and a subnet inside it but we still can't launch an EC2
-instance. Well we can but we won't. Not yet because it is still not accessible
-through the internet. The internet traffic won't pass through the VPC. It needs
-an internet gateway attached and the subnet properly routed.
+We have created a subnet inside the VPC but we still can't launch an EC2
+instance. Well we can but we won't, not yet, because the subnet we created is
+**private** and not accessible from outside the AWS infrastructure. We have to
+make this subnet **public**. We must first make the VPC accessible from outside
+AWS infrastructure.
 
 #### <a name="allow_internet" />Allow internet access via Internet Gateway
-Execute the command below to create an internet gateway. It should return the id
+We are going to create and attach an Internet Gateway to our VPC. Execute the
+command below to create an internet gateway. It should return the id
 of the internet gateway if it was successfully created.
 
 {% highlight bash %}
@@ -66,8 +82,11 @@ aws ec2 attach-internet-gateway --vpc-id vpc-046ea804c737b0734 \
   --internet-gateway-id igw-0ca0f555df971303c --region ap-southeast-1
 {% endhighlight %}
 
-Create a route table.
+Now that our VPC is accessible outside the AWS Infrastructure, we are going to
+route the subnet properly to make it public.
+#### <a name="public_subnet" />Make the subnet public.
 
+Create a route table.
 {% highlight bash %}
 aws ec2 create-route-table --vpc-id vpc-046ea804c737b0734 \
   | jq -r '.RouteTable.RouteTableId'
@@ -88,10 +107,38 @@ aws ec2 associate-route-table --route-table-id rtb-0da48374f8b6cec1d \
 {% endhighlight %}
 
 Now the internet traffic can pass through the VPC and can be routed to the
-subnet but unfortunately we still won't launch an EC2 instance because we won't
-be able to access it using the HTTP and SSH protocol.
+subnet but if we launched an EC2 instance how can we access it? We need to know
+the EC2 instance's public DNS but where can we find it? We can find the public
+DNS hostname on an EC2 instance's attribute but unfortunately the VPC and the
+subnet is not yet configured to assign a public DNS hostname to an EC2 instance.
+
+#### <a name="enable_public_ip_dns_hostname" />Enable public IP and DNS host names assignment on EC2 launch
+
+By default a subnet is configured not to auto-assign a public ip after
+launching a new EC2 instance. Modify the subnet attribute to auto-assign a
+public ip whenever an EC2 instance is launched.
+
+{% highlight bash %}
+aws ec2 modify-subnet-attribute --map-public-ip-on-launch \
+  --subnet-id subnet-0b9e54cc7752c940e
+{% endhighlight %}
+
+EC2 instances launched on non-default VPC don't get hostnames by default.
+We need to modify the vpc attribute to allow automatic DNS hostnames assignment.
+{% highlight bash %}
+aws ec2 modify-vpc-attribute --vpc-id vpc-a01106c2 \
+  --enable-dns-hostnames "{\"Value\":true}"
+{% endhighlight %}
+
+Now every EC2 instance launched on the subnet subnet-0b9e54cc7752c940e will
+have a public DNS hostname assigned to them. Unfortunately we still won't launch
+an EC2 instance because we won't be able to access it using the HTTP and SSH
+protocol.
 
 #### <a name="allow_http_ssh" />Allow HTTP and SSH access via Security Groups
+We will allow access to the EC2 instance through SSH and HTTP protocols by
+creating a security group and whitelisting those protocols. A security group is
+also required to launch an EC2 instance.
 
 Create a security group.
 {% highlight bash %}
@@ -110,50 +157,73 @@ aws ec2 authorize-security-group-ingress --group-id sg-01b68dc626cc61562 \
     IpProtocol=tcp,FromPort=80,ToPort=80,IpRanges=[{CidrIp=0.0.0.0/0}]
 {% endhighlight %}
 
-By default the subnet is configured to not auto-assign a public ip after
-launching a new EC2 instance. Modify the subnet attribute to auto-assign a
-public ip whenever an EC2 instance is launched.
+We have now finished setting up the VPC for our Rails app.
 
-{% highlight bash %}
-aws ec2 modify-subnet-attribute --map-public-ip-on-launch \
-  --subnet-id subnet-0b9e54cc7752c940e
-{% endhighlight %}
+### <a name="find_latest_ubuntu" />Find the latest image of Ubuntu
 
-By default EC2 instances launched in non-default VPC don't get hostnames.
-We need to modify the vpc attribute to allow dns hostnames.
-{% highlight bash %}
-aws ec2 modify-vpc-attribute --vpc-id vpc-a01106c2 \
-  --enable-dns-hostnames "{\"Value\":true}"
-{% endhighlight %}
+Launching an EC2 instance of Ubuntu through the terminal requires an image id as
+argument. We can find the id of the latest AMI(Amazon Machine Image) for Ubuntu
+16.04 LTS by executing the command below.
 
-Create a key pair. This key pair is used to access running EC2 instances via
-SSH.
-{% highlight bash %}
-aws ec2 create-key-pair --key-name RailsEC2 | jq -r '.KeyMaterial' > RailsEC2.pem
-{% endhighlight %}
-
-Find the latest Ubuntu image.
 {% highlight bash %}
 aws ec2 describe-images --owners 099720109477 \
   --filters 'Name=state,Values=available' \
   'Name=name,Values=ubuntu/images/hvm-ssd/ubuntu-xenial-16.04-amd64-server-????????' \
   --output json | jq -r '.Images | sort_by(.CreationDate) | last(.[]).ImageId'
-# ami-0d97809b54a5f01ba
 {% endhighlight %}
 
-Launch an EC2 instance.
+The **owners** parameter is the id of the vendor called Canonical which is the
+company behind Ubuntu. If successful the command would return the latest id of
+the AMI for Ubuntu. At the time of writing, the id latest image for Ubuntu
+16.04 LTS Server is **ami-0d97809b54a5f01ba**.
+
+### <a name="create_key_pair" />Create a key pair.
+
+An EC2 instance requires a key pair. The key pair is used to access running EC2
+instances via SSH. Create a key pair by executing the command below.
+
+{% highlight bash %}
+aws ec2 create-key-pair --key-name RailsEC2 | jq -r '.KeyMaterial' > RailsEC2.pem
+{% endhighlight %}
+
+### <a name="launch_ec2" />Launching the EC2 instance.
+Now that we have all we need to launch an EC2 instance of Ubuntu lets execute
+the command below to launch one new EC2 instance.
 
 {% highlight bash %}
 aws ec2 run-instances --count 1 --instance-type t2.micro \
   --key-name RailsEC2 \
   --image-id ami-0d97809b54a5f01ba \
   --security-group-ids sg-01b68dc626cc61562 \
-  --user-data file://bootstrap.sh \
   --subnet-id subnet-0b9e54cc7752c940e \
-  --iam-instance-profile Name=RailsEC2S3-Instance-Profile
+  | jq -r '.Instances[].InstanceId'
+# i-0eb7fac3a8e066e77"
 {% endhighlight %}
 
-### <a name="bootstrap_rails" />Bootstrap script for Rails on Ubuntu Server
+If successful, the command above would return the id of the new instance.
+Lets now check if we can access the EC2 instance we launched.
+
+### <a name="access_ec2" />Accessing Ubuntu on EC2.
+
+First get the the public DNS hostname of the instance we launched by running the
+command below. You may have to wait a few minutes after launching the EC2
+instance for this command to work because the command would only work on
+instances with **running** status and not with **pending**.
+
+{% highlight bash %}
+aws ec2 describe-instances --instance-ids i-0eb7fac3a8e066e77 \
+  | jq -r '.Reservations[].Instances[].PublicDnsName'
+{% endhighlight %}
+
+Run the command below and pass the location of the pem file we created earlier:
+
+{% highlight bash %}
+ssh -i "RailsEC2.pem" ubuntu@ec2-13-251-103-23.ap-southeast-1.compute.amazonaws.com
+{% endhighlight %}
+
+If the command is successful then you would be logged in to your Ubuntu Server.
+
+### <a name="bootstrap_rails" />Bootstrap script for Rails on the Ubuntu Server
 A bootstrap script is a script that is executed after the initial launch of an EC2
 instance. We are going to create and use the bootstrap script to automatically
 configure the production environment for our Rails app everytime a new EC2
@@ -303,6 +373,19 @@ allows the EC2 to pass the IAM role, **RailsEC2S3**, to an EC2 instance.
 {% highlight bash %}
 aws iam create-instance-profile --instance-profile-name RailsEC2S3-Instance-Profile
 aws iam add-role-to-instance-profile --role-name RailsEC2S3 --instance-profile-name RailsEC2S3-Instance-Profile
+{% endhighlight %}
+
+#### <a name="launch_bootstrapped_ec2" />Launching the boostrapped EC2 instance.
+Launch an EC2 instance.
+
+{% highlight bash %}
+aws ec2 run-instances --count 1 --instance-type t2.micro \
+  --key-name RailsEC2 \
+  --image-id ami-0d97809b54a5f01ba \
+  --security-group-ids sg-01b68dc626cc61562 \
+  --user-data file://bootstrap.sh \
+  --subnet-id subnet-0b9e54cc7752c940e \
+  --iam-instance-profile Name=RailsEC2S3-Instance-Profile
 {% endhighlight %}
 
 ## <a name="setup_rails" />Setup Rails
