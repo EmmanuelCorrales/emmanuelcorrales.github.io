@@ -24,6 +24,8 @@ Deploying a Rails application to an EC2 instance with Capistrano.
   - [Launch a bootstrapped EC2 instance.](#launch_bootstrapped_ec2)
 - [Prepare Rails app for deployment.](#setup_rails)
   - [Install Capistrano.](#install_capistrano)
+  - [Configure Nginx.](#configure_nginx)
+  - [Run initial deployment.](#initial_deployment)
 
 ## <a name="setup_ec2" />Setup EC2
 Before we can deploy our Rails app we must first set up the AWS Services we are
@@ -314,7 +316,7 @@ less /var/log/cloud-init-output.log
 
 ## <a name="setup_rails" />Setup Rails
 
-### Setup Capistrano
+### Install and configure Capistrano
 
 Add these gems to your Gemfile.
 
@@ -327,7 +329,6 @@ group :development do
   gem 'capistrano-rails-console',   require: false
   gem 'capistrano-bundler', require: false
   gem 'capistrano3-puma',   require: false
-
 end
 {% endhighlight %}
 
@@ -337,14 +338,15 @@ Then install it.
 bundle install
 {% endhighlight %}
 
-Generate the necessary configuration files.
-
+From your apps local root directory generate the necessary configuration files.
 {% highlight bash %}
 bundle exec cap install
 {% endhighlight %}
 
-This will generate a Capfile.
+This command will generate three files **Capfile**, **config/deploy.rb** and
+**config/production.rb**.
 
+Edit the Capfile to look like this:
 {% highlight conf %}
 # Capfile
 # Load DSL and set up stages
@@ -353,14 +355,7 @@ require "capistrano/setup"
 # Include default deployment tasks
 require "capistrano/deploy"
 
-# Load the SCM plugin appropriate to your project:
-#
-# require "capistrano/scm/hg"
-# install_plugin Capistrano::SCM::Hg
-# or
-# require "capistrano/scm/svn"
-# install_plugin Capistrano::SCM::Svn
-# or
+# Load the git SCM plugin appropriate to your project:
 require "capistrano/scm/git"
 install_plugin Capistrano::SCM::Git
 
@@ -374,15 +369,18 @@ install_plugin Capistrano::Puma
 Dir.glob("lib/capistrano/tasks/*.rake").each { |r| import r }
 {% endhighlight %}
 
-This will generate a **deploy.rb** file at the *config* directory.
+
+If I would deploy a Rails app called **example.emmanuelcorrales.com** where the
+source code is hosted at **git@github.com:EmmanuelCorrales/example.git** then my
+**deploy.rb** at the config directory should look like this:
 
 {% highlight ruby %}
 # config/deploy.rb
 lock "3.8.1"
 
-set :application,       'sponsor.eventsdito.com'
-set :repo_url,          'git@bitbucket.org:krumbsph/sponsor.eventsdito.com.git'
-set :user,              'deploy'
+set :application,       'example.emmanuelcorrales.com'
+set :repo_url,          'git@github.com:EmmanuelCorrales/example.git'
+set :user,              'ubuntu'
 set :puma_threads,      [4, 16]
 set :puma_workers,      0
 
@@ -460,7 +458,7 @@ This is how the *config/deploy/production.rb* would look like.
 {% highlight conf %}
 # config/deploy/production.rb
 server "13.228.29.39",
-  user: "deploy",
+  user: "ubuntu",
   roles: %w{web app db}
 {% endhighlight %}
 
