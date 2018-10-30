@@ -13,7 +13,7 @@ Deploying a Rails application to an EC2 instance with Capistrano.
   - [Setup VPC(Virtual Private Cloud)](#setup_vpc)
     - [Allow internet access via Internet Gateway.](#allow_internet)
     - [Allow HTTP and SSH traffic through security groups](#allow_http_ssh)
-  - [Bootstrap Rails setup.](#bootstrap_rails)
+  - [Bootstrap script for Rails on Ubuntu Server.](#bootstrap_rails)
   - [Setup S3.](#setup_s3)
   - [Setup SSH with Github.](#setup_ssh)
   - [Allow EC2 to access S3.](#ec2_s3)
@@ -23,76 +23,6 @@ Deploying a Rails application to an EC2 instance with Capistrano.
 - [Setup the Rails app.](#setup_rails)
 
 ## <a name="setup_infrastructure" />Setup the infrastructure with AWS Services
-
-
-
-### <a name="ec2_s3" />Allow EC2 to access S3 via roles.
-Create a json file for our trust policy called **RailsEC2S3-Trust-Policy.json**.
-Its contents should look like the code below.
-{% highlight json %}
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Effect": "Allow",
-      "Principal": {
-        "Service": "ec2.amazonaws.com"
-      },
-      "Action": "sts:AssumeRole"
-    }
-  ]
-}
-{% endhighlight %}
-
-Execute the command below to create the role **RailsEC2S3** and use the json
-file **RailsEC2S3-Trust-Policy.json** we created earlier.
-{% highlight bash %}
-aws iam create-role --role-name RailsEC2S3 \
-  --assume-role-policy-document file://RailsEC2S3-Trust-Policy.json
-{% endhighlight %}
-
-Create another json file called **mybucket-policy.json** that represents the
-inline policy for reading only from the bucket **my-bucket**. Its contents
-should look like the code below.
-{% highlight json %}
-{
-    "Version": "2012-10-17",
-    "Statement": [
-        {
-            "Effect": "Allow",
-            "Action": [
-                "s3:Get*",
-                "s3:List*"
-            ],
-            "Resource": [
-                "arn:aws:s3:::my-bucket/*"
-            ]
-        }
-    ]
-}
-{% endhighlight %}
-
-Execute the command below to create a policy and use the json file
-**mybucket-policy.json** we created earlier as the policy document. If
-successful the command will return ARN(AWS resource name) of the newly created
-policy.
-{% highlight bash %}
-aws iam create-policy --policy-name mybucket-policy \
-   --policy-document file://mybucket-policy.json | jq -r '.Policy.Arn'
-# arn:aws:iam::0123456789012:policy/mybucket-policy
-{% endhighlight %}
-
-Attach the policy to the role by providing the role name and the policy arn.
-{% highlight bash %}
-aws iam attach-role-policy --role-name RailsEC2S3 --policy-arn arn:aws:iam::0123456789012:policy/mybucket-policy
-{% endhighlight %}
-
-To attach the role we need to create an instance profile. The instance profile
-allows the EC2 to pass the IAM role, **RailsEC2S3**, to an EC2 instance.
-{% highlight bash %}
-aws iam create-instance-profile --instance-profile-name RailsEC2S3-Instance-Profile
-aws iam add-role-to-instance-profile --role-name RailsEC2S3 --instance-profile-name RailsEC2S3-Instance-Profile
-{% endhighlight %}
 
 ### <a name="setup_vpc" />Setup VPC(Virtual Private Cloud)
 We are going to create a new VPC and use it for our Rails app instead of the
@@ -223,7 +153,7 @@ aws ec2 run-instances --count 1 --instance-type t2.micro \
   --iam-instance-profile Name=RailsEC2S3-Instance-Profile
 {% endhighlight %}
 
-### <a name="bootstrap_rails" />Bootstrap script
+### <a name="bootstrap_rails" />Bootstrap script for Rails on Ubuntu Server
 A bootstrap script is a script that is executed after the initial launch of an EC2
 instance. We are going to create and use the bootstrap script to automatically
 configure the production environment for our Rails app everytime a new EC2
@@ -306,6 +236,75 @@ aws s3 cp github_key s3://my-bucket/
 
 The EC2 instance of the Ubuntu server can download it upon launch with the
 execution of the **bootstap script** which we will cover on the next section.
+
+### <a name="ec2_s3" />Allow EC2 to access S3 via roles.
+Create a json file for our trust policy called **RailsEC2S3-Trust-Policy.json**.
+Its contents should look like the code below.
+{% highlight json %}
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Principal": {
+        "Service": "ec2.amazonaws.com"
+      },
+      "Action": "sts:AssumeRole"
+    }
+  ]
+}
+{% endhighlight %}
+
+Execute the command below to create the role **RailsEC2S3** and use the json
+file **RailsEC2S3-Trust-Policy.json** we created earlier.
+{% highlight bash %}
+aws iam create-role --role-name RailsEC2S3 \
+  --assume-role-policy-document file://RailsEC2S3-Trust-Policy.json
+{% endhighlight %}
+
+Create another json file called **mybucket-policy.json** that represents the
+inline policy for reading only from the bucket **my-bucket**. Its contents
+should look like the code below.
+{% highlight json %}
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Action": [
+                "s3:Get*",
+                "s3:List*"
+            ],
+            "Resource": [
+                "arn:aws:s3:::my-bucket/*"
+            ]
+        }
+    ]
+}
+{% endhighlight %}
+
+Execute the command below to create a policy and use the json file
+**mybucket-policy.json** we created earlier as the policy document. If
+successful the command will return ARN(AWS resource name) of the newly created
+policy.
+{% highlight bash %}
+aws iam create-policy --policy-name mybucket-policy \
+   --policy-document file://mybucket-policy.json | jq -r '.Policy.Arn'
+# arn:aws:iam::0123456789012:policy/mybucket-policy
+{% endhighlight %}
+
+Attach the policy to the role by providing the role name and the policy arn.
+{% highlight bash %}
+aws iam attach-role-policy --role-name RailsEC2S3 --policy-arn arn:aws:iam::0123456789012:policy/mybucket-policy
+{% endhighlight %}
+
+To attach the role we need to create an instance profile. The instance profile
+allows the EC2 to pass the IAM role, **RailsEC2S3**, to an EC2 instance.
+{% highlight bash %}
+aws iam create-instance-profile --instance-profile-name RailsEC2S3-Instance-Profile
+aws iam add-role-to-instance-profile --role-name RailsEC2S3 --instance-profile-name RailsEC2S3-Instance-Profile
+{% endhighlight %}
+
 ## <a name="setup_rails" />Setup Rails
 
 ### Setup Capistrano
