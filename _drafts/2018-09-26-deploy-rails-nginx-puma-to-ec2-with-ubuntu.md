@@ -22,7 +22,8 @@ Deploying a Rails application to an EC2 instance with Capistrano.
   - [Accessing Ubuntu on EC2](#access_ec2)
   - [Automatically configure the Ubuntu Server on launch](#automatic_server_configuration)
   - [Launch a bootstrapped EC2 instance.](#launch_bootstrapped_ec2)
-- [Setup the Rails app.](#setup_rails)
+- [Prepare Rails app for deployment.](#setup_rails)
+  - [Install Capistrano.](#install_capistrano)
 
 ## <a name="setup_ec2" />Setup EC2
 Before we can deploy our Rails app we must first set up the AWS Services we are
@@ -281,6 +282,34 @@ aws ec2 run-instances --count 1 --instance-type t2.micro \
   --security-group-ids sg-01b68dc626cc61562 \
   --subnet-id subnet-0b9e54cc7752c940e \
   --user-data file://bootstrap.sh
+{% endhighlight %}
+
+Login to the server via ssh.
+
+### <a name="access_ec2" />Confirm Rails installation
+List all the instances public DNS.
+
+{% highlight bash %}
+aws ec2 describe-instances | jq -r '.Reservations[].Instances[].PublicDnsName'
+# ubuntu@ec2-13-251-103-24.ap-southeast-1.compute.amazonaws.com
+{% endhighlight %}
+
+Choose the DNS hostname of the newly launched instance then pass it and the
+location of the same pem file we used earlier as arguments to the ssh command
+like the example below:
+{% highlight bash %}
+ssh -i "RailsEC2.pem" ubuntu@ec2-13-251-103-24.ap-southeast-1.compute.amazonaws.com
+{% endhighlight %}
+
+Check if Rails was installed sucessfully.
+{% highlight bash %}
+rails -v
+{% endhighlight %}
+
+If there is an error you can investigate what went wrong by reading the logs at
+*/var/log/cloud-init-output.log*.
+{% highlight bash %}
+less /var/log/cloud-init-output.log
 {% endhighlight %}
 
 ## <a name="setup_rails" />Setup Rails
