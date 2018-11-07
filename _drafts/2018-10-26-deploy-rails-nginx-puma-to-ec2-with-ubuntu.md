@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "Rails: Deploying to Ubuntu on an EC2 instance with Capistrano, Puma and Nginx."
-date:   2018-09-26 08:30:00 +0800
+date:   2018-10-26 08:30:00 +0800
 categories: rails ruby ubuntu capistrano puma nginx
 tags: [ rails, ruby, ubuntu, capistrano, puma, nginx ]
 ---
