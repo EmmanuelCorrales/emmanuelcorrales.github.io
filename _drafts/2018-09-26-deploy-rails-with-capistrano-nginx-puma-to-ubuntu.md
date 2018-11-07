@@ -17,6 +17,21 @@ Rails app to an Ubuntu Server with Nginx and Puma.
 
 ## <a name="setup_ubuntu" />Setup Ubuntu
 
+Ssh to the server.
+```bash
+ssh emmanuelcorrales.com
+```
+
+Create user **deploy**.
+```bash
+adduser deploy
+```
+
+Change its password.
+```bash
+passwd deploy
+```
+
 Update Ubuntu then install Git and Nginx.
 ```bash
 sudo apt-get update
@@ -40,7 +55,7 @@ rvm use 2.2.1 --default
 Install Rails and Bundler without docs too save space and nobody needs docs on
 the server.
 ```bash
-gem install rails -V --no-ri --no-rdoc
+gem install rails -v '5.2.0' -V --no-ri --no-rdoc
 gem install bundler -V --no-ri --no-rdoc
 ```
 
