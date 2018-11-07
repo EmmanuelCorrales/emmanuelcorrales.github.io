@@ -1,81 +1,102 @@
 ---
 layout: post
-title:  "Rails: Deploying to Ubuntu on an EC2 instance with Capistrano, Puma and Nginx."
+title:  "Rails: Capistrano for easy deployment and configuration to Ubuntu with
+Nginx and Puma"
 date:   2018-09-26 08:30:00 +0800
 categories: rails ruby ubuntu capistrano puma nginx
 tags: [ rails, ruby, ubuntu, capistrano, puma, nginx ]
 ---
 
-Deploying a Rails application to an EC2 instance with Capistrano.
+In this post I'll demonstrate how to use Capistrano to deploy and configure a
+Rails app to an Ubuntu Server with Nginx and Puma.
 
 ### Table of Contents
-  - [Install Capistrano.](#install_capistrano)
-  - [Configure Nginx.](#configure_nginx)
-  - [Run initial deployment.](#initial_deployment)
+- [Setup Ubuntu.](#setup_ubuntu)
+- [Setup Capistrano.](#setup_capistrano)
+- [Configure Nginx.](#configure_nginx)
 
-## Setup Ubuntu
+## <a name="setup_ubuntu" />Setup Ubuntu
 
-{% highlight bash %}
-#!/bin/bash
-
-# Script for bootstrapping Ubuntu on EC2.
-
+Update Ubuntu then install Git and Nginx.
+```bash
 sudo apt-get update
-
-# Install Nginx.
 sudo apt-get install curl git-core nginx -y
+```
 
-# Install Ruby via RVM.
+Install RVM.
+```bash
 gpg --keyserver hkp://keys.gnupg.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3
 curl -sSL https://get.rvm.io | bash -s stable
-
 source /etc/profile.d/rvm.sh
 rvm requirements
+```
 
-# Install Ruby.
+Install Ruby via RVM.
+```bash
 rvm install 2.2.1
 rvm use 2.2.1 --default
+```
 
-# Install Rails and Bundler.
+Install Rails and Bundler without docs too save space and nobody needs docs on
+the server.
+```bash
 gem install rails -V --no-ri --no-rdoc
 gem install bundler -V --no-ri --no-rdoc
-{% endhighlight %}
+```
 
-## <a name="setup_rails" />Setup Rails
+## <a name="setup_capistrano" />Setup Capistrano
 
-### Install and configure Capistrano
+### "Capify" the Rails app.
 
-Add these gems to your Gemfile.
-
-{% highlight ruby %}
+Add this gem to your Gemfile.
+```ruby
 group :development do
-  # Capistrano for deployment.
-  gem 'capistrano',         require: false
-  gem 'capistrano-rvm',     require: false
-  gem 'capistrano-rails',   require: false
-  gem 'capistrano-rails-console',   require: false
-  gem 'capistrano-bundler', require: false
-  gem 'capistrano3-puma',   require: false
+  gem 'capistrano', '~>3.10', require: false
 end
-{% endhighlight %}
+```
+Then install it.
+```bash
+bundle install
+```
+From your apps local root directory generate the necessary configuration files.
+```bash
+bundle exec cap install
+```
+This command will generate four files **Capfile**, **config/deploy.rb**
+**config/deploy/staging.rb** and **config/deploy/production.rb**.
+
+We want to deploy the Rails app called **example.emmanuelcorrales.com** whose
+repository is hosted at **git@github.com:EmmanuelCorrales/example.git**.
+Different verisons of the app would be stored at the
+**/home/default/example.emmanuelcorrales.com** directory. Configure Capistrano
+to install it there by changing the contents of  **config/deploy.rb** to look
+like the code below.
+```ruby
+# config valid for current version and patch releases of Capistrano
+lock "~> 3.11.0"
+
+set :application, 'example.emmanuelcorrales.com'
+set :repo_url, 'git@github.com:EmmanuelCorrales/example.git'
+
+# Deploy configurations
+set :deploy_via,      :remote_cache
+set :deploy_to,       "/home/#{fetch(:user)}/apps/#{fetch(:application)}"
+```
+### Add Ruby on Rails deployment tasks
+
+Add this gem to your Gemfile under the capistrano gem.
+```ruby
+gem 'capistrano-rails', '~>1.4', require: false
+```
 
 Then install it.
-
-{% highlight bash %}
+```bash
 bundle install
-{% endhighlight %}
+```
 
-From your apps local root directory generate the necessary configuration files.
-{% highlight bash %}
-bundle exec cap install
-{% endhighlight %}
+Edit the **Capfile** to look like this:
 
-This command will generate three files **Capfile**, **config/deploy.rb** and
-**config/production.rb**.
-
-Edit the Capfile to look like this:
-{% highlight conf %}
-# Capfile
+```conf
 # Load DSL and set up stages
 require "capistrano/setup"
 
@@ -86,144 +107,90 @@ require "capistrano/deploy"
 require "capistrano/scm/git"
 install_plugin Capistrano::SCM::Git
 
-require "capistrano/rvm"
-require "capistrano/bundler"
 require "capistrano/rails"
-require "capistrano/puma"
-install_plugin Capistrano::Puma
 
 # Load custom tasks from `lib/capistrano/tasks` if you have any defined
 Dir.glob("lib/capistrano/tasks/*.rake").each { |r| import r }
-{% endhighlight %}
+```
 
+Symlink Rails shared files and directories like log, tmp and public/uploads.
+Enable it by setting the **linked_dirs** and **linked_files** options at the
+**deploy.rb**.
 
-If I would deploy a Rails app called **example.emmanuelcorrales.com** where the
-source code is hosted at **git@github.com:EmmanuelCorrales/example.git** then my
-**deploy.rb** at the config directory should look like this:
+```ruby
+## Linked Files & Directories (Default None):
+append :linked_dirs, 'log', 'tmp/pids', 'tmp/cache', 'tmp/sockets', 'vendor/bundle', '.bundle', 'public/system', 'public/uploads'
+append :linked_files, 'config/database.yml', 'config/secrets.yml', 'config/application.yml'
+```
 
-{% highlight ruby %}
-# config/deploy.rb
-lock "3.8.1"
+### Configure Puma
 
-set :application,       'example.emmanuelcorrales.com'
-set :repo_url,          'git@github.com:EmmanuelCorrales/example.git'
-set :user,              'ubuntu'
-set :puma_threads,      [4, 16]
-set :puma_workers,      0
+Add this gem to your Gemfile under the capistrano gem.
+```ruby
+gem 'capistrano3-puma', require: false
+```
 
-# Don't change these unless you know what you're doing
-set :pty,             true
-set :use_sudo,        false
-set :stage,           :production
-set :deploy_via,      :remote_cache
-set :deploy_to,       "/home/#{fetch(:user)}/apps/#{fetch(:application)}"
-set :puma_bind,       "unix://#{shared_path}/tmp/sockets/#{fetch(:application)}-puma.sock"
-set :puma_state,      "#{shared_path}/tmp/pids/puma.state"
-set :puma_pid,        "#{shared_path}/tmp/pids/puma.pid"
+Then install it.
+```bash
+bundle install
+```
+
+Add these lines to your Capfile.
+```ruby
+require 'capistrano/puma'
+install_plugin Capistrano::Puma
+```
+Add these lines to the **config/deploy.rb**.
+```ruby
+# Puma configurations
+set :puma_threads, [4, 16]
+set :puma_workers, 0
+set :puma_bind, "unix://#{shared_path}/tmp/sockets/#{fetch(:application)}-puma.sock"
+set :puma_state, "#{shared_path}/tmp/pids/puma.state"
+set :puma_pid, "#{shared_path}/tmp/pids/puma.pid"
 set :puma_access_log, "#{release_path}/log/puma.error.log"
-set :puma_error_log,  "#{release_path}/log/puma.access.log"
-set :ssh_options,     { forward_agent: true, user: fetch(:user), keys: %w(~/.ssh/id_rsa.pub) }
+set :puma_error_log, "#{release_path}/log/puma.access.log"
 set :puma_preload_app, true
 set :puma_worker_timeout, nil
-set :puma_init_active_record, true  # Change to false when not using ActiveRecord
+set :puma_init_active_record, true
+```
 
-## Defaults:
-# set :scm,           :git
-# set :branch,        :master
-# set :format,        :pretty
-# set :log_level,     :debug
-# set :keep_releases, 5
+### Configure Nginx
 
-## Linked Files & Directories (Default None):
-set :linked_files, %w{config/application.yml}
-set :linked_dirs,  %w{log tmp/pids tmp/cache tmp/sockets vendor/bundle public/system}
+Add this line to your Capfile below the line *install_plugin Capistrano::Puma*.
+```ruby
+install_plugin Capistrano::Puma
+```
 
-namespace :puma do
-  desc 'Create Directories for Puma Pids and Socket'
-  task :make_dirs do
-    on roles(:app) do
-      execute "mkdir #{shared_path}/tmp/sockets -p"
-      execute "mkdir #{shared_path}/tmp/pids -p"
-    end
-  end
+Add these lines to the **config/deploy.rb**. These are the parameters for the
+Nginx configurations that will be uploaded to the server.
+```ruby
+# Nginx configurations
+set :nginx_config_name, "#{fetch(:application)}_#{fetch(:stage)}"
+set :nginx_flags, 'fail_timeout=0'
+set :nginx_http_flags, fetch(:nginx_flags)
+set :nginx_server_name, "localhost #{fetch(:application)}.local"
+set :nginx_sites_available_path, '/etc/nginx/sites-available'
+set :nginx_sites_enabled_path, '/etc/nginx/sites-enabled'
+set :nginx_socket_flags, fetch(:nginx_flags)
+set :nginx_ssl_certificate, "/etc/ssl/certs/#{fetch(:nginx_config_name)}.crt"
+set :nginx_ssl_certificate_key, "/etc/ssl/private/#{fetch(:nginx_config_name)}.key"
+set :nginx_use_ssl, false
+```
 
-  before :start, :make_dirs
-end
+Upload the nginx configuration to the server.
+```bash
+bundle exec cap production puma_nginx:config
+```
+## Deploy the Rails app.
 
-namespace :deploy do
-  desc "Make sure local git is in sync with remote."
-  task :check_revision do
-    on roles(:app) do
-      unless `git rev-parse HEAD` == `git rev-parse origin/master`
-        puts "WARNING: HEAD is not the same as origin/master"
-        puts "Run `git push` to sync changes."
-        exit
-      end
-    end
-  end
+Edit the contents of **config/deploy/production.rb** to look like this:
+```ruby
+server "example.emmanuelcorrales.com", user: "deploy", roles: %w{web app db}
+```
 
-  desc 'Initial Deploy'
-  task :initial do
-    on roles(:app) do
-      before 'deploy:restart', 'puma:start'
-      invoke 'deploy'
-    end
-  end
+Deploy to the server.
 
-  before :starting,     :check_revision
-  after  :finishing,    :compile_assets
-  after  :finishing,    :cleanup
-end
-
-# ps aux | grep puma    # Get puma pid
-# kill -s SIGUSR2 pid   # Restart puma
-# kill -s SIGTERM pid   # Stop puma
-{% endhighlight %}
-
-This is how the *config/deploy/production.rb* would look like.
-
-{% highlight conf %}
-# config/deploy/production.rb
-server "13.228.29.39",
-  user: "ubuntu",
-  roles: %w{web app db}
-{% endhighlight %}
-
-## Configure Nginx
-
-{% highlight conf %}
-upstream puma {
-  # Path to Puma SOCK file, as defined previously
-  server unix://home/deploy/apps/sponsor.eventsdito.com/shared/tmp/sockets/sponsor.eventsdito.com-puma.sock;
-}
-
-server {
-  listen 80;
-  server_name sponsor.eventsdito.com;
-
-  root /home/deploy/apps/sponsor.eventsdito.com/current/public;
-  access_log /home/deploy/apps/sponsor.eventsdito.com/shared/log/nginx.access.log;
-  error_log /home/deploy/apps/sponsor.eventsdito.com/shared/log/nginx.error.log info;
-
-  location ~ ^/(assets|fonts|system)/|favicon.ico|robots.txt {
-    gzip_static on;
-    expires max;
-    add_header Cache-Control public;
-  }
-
-  try_files $uri/index.html $uri @puma;
-  location @puma {
-    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-    proxy_set_header Host $http_host;
-    proxy_redirect off;
-
-    proxy_pass http://puma;
-  }
-
-  error_page 500 502 503 504 /500.html;
-  client_max_body_size 10M;
-  keepalive_timeout 10;
-}
-
-{% endhighlight %}
-
+```bash
+bundle exec cap production deploy
+```
