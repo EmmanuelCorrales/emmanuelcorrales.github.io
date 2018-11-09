@@ -50,13 +50,14 @@ Install RVM.
 ```bash
 gpg --keyserver hkp://keys.gnupg.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3
 curl -sSL https://get.rvm.io | bash -s stable
-source /etc/profile.d/rvm.sh
+source /home/deploy/.rvm/scripts/rvm
 rvm requirements
 ```
 Install Ruby via RVM.
 ```bash
-rvm install 2.2.1
-rvm use 2.2.1 --default
+rvm install 2.2.2
+rvm use 2.2.2 --default
+ruby --version
 ```
 Install Rails and Bundler without docs too save space and nobody needs docs on
 the server.
