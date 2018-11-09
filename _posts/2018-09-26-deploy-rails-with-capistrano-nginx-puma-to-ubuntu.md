@@ -55,10 +55,17 @@ ruby --version
 Install Rails and Bundler without docs too save space and nobody needs docs on
 the server.
 ```bash
-gem install rails -v '5.2.0' -V --no-ri --no-rdoc
-gem install bundler -V --no-ri --no-rdoc
+deploy@server:~:$ gem install rails -v '5.2.0' -V --no-ri --no-rdoc
+deploy@server:~:$ gem install bundler -V --no-ri --no-rdoc
 ```
 ### <a name="setup_ssh" />Setup SSH
+
+Create .ssh directory
+```bash
+deploy@server:~:$ mkdir -m 700 .ssh
+deploy@server:~:$ touch ~/.ssh/authorized_keys
+deploy@server:~:$ chmod 600 ~/.ssh/authorized_keys
+```
 Setup SSH access to the server. Create key pairs from your local machine.
 ```bash
 ssh-keygen -t rsa
