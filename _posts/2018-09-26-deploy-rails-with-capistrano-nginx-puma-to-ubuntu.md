@@ -8,6 +8,7 @@ tags: [ rails, ruby, ubuntu, capistrano, puma, nginx ]
 ---
 In this post I'll demonstrate how to use Capistrano to deploy and configure a
 Rails app to an Ubuntu Server with Nginx and Puma.
+
 ### Table of Contents
 - [Setup the Ubuntu Server.](#setup_ubuntu)
   - [Create user deploy.](#create_user_deploy)
