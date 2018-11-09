@@ -37,7 +37,7 @@ Update Ubuntu then install Curl, Git and Nginx.
 sudo apt-get update
 sudo apt-get install curl git-core nginx -y
 ```
-### <a name="setup_ruby_on_rails" />Setup Ruby on Rails
+### <a name="setup_ruby_on_rails" />Setup Ruby on Rails environment
 Install RVM.
 ```bash
 gpg --keyserver hkp://keys.gnupg.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3
