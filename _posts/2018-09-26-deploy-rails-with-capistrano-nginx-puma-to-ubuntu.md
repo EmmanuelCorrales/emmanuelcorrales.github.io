@@ -21,7 +21,7 @@ Rails app to an Ubuntu Server with Nginx and Puma.
   - [Configure Puma.](#configure_puma)
   - [Configure Nginx.](#configure_nginx)
 - [Deploying the Rails app with Capistrano.](#deploy)
-## <a name="setup_ubuntu" />Setup Ubuntu
+## <a name="setup_ubuntu" />Setup the Ubuntu Server
 ### <a name="create_user_deploy" />Create user deploy
 Login to the server as root.
 ```bash
