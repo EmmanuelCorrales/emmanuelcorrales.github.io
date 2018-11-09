@@ -6,38 +6,49 @@ date:   2018-09-26 08:30:00 +0800
 categories: rails ruby ubuntu capistrano puma nginx
 tags: [ rails, ruby, ubuntu, capistrano, puma, nginx ]
 ---
-
 In this post I'll demonstrate how to use Capistrano to deploy and configure a
 Rails app to an Ubuntu Server with Nginx and Puma.
-
 ### Table of Contents
-- [Setup Ubuntu.](#setup_ubuntu)
+- [Setup the Ubuntu Server.](#setup_ubuntu)
+  - [Create user deploy.](#create_user_deploy)
+  - [Install Git and Nginx.](#install_git_nginx)
+  - [Setup Ruby on Rails environment.](#setup_ruby_on_rails)
+  - [Setup SSH.](#setup_ssh)
 - [Setup Capistrano.](#setup_capistrano)
-- [Configure Nginx.](#configure_nginx)
-
+  - [Capify the Rails app.](#capify_rails)
+  - [Add Ruby on Rails deployment tasks.](#add_ror_tasks)
+  - [Configure Puma.](#configure_puma)
+  - [Configure Nginx.](#configure_nginx)
+- [Deploying the Rails app with Capistrano.](#deploy)
 ## <a name="setup_ubuntu" />Setup Ubuntu
-
-Ssh to the server.
+### <a name="create_user_deploy" />Create user deploy
+Login to the server as root.
 ```bash
-ssh emmanuelcorrales.com
+ssh root@example.emmanuelcorrales.com
 ```
-
-Create user **deploy**.
+Create user called **deploy**.
 ```bash
 adduser deploy
 ```
-
-Change its password.
+Change its password with whatever you want.
 ```bash
 passwd deploy
 ```
-
+Make the **deploy** user a super user.
+```bash
+gpasswd -a deploy sudo
+```
+Login as **deploy**.
+```bash
+su - deploy
+```
+### <a name="install_git_nginx" />Install Git and Nginx
 Update Ubuntu then install Git and Nginx.
 ```bash
 sudo apt-get update
 sudo apt-get install curl git-core nginx -y
 ```
-
+### <a name="setup_ruby_on_rails" />Setup Ruby on Rails
 Install RVM.
 ```bash
 gpg --keyserver hkp://keys.gnupg.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3
@@ -45,24 +56,33 @@ curl -sSL https://get.rvm.io | bash -s stable
 source /etc/profile.d/rvm.sh
 rvm requirements
 ```
-
 Install Ruby via RVM.
 ```bash
 rvm install 2.2.1
 rvm use 2.2.1 --default
 ```
-
 Install Rails and Bundler without docs too save space and nobody needs docs on
 the server.
 ```bash
 gem install rails -v '5.2.0' -V --no-ri --no-rdoc
 gem install bundler -V --no-ri --no-rdoc
 ```
-
+### <a name="setup_ssh" />Setup SSH
+Setup SSH access to the server. Create key pairs from your local machine.
+```bash
+ssh-keygen -t rsa
+```
+This will generate two files **~/.ssh/id_rsa** and **~/.ssh/id_rsa.pub**. Copy
+ the public key **~/.ssh/id_rsa** it to the server.
+```bash
+ssh-copy-id deploy@example.emmanuelcorrales.com
+```
+The server will also use the same public key to pull changes to the Rails from
+the repository. Add the newly created public key (~/.ssh/id_rsa.pub) to your
+repository's deployment keys. If you are using Github you can find the
+instructions [here](https://developer.github.com/v3/guides/managing-deploy-keys/).
 ## <a name="setup_capistrano" />Setup Capistrano
-
-### "Capify" the Rails app.
-
+### <a name="capify_rails" />"Capify" the Rails app
 Add this gem to your Gemfile.
 ```ruby
 group :development do
@@ -97,20 +117,16 @@ set :repo_url, 'git@github.com:EmmanuelCorrales/example.git'
 set :deploy_via,      :remote_cache
 set :deploy_to,       "/home/#{fetch(:user)}/apps/#{fetch(:application)}"
 ```
-### Add Ruby on Rails deployment tasks
-
+### <a name="add_ror_tasks" />Add Ruby on Rails deployment tasks
 Add this gem to your Gemfile under the capistrano gem.
 ```ruby
 gem 'capistrano-rails', '~>1.4', require: false
 ```
-
 Then install it.
 ```bash
 bundle install
 ```
-
 Edit the **Capfile** to look like this:
-
 ```conf
 # Load DSL and set up stages
 require "capistrano/setup"
@@ -127,29 +143,23 @@ require "capistrano/rails"
 # Load custom tasks from `lib/capistrano/tasks` if you have any defined
 Dir.glob("lib/capistrano/tasks/*.rake").each { |r| import r }
 ```
-
 Symlink Rails shared files and directories like log, tmp and public/uploads.
 Enable it by setting the **linked_dirs** and **linked_files** options at the
 **deploy.rb**.
-
 ```ruby
 ## Linked Files & Directories (Default None):
 append :linked_dirs, 'log', 'tmp/pids', 'tmp/cache', 'tmp/sockets', 'vendor/bundle', '.bundle', 'public/system', 'public/uploads'
 append :linked_files, 'config/database.yml', 'config/secrets.yml', 'config/application.yml'
 ```
-
-### Configure Puma
-
+### <a name="configure_puma" />Configure Puma
 Add this gem to your Gemfile under the capistrano gem.
 ```ruby
 gem 'capistrano3-puma', require: false
 ```
-
 Then install it.
 ```bash
 bundle install
 ```
-
 Add these lines to your Capfile.
 ```ruby
 require 'capistrano/puma'
@@ -169,14 +179,11 @@ set :puma_preload_app, true
 set :puma_worker_timeout, nil
 set :puma_init_active_record, true
 ```
-
-### Configure Nginx
-
+### <a name="configure_nginx" />Configure Nginx
 Add this line to your Capfile below the line *install_plugin Capistrano::Puma*.
 ```ruby
 install_plugin Capistrano::Puma
 ```
-
 Add these lines to the **config/deploy.rb**. These are the parameters for the
 Nginx configurations that will be uploaded to the server.
 ```ruby
@@ -192,20 +199,16 @@ set :nginx_ssl_certificate, "/etc/ssl/certs/#{fetch(:nginx_config_name)}.crt"
 set :nginx_ssl_certificate_key, "/etc/ssl/private/#{fetch(:nginx_config_name)}.key"
 set :nginx_use_ssl, false
 ```
-
 Upload the nginx configuration to the server.
 ```bash
 bundle exec cap production puma_nginx:config
 ```
-## Deploy the Rails app.
-
+## <a name="deploy" />Deploying the Rails app with Capistrano
 Edit the contents of **config/deploy/production.rb** to look like this:
 ```ruby
 server "example.emmanuelcorrales.com", user: "deploy", roles: %w{web app db}
 ```
-
 Deploy to the server.
-
 ```bash
 bundle exec cap production deploy
 ```
