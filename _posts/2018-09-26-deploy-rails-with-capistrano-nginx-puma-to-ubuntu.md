@@ -11,7 +11,6 @@ Rails app to an Ubuntu Server with Nginx and Puma.
 
 ### Table of Contents
 - [Setup the Ubuntu Server.](#setup_ubuntu)
-  - [Create a user "deploy".](#create_user_deploy)
   - [Install Git and Nginx.](#install_git_nginx)
   - [Setup Ruby on Rails environment.](#setup_ruby_on_rails)
   - [Setup SSH.](#setup_ssh)
@@ -22,18 +21,13 @@ Rails app to an Ubuntu Server with Nginx and Puma.
   - [Configure Nginx.](#configure_nginx)
 - [Deploying the Rails app with Capistrano.](#deploy)
 ## <a name="setup_ubuntu" />Setup the Ubuntu Server
-### <a name="create_user_deploy" />Create user deploy
-Login to the server as root.
+Login to the server as **root** user.
 ```bash
 ssh root@example.emmanuelcorrales.com
 ```
-Create a user called **deploy**.
+Create a super user called **deploy**.
 ```bash
-adduser deploy
-```
-Make the **deploy** user a super user.
-```bash
-gpasswd -a deploy sudo
+useradd -m deploy -G sudo
 ```
 Login as **deploy**.
 ```bash
