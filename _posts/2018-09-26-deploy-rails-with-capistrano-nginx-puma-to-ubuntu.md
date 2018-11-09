@@ -11,7 +11,6 @@ Rails app to an Ubuntu Server with Nginx and Puma.
 
 ### Table of Contents
 - [Setup the Ubuntu Server.](#setup_ubuntu)
-  - [Install Git and Nginx.](#install_git_nginx)
   - [Setup Ruby on Rails environment.](#setup_ruby_on_rails)
   - [Setup SSH.](#setup_ssh)
 - [Setup Capistrano.](#setup_capistrano)
@@ -33,8 +32,7 @@ Login as **deploy**.
 ```bash
 su - deploy
 ```
-### <a name="install_git_nginx" />Install Git and Nginx
-Update Ubuntu then install Git and Nginx.
+Update Ubuntu then install Curl, Git and Nginx.
 ```bash
 sudo apt-get update
 sudo apt-get install curl git-core nginx -y
