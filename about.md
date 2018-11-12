@@ -1,7 +1,7 @@
 ---
 layout: page
 title: About
-permalink: /about/
+order: 2
 ---
 <b>Emmanuel Corrales</b> is a software engineer with a passion for developing software.
  He has a degree in computer science and loves clean and well-tested code. Currently he is working
