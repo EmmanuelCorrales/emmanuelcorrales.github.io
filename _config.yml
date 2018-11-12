@@ -24,9 +24,16 @@ markdown: kramdown
 theme: jekyll-theme-hyde-plus
 permalink: /blog/:title
 paginate: 5
+
 collections:
   cheatsheets:
     output: true
+
+plugins:
+  - jemoji
+
+emoji:
+  src: "/assets/images/emoji"
 
 social:
   twitter:        em_corrales
