@@ -33,7 +33,7 @@ plugins:
   - jemoji
 
 emoji:
-  src: "/assets/images/emoji"
+  src: "/assets/images/"
 
 social:
   twitter:        em_corrales
