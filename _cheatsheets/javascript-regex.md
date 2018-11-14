@@ -4,10 +4,10 @@ title:  "Javascript Regex Cheat Sheet"
 categories: emoji
 tags: [cheetsheet emoji]
 ---
-<div class="container">
+<div class="cheatsheet">
   <div class="command-container">
     <div class="grid-block">
-      <div class="grid-lg-1-3">
+      <div class="grid-lg-1-2">
         <h2>Basics</h2>
         <ul>
           <li><kbd>.</kbd> - Any character except newline</li>
@@ -32,8 +32,6 @@ tags: [cheetsheet emoji]
           <li><kbd>(?:..)</kbd> - Non-capturing group</li>
           <li><kbd>\Y</kbd> - Match the Y'th captured group</li>
         </ul>
-      </div>
-      <div class="grid-lg-1-3">
         <h2>Character Classes</h2>
         <ul>
           <li><kbd>[ab-d]</kbd> - One character of a, b, c, d</li>
@@ -46,6 +44,8 @@ tags: [cheetsheet emoji]
           <li><kbd>\w</kbd> - One word character</li>
           <li><kbd>\w</kbd> - One non-word character</li>
         </ul>
+      </div>
+      <div class="grid-lg-1-2">
         <h2>Assertions</h2>
         <ul>
           <li><kbd>^</kbd> - Start of string</li>
@@ -55,8 +55,6 @@ tags: [cheetsheet emoji]
           <li><kbd>(?=..)</kbd> - Positive look ahead</li>
           <li><kbd>(?!..)</kbd> - Negative look ahead</li>
         </ul>
-      </div>
-      <div class="grid-lg-1-3">
         <h2>Flags</h2>
         <ul>
           <li><kbd>g</kbd> - Global match</li>
