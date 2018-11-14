@@ -1,9 +1,8 @@
 ---
-layout: post
+layout: cheatsheet
 title:  "Github Emoji Cheat Sheet"
-date:   2016-11-12 15:30:00 +0800
-categories: emoji
-tags: [cheetsheet emoji]
+categories: cheetsheet emoji github
+tags: [cheetsheet emoji github]
 ---
 ## Table of Contents
 
