@@ -4,18 +4,13 @@ title: Home
 ---
 
 <div class="home">
-
-  <ul class="post-list">
-    {% for post in paginator.posts %}
-      <li>
-        <h2>
-          <a class="post-link" href="{{ post.url | prepend: site.baseurl }}">{{ post.title | escape }}</a>
-        </h2>
-        <span class="post-meta">{{ post.date | date: "%b %-d, %Y" }}</span>
-        {{ post.excerpt }}
-      </li>
-    {% endfor %}
-  </ul>
+  {% for post in paginator.posts %}
+    <h2>
+      <a class="post-link" href="{{ post.url | prepend: site.baseurl }}">{{ post.title | escape }}</a>
+    </h2>
+    <span class="post-meta">{{ post.date | date: "%b %-d, %Y" }}</span>
+    {{ post.excerpt }}
+  {% endfor %}
 
   <div class="pagination">
     {% if paginator.next_page %}
