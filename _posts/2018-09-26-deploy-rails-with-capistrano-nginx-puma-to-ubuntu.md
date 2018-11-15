@@ -52,7 +52,7 @@ rvm install 2.2.2
 rvm use 2.2.2 --default
 ruby --version
 ```
-Install Rails and Bundler without docs too save space and nobody needs docs on
+Install Rails and Bundler without docs to save space and nobody needs docs on
 the server.
 ```bash
 deploy@server:~:$ gem install rails -v '5.2.0' -V --no-ri --no-rdoc
