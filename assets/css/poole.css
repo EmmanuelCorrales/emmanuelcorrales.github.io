@@ -328,29 +328,19 @@ tbody tr:nth-child(odd) th {
  * page is wrapped in `.page` and is only used on the page layout.
  */
 
-.page,
-.post {
+.page {
   margin-bottom: 4em;
 }
 
 /* Blog post or page title */
-.page-title,
-.post-title,
-.post-title a {
+.page-title {
   color: #303030;
 }
-.page-title,
-.post-title {
+
+.page-title {
   margin-top: 0;
 }
 
-/* Meta data line below post title */
-.post-date {
-  display: block;
-  margin-top: -.5rem;
-  margin-bottom: 1rem;
-  color: #9a9a9a;
-}
 
 /* Related posts */
 .related {
