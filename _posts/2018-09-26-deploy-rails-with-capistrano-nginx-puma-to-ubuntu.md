@@ -1,7 +1,7 @@
 ---
 layout: post
-title:  "Rails: Capistrano for easy deployment and configuration to Ubuntu with
-Nginx and Puma"
+title:  "Ruby on Rails: Capistrano for easy deployment and configuration to
+Ubuntu with Nginx and Puma"
 date:   2018-09-26 08:30:00 +0800
 categories: rails ruby ubuntu capistrano puma nginx
 thumbnail: RoR.jpg
