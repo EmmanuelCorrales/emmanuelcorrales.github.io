@@ -13,6 +13,16 @@
   color: #9a9a9a;
 }
 
+figure {
+  margin-left: 0px;
+  margin-right: 0px;
+}
+
+pre {
+  overflow-x: auto;
+  white-space: pre;
+}
+
 /* Related posts */
 .related {
   padding-top: 2rem;
