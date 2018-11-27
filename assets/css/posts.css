@@ -1,0 +1,14 @@
+.post-title {
+  margin-top: 0;
+}
+
+.post-title,
+.post-title a {
+  color: #303030;
+}
+
+.post-date {
+  display: block;
+  margin-top: -.5rem;
+  color: #9a9a9a;
+}
