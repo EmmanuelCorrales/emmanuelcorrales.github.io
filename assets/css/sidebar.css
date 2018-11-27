@@ -18,7 +18,7 @@
     left: 0;
     bottom: 0;
     width: 18rem;
-    text-align: left;
+    text-align: center;
   }
 }
 
@@ -97,4 +97,8 @@ a.social:link, a.social:visited {
 
 a.social :hover {
   opacity: 0.5;
+}
+
+.copy-right {
+  text-align: center;
 }
