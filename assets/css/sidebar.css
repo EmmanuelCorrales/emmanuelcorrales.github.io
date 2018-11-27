@@ -80,3 +80,21 @@ a.sidebar-nav-item:focus {
     left:   1rem;
   }
 }
+
+/* Social */
+.social-icons {
+  margin: 16px;
+  display: flex;
+  justify-content: space-evenly;
+}
+
+a.social:link, a.social:visited {
+  color: white;
+  text-decoration: none;
+  font-size: 32px;
+  padding: 8px;
+}
+
+a.social :hover {
+  opacity: 0.5;
+}
