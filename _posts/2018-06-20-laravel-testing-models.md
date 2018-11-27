@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "Laravel 5.6: Testing models"
+title:  "Laravel: Testing models"
 date:   2018-06-20 16:30:33 +0800
 categories: laravel php eloquent tdd
 tags: [ laravel, php, eloquent, tdd ]
