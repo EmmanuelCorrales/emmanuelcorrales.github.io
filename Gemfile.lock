@@ -1,3 +1,11 @@
+PATH
+  remote: ../jekyll-deploy
+  specs:
+    jekyll-deploy (0.1.0)
+      git (~> 1.5)
+      jekyll (~> 3.7)
+      rugged (~> 0.27)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -19,6 +27,7 @@ GEM
     ffi (1.9.25)
     forwardable-extended (2.6.0)
     gemoji (3.0.0)
+    git (1.5.0)
     html-pipeline (2.9.0)
       activesupport (>= 2)
       nokogiri (>= 1.4)
@@ -87,6 +96,7 @@ GEM
     redcarpet (3.4.0)
     rouge (3.3.0)
     ruby_dep (1.5.0)
+    rugged (0.27.7)
     safe_yaml (1.0.4)
     sass (3.7.2)
       sass-listen (~> 4.0.0)
@@ -105,11 +115,12 @@ PLATFORMS
 
 DEPENDENCIES
   jekyll
+  jekyll-deploy!
   jekyll-theme-hyde-plus (~> 0.3.0)
   jemoji
 
 RUBY VERSION
-   ruby 2.4.2p198
+   ruby 2.4.3p205
 
 BUNDLED WITH
-   1.16.2
+   1.17.1
