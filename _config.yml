@@ -23,7 +23,7 @@ Applications Developer(.Net and Spring). He is a linux enthusiast and his
 favorite tool is the terminal. He codes with it, works with it, lives with it
 and will probably not survive without it. He is a big fan of open source and is
 always trying to learn something new."
-url: "https://emmanuelcorrales.com" # the base hostname & protocol for your site
+url: "https://emcorrales.com" # the base hostname & protocol for your site
 baseurl: "" # the subpath of your site, e.g. /blog
 
 # Build settings
@@ -53,4 +53,4 @@ google_analytics: UA-80537045-1
 author:
   name:           'Emmanuel Corrales'
   email:          contact@emmanuelcorrales.com
-  url:            https://emmanuelcorrales.com
+  url:            https://emcorrales.com
