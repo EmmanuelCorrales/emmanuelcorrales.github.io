@@ -15,14 +15,13 @@
 # in the templates via {{ site.myvariable }}.
 title: Emmanuel Corrales
 tagline: Software Engineer
-description: "Emmanuel Corrales is a Software Engineer with a passion for developing
-software. He has a degree in Computer Science and loves clean and well-tested
-code. He is currently working with Javascript on MERN stack and Ruby on Rails
-applications. He is also an experienced Android Developer and Enterpise
-Applications Developer(.Net and Spring). He is a linux enthusiast and his
-favorite tool is the terminal. He codes with it, works with it, lives with it
-and will probably not survive without it. He is a big fan of open source and is
-always trying to learn something new."
+description: "I am Emmanuel Corrales, you may also call me Em. I've been in the
+technology industry for more than five years. I am currently working as a DevOps
+Consultant for Opswerks. I am also an experienced Software Engineer who is
+language agnostic. A jack of all trades guy. I'm a linux enthusiast and my
+favorite tool is the terminal. I code with it, work with it, live with it and
+will probably not survive without it. I am a big fan of open source and has
+always been trying to learn something new."
 url: "https://emcorrales.com" # the base hostname & protocol for your site
 baseurl: "" # the subpath of your site, e.g. /blog
 
