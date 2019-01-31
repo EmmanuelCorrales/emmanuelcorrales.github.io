@@ -1,3 +1,6 @@
 [submodule "_posts"]
 	path = _posts
 	url = git@github.com:emcorrales/blog_posts.git
+[submodule "_cheatsheets"]
+	path = _cheatsheets
+	url = git@github.com:emcorrales/cheatsheets.git
