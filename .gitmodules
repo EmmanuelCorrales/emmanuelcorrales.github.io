@@ -4,3 +4,6 @@
 [submodule "_cheatsheets"]
 	path = _cheatsheets
 	url = git@github.com:emcorrales/cheatsheets.git
+[submodule "_drafts"]
+	path = _drafts
+	url = git@github.com:emcorrales/drafts.git
