@@ -25,4 +25,5 @@ gem "jekyll-theme-hyde-plus", "~> 0.3.0"
 group :jekyll_plugins do
 #  gem "jekyll-github-metadata", "~> 1.0"
   gem "jekyll-gravatar"
+  gem "jekyll-sitemap"
 end
