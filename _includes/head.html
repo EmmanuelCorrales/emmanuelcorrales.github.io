@@ -20,7 +20,7 @@
   <link rel="stylesheet" href="{{ site.url }}/assets/css/hyde.css">
   <link rel="stylesheet" href="{{ site.url }}/assets/css/cheatsheet.css">
   <link rel="stylesheet" href="{{ site.url }}/assets/css/sidebar.css">
-  {% if page.url == '/' or page.path contains '_posts' %}
+  {% if page.url == '/' or page.path contains '_posts' or page.path contains '_drafts' %}
     <link rel="stylesheet" href="{{ site.url }}/assets/css/posts.css">
   {% endif %}
   <link rel="stylesheet" href="{{ site.url }}/vendor/font-awesome/5.5.0/css/all.min.css">
