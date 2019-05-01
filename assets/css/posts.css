@@ -13,6 +13,10 @@
   color: #9a9a9a;
 }
 
+.posts img {
+  width: 100%;
+}
+
 .post img {
   width: 100%;
 }
