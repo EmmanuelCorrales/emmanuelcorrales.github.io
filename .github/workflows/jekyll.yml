@@ -19,4 +19,9 @@ jobs:
         jekyll/builder:latest /bin/bash -c "chmod -R 777 /srv/jekyll && jekyll build --future"
     - name: Assign CNAME.
       run: echo emcorrales.com > _site/CNAME
-
+    - name: Configure repo.
+      run: git add _site && git commit -m "Deploy!"
+    - name: Splitting...
+      run: git branch -D gh-pages && git subtree split -P _site -b gh-pages
+    - name: Deploying...
+      run: git push origin gh-pages --force
