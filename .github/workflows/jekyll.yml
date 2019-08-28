@@ -26,4 +26,7 @@ jobs:
     - name: Splitting...
       run: git subtree split -P _site -b gh-pages
     - name: Deploying...
-      run: git push origin gh-pages --force
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_ACTOR: ${{ secrets.GITHUB_ACTOR }}
+      run: git push https://$GITHUB_ACTOR:$GITHUB_TOKEN@github.com/emcorrales/blog.git gh-pages --force
