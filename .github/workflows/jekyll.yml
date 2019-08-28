@@ -19,6 +19,8 @@ jobs:
         jekyll/builder:latest /bin/bash -c "chmod -R 777 /srv/jekyll && jekyll build --future"
     - name: Assign CNAME.
       run: echo emcorrales.com > _site/CNAME
+    - name: Configuring Git...
+      run: git config user.email contact@emcorrales.com && git config user.name "Emmanuel Corrales"
     - name: Configure repo.
       run: git add _site && git commit -m "Deploy!"
     - name: Splitting...
