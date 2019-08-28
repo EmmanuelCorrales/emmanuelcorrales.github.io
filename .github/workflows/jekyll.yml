@@ -24,6 +24,6 @@ jobs:
     - name: Configure repo.
       run: git add _site && git commit -m "Deploy!"
     - name: Splitting...
-      run: git branch -D gh-pages && git subtree split -P _site -b gh-pages
+      run: git subtree split -P _site -b gh-pages
     - name: Deploying...
       run: git push origin gh-pages --force
