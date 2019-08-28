@@ -17,8 +17,9 @@ jobs:
         docker run \
         -v ${{ github.workspace }}:/srv/jekyll -v ${{ github.workspace }}/_site:/srv/jekyll/_site \
         jekyll/builder:latest /bin/bash -c "chmod -R 777 /srv/jekyll && jekyll build --future"
-    - name: Assign CNAME.
+    - name: Adding gh requirements...
       run: echo emcorrales.com > _site/CNAME
+      run: touch .nojekyll
     - name: Configuring Git...
       run: git config user.email contact@emcorrales.com && git config user.name "Emmanuel Corrales"
     - name: Configure repo.
