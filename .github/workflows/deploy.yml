@@ -1,4 +1,4 @@
-name: My blog's CI
+name: Development CI
 
 on:
   push:
