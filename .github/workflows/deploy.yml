@@ -14,8 +14,6 @@ jobs:
     - uses: actions/checkout@v1
     - uses: emcorrales/action-deploy@master
       with:
-        token: ${{ secrets.GITHUB_TOKEN }}
-        actor: ${{ secrets.GITHUB_ACTOR }}
         name: "Emmanuel M. Corrales"
         email: "contact@emcorrales.com"
         url: github.com/emcorrales/blog.git
