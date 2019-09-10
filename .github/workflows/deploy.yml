@@ -1,0 +1,20 @@
+name: My blog's CI
+
+on:
+  push:
+    branches:
+    - dev
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: emcorrales/action-deploy
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        actor: ${{ secrets.GITHUB_ACTOR }}
+        name: "Emmanuel M. Corrales"
+        email: "contact@emcorrales.com"
+        url: github.com/emcorrales/blog.git
