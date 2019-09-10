@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: emcorrales/action-deploy
+    - uses: emcorrales/action-deploy@master
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
         actor: ${{ secrets.GITHUB_ACTOR }}
