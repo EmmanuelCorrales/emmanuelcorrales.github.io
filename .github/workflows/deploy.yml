@@ -17,5 +17,4 @@ jobs:
         token: ${{ secrets.GITHUB_TOKEN }}
         name: "Emmanuel M. Corrales"
         email: "contact@emcorrales.com"
-        url: github.com/emcorrales/blog.git
         domain: emcorrales.com
