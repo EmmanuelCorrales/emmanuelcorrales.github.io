@@ -15,6 +15,6 @@ jobs:
     - uses: emcorrales/action-jekyll-deploy-ghpages@master
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
-        git_commiter_name: "Emmanuel M. Corrales"
-        git_commiter_email: "contact@emcorrales.com"
+        git_committer_name: "Emmanuel M. Corrales"
+        git_committer_email: "contact@emcorrales.com"
         custom_domain: emcorrales.com
