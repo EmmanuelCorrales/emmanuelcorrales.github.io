@@ -12,7 +12,7 @@ jobs:
 
     steps:
     - uses: actions/checkout@v1
-    - uses: emcorrales/action-deploy@master
+    - uses: emcorrales/action-jekyll-deploy-ghpages@master
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
         name: "Emmanuel M. Corrales"
