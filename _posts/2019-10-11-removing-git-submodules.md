@@ -47,3 +47,5 @@ rm -rf drafts
 git add .
 git push origin master
 ```
+
+There you have it! You have succesfully remove the submodule.
