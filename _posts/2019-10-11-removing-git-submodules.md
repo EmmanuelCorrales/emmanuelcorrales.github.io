@@ -7,9 +7,9 @@ tags: [ git ]
 ---
 I decided to write this post because I've been getting a lot of tickets
 regarding pipelines not working due to improper removal of git submodule/s in
-their repo. Here's a simple guide on how to remove git submodules.
+their repo. Here's a simple guide on how to remove Git submodules.
 
-Lets say I want to remove a git submodule called **drafts**.
+Lets say I want to remove a Git submodule called **drafts**.
 
 1. Edit **.gitmodules** to remove lines that are similar to the example below.
 ```bash
