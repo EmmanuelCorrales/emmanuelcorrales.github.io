@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "Removing git submodules."
+title:  "Removing Git submodules."
 date:   2019-10-11 08:30:00 +0800
 categories:  git
 tags: [ git ]
@@ -48,4 +48,5 @@ git add .
 git push origin master
 ```
 
-There you have it! You have succesfully remove the submodule.
+There you have it! You have succesfully remove the submodule from your local git
+repo.
