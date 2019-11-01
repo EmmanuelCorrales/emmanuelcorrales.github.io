@@ -1,9 +1,9 @@
 # pack-refs with: peeled fully-peeled sorted 
 effec30f5d3791f7c39a80dd44dc7512576f5e69 refs/heads/dev
-dd6929d17c4cdfeb11e589f9d2c6f5c35d4f081c refs/heads/gh-pages
+8da12dea065f2e98b854059b9073c59f334c9cb9 refs/heads/gh-pages
 526b4aa3f45bea805368a4dcf4bd882a5cc551ed refs/heads/jekyll-deploy
 cf72da24e0580a8c2bf1b4145cfa268c0e9b4a11 refs/heads/jemoji
-5bda467a828d30be10b41c288113fe94936475eb refs/heads/master
+fd615ace6ebc67a56108871811d1734dd7dc39d6 refs/heads/master
 4ba6354a63756b694062e607964216e8f99f1440 refs/heads/minima
 1f236128b1fa2f7d71a75c4f9b38004ef79f76a8 refs/heads/test
 69f843bf3aaa2f04cc993edc98b6f1903ba968e4 refs/heads/wakoko
