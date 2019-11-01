@@ -5,8 +5,8 @@
     <description>I am Emmanuel Corrales, you may also call me Em. I've been in the technology industry for more than five years. I am currently working as a DevOps Consultant. I am also an experienced Software Engineer who is language agnostic. A jack of all trades guy. I'm a linux enthusiast and my favorite tool is the terminal. I code with it, work with it, live with it and will probably not survive without it. I am a big fan of open source and has always been trying to learn something new.</description>
     <link>https://emcorrales.com/</link>
     <atom:link href="https://emcorrales.com/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Fri, 01 Nov 2019 21:17:16 +0000</pubDate>
-    <lastBuildDate>Fri, 01 Nov 2019 21:17:16 +0000</lastBuildDate>
+    <pubDate>Fri, 01 Nov 2019 21:29:43 +0000</pubDate>
+    <lastBuildDate>Fri, 01 Nov 2019 21:29:43 +0000</lastBuildDate>
     <generator>Jekyll v3.8.5</generator>
     
       <item>
@@ -51,7 +51,7 @@ git push origin master
   &lt;/li&gt;
 &lt;/ol&gt;
 
-&lt;p&gt;There you have it! You have succesfully removed the submodule from your local
+&lt;p&gt;There you have it, You have succesfully removed the submodule from your local
 git repo.&lt;/p&gt;
 </description>
         <pubDate>Fri, 11 Oct 2019 00:30:00 +0000</pubDate>
