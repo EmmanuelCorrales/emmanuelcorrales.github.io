@@ -48,5 +48,5 @@ git add .
 git push origin master
 ```
 
-There you have it! You have succesfully removed the submodule from your local
+There you have it, You have succesfully removed the submodule from your local
 git repo.
