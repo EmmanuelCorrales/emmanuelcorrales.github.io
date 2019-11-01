@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+  <head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  <!-- Enable responsiveness on mobile devices-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title>
+    
+      Javascript Regex Cheat Sheet | Emmanuel Corrales
+    
+  </title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="https://emcorrales.com/assets/css/poole.css">
+  <link rel="stylesheet" href="https://emcorrales.com/assets/css/syntax.css">
+  <link rel="stylesheet" href="https://emcorrales.com/assets/css/hyde.css">
+  <link rel="stylesheet" href="https://emcorrales.com/assets/css/cheatsheet.css">
+  <link rel="stylesheet" href="https://emcorrales.com/assets/css/sidebar.css">
+  
+  <link rel="stylesheet" href="https://emcorrales.com/vendor/font-awesome/5.5.0/css/all.min.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
+
+  <!-- Favicons -->
+  <link rel="apple-touch-icon" sizes="57x57" href="https://emcorrales.com/assets/images/apple-icon-57x57.png">
+  <link rel="apple-touch-icon" sizes="60x60" href="https://emcorrales.com/assets/images/apple-icon-60x60.png">
+  <link rel="apple-touch-icon" sizes="72x72" href="https://emcorrales.com/assets/images/apple-icon-72x72.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="https://emcorrales.com/assets/images/apple-icon-76x76.png">
+  <link rel="apple-touch-icon" sizes="114x114" href="https://emcorrales.com/assets/images/apple-icon-114x114.png">
+  <link rel="apple-touch-icon" sizes="120x120" href="https://emcorrales.com/assets/images/apple-icon-120x120.png">
+  <link rel="apple-touch-icon" sizes="144x144" href="https://emcorrales.com/assets/images/apple-icon-144x144.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="https://emcorrales.com/assets/images/apple-icon-152x152.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="https://emcorrales.com/assets/images/apple-icon-180x180.png">
+  <link rel="icon" type="image/png" sizes="192x192"  href="https://emcorrales.com/assets/images/android-icon-192x192.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="https://emcorrales.com/assets/images/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="96x96" href="https://emcorrales.com/assets/images/favicon-96x96.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="https://emcorrales.com/assets/images/favicon-16x16.png">
+  <link rel="manifest" href="/manifest.json">
+  <meta name="msapplication-TileColor" content="#ffffff">
+  <meta name="msapplication-TileImage" content="https://emcorrales.com/assets/images/ms-icon-144x144.png">
+  <meta name="theme-color" content="#ffffff">
+
+  <!-- RSS -->
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="https://emcorrales.com/feed.xml">
+
+  
+  <!-- Google Analytics -->
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-80537045-1', 'auto');
+    ga('send', 'pageview');
+  </script>
+  
+
+  <!-- Begin Jekyll SEO tag v2.4.0 -->
+<title>Javascript Regex Cheat Sheet | Emmanuel Corrales</title>
+<meta name="generator" content="Jekyll v3.8.5" />
+<meta property="og:title" content="Javascript Regex Cheat Sheet" />
+<meta name="author" content="Emmanuel Corrales" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Basics . - Any character except newline a - The character a ab - The string ab a|b - a or b a\* - 0 or more a&#39;s \ - Escapes a special character Quantifiers * - 0 or more + - 1 or more ? - 0 or 1 {2} - Exactly 2 {2,5} - Between 2 and 5 {2,5} - Between 2 and 5 Groups (..) - Capturing group (?:..) - Non-capturing group \Y - Match the Y&#39;th captured group Character Classes [ab-d] - One character of a, b, c, d [^ab-d] - One character except a, b, c, d [\b] - Backspace character \d - One digit \D - One non-digit \s - One whitespace \S - One non-whitespace \w - One word character \w - One non-word character Assertions ^ - Start of string $ - End of string \b - Word boundary \B - Non-word boundary (?=..) - Positive look ahead (?!..) - Negative look ahead Flags g - Global match i - Ignore case m - ^ and $ match start and end of line Special Characters \n - New line \r - Carriage return \t - Tab \0 - Null Character \YYY - Octal character YYY \xYY - Hexadecimal character YY \uYYYY - Hexadecimal character YYYY \cY - Control character Y Replacement $$ - Insert $ $&amp; - Insert entire match $` - Insert preceding string $&#39; - Insert following string $Y - Insert Y&#39;th captured group" />
+<meta property="og:description" content="Basics . - Any character except newline a - The character a ab - The string ab a|b - a or b a\* - 0 or more a&#39;s \ - Escapes a special character Quantifiers * - 0 or more + - 1 or more ? - 0 or 1 {2} - Exactly 2 {2,5} - Between 2 and 5 {2,5} - Between 2 and 5 Groups (..) - Capturing group (?:..) - Non-capturing group \Y - Match the Y&#39;th captured group Character Classes [ab-d] - One character of a, b, c, d [^ab-d] - One character except a, b, c, d [\b] - Backspace character \d - One digit \D - One non-digit \s - One whitespace \S - One non-whitespace \w - One word character \w - One non-word character Assertions ^ - Start of string $ - End of string \b - Word boundary \B - Non-word boundary (?=..) - Positive look ahead (?!..) - Negative look ahead Flags g - Global match i - Ignore case m - ^ and $ match start and end of line Special Characters \n - New line \r - Carriage return \t - Tab \0 - Null Character \YYY - Octal character YYY \xYY - Hexadecimal character YY \uYYYY - Hexadecimal character YYYY \cY - Control character Y Replacement $$ - Insert $ $&amp; - Insert entire match $` - Insert preceding string $&#39; - Insert following string $Y - Insert Y&#39;th captured group" />
+<link rel="canonical" href="https://emcorrales.com/cheatsheets/javascript-regex" />
+<meta property="og:url" content="https://emcorrales.com/cheatsheets/javascript-regex" />
+<meta property="og:site_name" content="Emmanuel Corrales" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2019-11-01T19:39:39+00:00" />
+<script type="application/ld+json">
+{"author":{"@type":"Person","name":"Emmanuel Corrales"},"description":"Basics . - Any character except newline a - The character a ab - The string ab a|b - a or b a\\* - 0 or more a&#39;s \\ - Escapes a special character Quantifiers * - 0 or more + - 1 or more ? - 0 or 1 {2} - Exactly 2 {2,5} - Between 2 and 5 {2,5} - Between 2 and 5 Groups (..) - Capturing group (?:..) - Non-capturing group \\Y - Match the Y&#39;th captured group Character Classes [ab-d] - One character of a, b, c, d [^ab-d] - One character except a, b, c, d [\\b] - Backspace character \\d - One digit \\D - One non-digit \\s - One whitespace \\S - One non-whitespace \\w - One word character \\w - One non-word character Assertions ^ - Start of string $ - End of string \\b - Word boundary \\B - Non-word boundary (?=..) - Positive look ahead (?!..) - Negative look ahead Flags g - Global match i - Ignore case m - ^ and $ match start and end of line Special Characters \\n - New line \\r - Carriage return \\t - Tab \\0 - Null Character \\YYY - Octal character YYY \\xYY - Hexadecimal character YY \\uYYYY - Hexadecimal character YYYY \\cY - Control character Y Replacement $$ - Insert $ $&amp; - Insert entire match $` - Insert preceding string $&#39; - Insert following string $Y - Insert Y&#39;th captured group","headline":"Javascript Regex Cheat Sheet","dateModified":"2019-11-01T19:39:39+00:00","datePublished":"2019-11-01T19:39:39+00:00","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://emcorrales.com/cheatsheets/javascript-regex"},"url":"https://emcorrales.com/cheatsheets/javascript-regex","@context":"http://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+</head>
+
+
+  <body>
+
+    <div class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      <img src="https://www.gravatar.com/avatar/6b917878b9fccb87c8b1489813b755e2?s=500" alt="Emmanuel Corrales" />
+      <h1>
+        <a href="https://emcorrales.com">
+          Emmanuel Corrales
+        </a>
+      </h1>
+    </div>
+
+    <nav class="sidebar-nav">
+      <a class="sidebar-nav-item" href="https://emcorrales.com">Blog</a>
+
+      
+
+      
+      
+        
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+          
+        
+      
+        
+          
+        
+      
+        
+          
+        
+      
+        
+          
+            <a class="sidebar-nav-item" href="/cheatsheets">Cheat Sheets</a>
+          
+        
+      
+        
+          
+            <a class="sidebar-nav-item" href="/about">About</a>
+          
+        
+      
+    </nav>
+
+    <div class="social-icons">
+      <a href="https://twitter.com/em_corrales"
+        class="social fab fa-twitter" title="Twitter" target="_blank"></a>
+
+      <a href="https://linkedin.com/in/emmanuelcorrales"
+        class="social fab fa-linkedin" title="Linkedin" target="_blank"></a>
+
+      <a href="https://github.com/emcorrales"
+        class="social fab fa-github" title="Github" target="_blank"></a>
+
+      <a href="mailto:contact@emcorrales.com" class="social fa fa-envelope"
+        title="Email"></a>
+
+      <a href="/feed.xml" class="social fa fa-rss" title="RSS feed"
+        target="_blank"></a>
+    </div>
+
+    <p>&copy; 2019. All rights reserved.</p>
+  </div>
+</div>
+
+
+    <div class="content container">
+      <div class="cheatsheet">
+  <h1>Javascript Regex Cheat Sheet</h1>
+  <div class="grid-block">
+  <div class="grid-lg-1-2">
+    <h2>Basics</h2>
+    <ul>
+      <li><kbd>.</kbd> - Any character except newline</li>
+      <li><kbd>a</kbd> - The character a</li>
+      <li><kbd>ab</kbd> - The string ab</li>
+      <li><kbd>a|b</kbd> - a or b</li>
+      <li><kbd>a\*</kbd> - 0 or more a's</li>
+      <li><kbd>\</kbd> - Escapes a special character</li>
+    </ul>
+    <h2>Quantifiers</h2>
+    <ul>
+      <li><kbd>*</kbd> - 0 or more</li>
+      <li><kbd>+</kbd> - 1 or more</li>
+      <li><kbd>?</kbd> - 0 or 1</li>
+      <li><kbd>{2}</kbd> - Exactly 2</li>
+      <li><kbd>{2,5}</kbd> - Between 2 and 5</li>
+      <li><kbd>{2,5}</kbd> - Between 2 and 5</li>
+    </ul>
+    <h2>Groups</h2>
+    <ul>
+      <li><kbd>(..)</kbd> - Capturing group</li>
+      <li><kbd>(?:..)</kbd> - Non-capturing group</li>
+      <li><kbd>\Y</kbd> - Match the Y'th captured group</li>
+    </ul>
+    <h2>Character Classes</h2>
+    <ul>
+      <li><kbd>[ab-d]</kbd> - One character of a, b, c, d</li>
+      <li><kbd>[^ab-d]</kbd> - One character except a, b, c, d</li>
+      <li><kbd>[\b]</kbd> - Backspace character</li>
+      <li><kbd>\d</kbd> - One digit</li>
+      <li><kbd>\D</kbd> - One non-digit</li>
+      <li><kbd>\s</kbd> - One whitespace</li>
+      <li><kbd>\S</kbd> - One non-whitespace</li>
+      <li><kbd>\w</kbd> - One word character</li>
+      <li><kbd>\w</kbd> - One non-word character</li>
+    </ul>
+  </div>
+  <div class="grid-lg-1-2">
+    <h2>Assertions</h2>
+    <ul>
+      <li><kbd>^</kbd> - Start of string</li>
+      <li><kbd>$</kbd> - End of string</li>
+      <li><kbd>\b</kbd> - Word boundary</li>
+      <li><kbd>\B</kbd> - Non-word boundary</li>
+      <li><kbd>(?=..)</kbd> - Positive look ahead</li>
+      <li><kbd>(?!..)</kbd> - Negative look ahead</li>
+    </ul>
+    <h2>Flags</h2>
+    <ul>
+      <li><kbd>g</kbd> - Global match</li>
+      <li><kbd>i</kbd> - Ignore case</li>
+      <li><kbd>m</kbd> - ^ and $ match start and end of line</li>
+    </ul>
+    <h2>Special Characters</h2>
+    <ul>
+      <li><kbd>\n</kbd> - New line</li>
+      <li><kbd>\r</kbd> - Carriage return</li>
+      <li><kbd>\t</kbd> - Tab</li>
+      <li><kbd>\0</kbd> - Null Character</li>
+      <li><kbd>\YYY</kbd> - Octal character YYY</li>
+      <li><kbd>\xYY</kbd> - Hexadecimal character YY</li>
+      <li><kbd>\uYYYY</kbd> - Hexadecimal character YYYY</li>
+      <li><kbd>\cY</kbd> - Control character Y</li>
+    </ul>
+    <h2>Replacement</h2>
+    <ul>
+      <li><kbd>$$</kbd> - Insert $</li>
+      <li><kbd>$&amp;</kbd> - Insert entire match</li>
+      <li><kbd>$`</kbd> - Insert preceding string</li>
+      <li><kbd>$'</kbd> - Insert following string</li>
+      <li><kbd>$Y</kbd> - Insert Y'th captured group</li>
+    </ul>
+  </div>
+</div>
+
+</div>
+
+
+  <div id="disqus_thread"></div>
+<script>
+
+/**
+*  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+*  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables*/
+/*
+var disqus_config = function () {
+this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
+this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+};
+*/
+(function() { // DON'T EDIT BELOW THIS LINE
+  var d = document, s = d.createElement('script');
+  s.src = 'https://emmanuel-corrales.disqus.com/embed.js';
+  s.setAttribute('data-timestamp', +new Date());
+  (d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+
+
+    </div>
+
+  </body>
+</html>

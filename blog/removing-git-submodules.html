@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+  <head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  <!-- Enable responsiveness on mobile devices-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title>
+    
+      How to remove Git submodules. | Emmanuel Corrales
+    
+  </title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="https://emcorrales.com/assets/css/poole.css">
+  <link rel="stylesheet" href="https://emcorrales.com/assets/css/syntax.css">
+  <link rel="stylesheet" href="https://emcorrales.com/assets/css/hyde.css">
+  <link rel="stylesheet" href="https://emcorrales.com/assets/css/cheatsheet.css">
+  <link rel="stylesheet" href="https://emcorrales.com/assets/css/sidebar.css">
+  
+    <link rel="stylesheet" href="https://emcorrales.com/assets/css/posts.css">
+  
+  <link rel="stylesheet" href="https://emcorrales.com/vendor/font-awesome/5.5.0/css/all.min.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
+
+  <!-- Favicons -->
+  <link rel="apple-touch-icon" sizes="57x57" href="https://emcorrales.com/assets/images/apple-icon-57x57.png">
+  <link rel="apple-touch-icon" sizes="60x60" href="https://emcorrales.com/assets/images/apple-icon-60x60.png">
+  <link rel="apple-touch-icon" sizes="72x72" href="https://emcorrales.com/assets/images/apple-icon-72x72.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="https://emcorrales.com/assets/images/apple-icon-76x76.png">
+  <link rel="apple-touch-icon" sizes="114x114" href="https://emcorrales.com/assets/images/apple-icon-114x114.png">
+  <link rel="apple-touch-icon" sizes="120x120" href="https://emcorrales.com/assets/images/apple-icon-120x120.png">
+  <link rel="apple-touch-icon" sizes="144x144" href="https://emcorrales.com/assets/images/apple-icon-144x144.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="https://emcorrales.com/assets/images/apple-icon-152x152.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="https://emcorrales.com/assets/images/apple-icon-180x180.png">
+  <link rel="icon" type="image/png" sizes="192x192"  href="https://emcorrales.com/assets/images/android-icon-192x192.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="https://emcorrales.com/assets/images/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="96x96" href="https://emcorrales.com/assets/images/favicon-96x96.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="https://emcorrales.com/assets/images/favicon-16x16.png">
+  <link rel="manifest" href="/manifest.json">
+  <meta name="msapplication-TileColor" content="#ffffff">
+  <meta name="msapplication-TileImage" content="https://emcorrales.com/assets/images/ms-icon-144x144.png">
+  <meta name="theme-color" content="#ffffff">
+
+  <!-- RSS -->
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="https://emcorrales.com/feed.xml">
+
+  
+  <!-- Google Analytics -->
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-80537045-1', 'auto');
+    ga('send', 'pageview');
+  </script>
+  
+
+  <!-- Begin Jekyll SEO tag v2.4.0 -->
+<title>How to remove Git submodules. | Emmanuel Corrales</title>
+<meta name="generator" content="Jekyll v3.8.5" />
+<meta property="og:title" content="How to remove Git submodules." />
+<meta name="author" content="Emmanuel Corrales" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="I decided to write this post because I’ve been getting a lot of tickets regarding pipelines not working due to improper removal of git submodule/s in their repo. Here’s a simple guide on how to remove Git submodules." />
+<meta property="og:description" content="I decided to write this post because I’ve been getting a lot of tickets regarding pipelines not working due to improper removal of git submodule/s in their repo. Here’s a simple guide on how to remove Git submodules." />
+<link rel="canonical" href="https://emcorrales.com/blog/removing-git-submodules" />
+<meta property="og:url" content="https://emcorrales.com/blog/removing-git-submodules" />
+<meta property="og:site_name" content="Emmanuel Corrales" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2019-10-11T00:30:00+00:00" />
+<script type="application/ld+json">
+{"author":{"@type":"Person","name":"Emmanuel Corrales"},"description":"I decided to write this post because I’ve been getting a lot of tickets regarding pipelines not working due to improper removal of git submodule/s in their repo. Here’s a simple guide on how to remove Git submodules.","headline":"How to remove Git submodules.","dateModified":"2019-10-11T00:30:00+00:00","datePublished":"2019-10-11T00:30:00+00:00","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://emcorrales.com/blog/removing-git-submodules"},"url":"https://emcorrales.com/blog/removing-git-submodules","@context":"http://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+</head>
+
+
+  <body>
+
+    <div class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      <img src="https://www.gravatar.com/avatar/6b917878b9fccb87c8b1489813b755e2?s=500" alt="Emmanuel Corrales" />
+      <h1>
+        <a href="https://emcorrales.com">
+          Emmanuel Corrales
+        </a>
+      </h1>
+    </div>
+
+    <nav class="sidebar-nav">
+      <a class="sidebar-nav-item" href="https://emcorrales.com">Blog</a>
+
+      
+
+      
+      
+        
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+          
+        
+      
+        
+          
+        
+      
+        
+          
+        
+      
+        
+          
+            <a class="sidebar-nav-item" href="/cheatsheets">Cheat Sheets</a>
+          
+        
+      
+        
+          
+            <a class="sidebar-nav-item" href="/about">About</a>
+          
+        
+      
+    </nav>
+
+    <div class="social-icons">
+      <a href="https://twitter.com/em_corrales"
+        class="social fab fa-twitter" title="Twitter" target="_blank"></a>
+
+      <a href="https://linkedin.com/in/emmanuelcorrales"
+        class="social fab fa-linkedin" title="Linkedin" target="_blank"></a>
+
+      <a href="https://github.com/emcorrales"
+        class="social fab fa-github" title="Github" target="_blank"></a>
+
+      <a href="mailto:contact@emcorrales.com" class="social fa fa-envelope"
+        title="Email"></a>
+
+      <a href="/feed.xml" class="social fa fa-rss" title="RSS feed"
+        target="_blank"></a>
+    </div>
+
+    <p>&copy; 2019. All rights reserved.</p>
+  </div>
+</div>
+
+
+    <div class="content container">
+      <div class="post">
+  <h1 class="post-title">How to remove Git submodules.</h1>
+  <span class="post-date">11 Oct 2019</span>
+  <br/>
+  <p>I decided to write this post because I’ve been getting a lot of tickets
+regarding pipelines not working due to improper removal of git submodule/s in
+their repo. Here’s a simple guide on how to remove Git submodules.</p>
+
+<p>Lets say I want to remove a Git submodule called <strong>drafts</strong>.</p>
+
+<ol>
+  <li>Edit <strong>.gitmodules</strong> to remove lines that are similar to the example below.
+    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">[</span>submodule <span class="s2">"drafts"</span><span class="o">]</span>
+  path <span class="o">=</span> drafts
+  url <span class="o">=</span> git://github.com/emcorrales/drafts.git
+</code></pre></div>    </div>
+  </li>
+  <li>Edit <strong>.git/config</strong> and remove lines that are similar to the example below.
+    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">[</span>submodule <span class="s2">"drafts"</span><span class="o">]</span>
+  url <span class="o">=</span> git://github.com/emcorrales/drafts.git
+</code></pre></div>    </div>
+  </li>
+  <li>Remove the submodule from the git index.
+    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git <span class="nb">rm</span> <span class="nt">--cached</span> drafts
+</code></pre></div>    </div>
+  </li>
+  <li>Remove submodule’s git repo. The command above will move the <strong>.git</strong>
+directory of the submodule <strong>drafts</strong> to <strong>.git/modules/drafts</strong> to protect its
+history so we remove it as well.
+    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">rm</span> <span class="nt">-rf</span> .git/modules/drafts
+</code></pre></div>    </div>
+  </li>
+  <li>Remove submodule directory because git sees ./drafts as a new directory
+instead of a submodule.
+    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">rm</span> <span class="nt">-rf</span> drafts
+</code></pre></div>    </div>
+  </li>
+  <li>Commit changes then push.
+    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git add <span class="nb">.</span>
+git push origin master
+</code></pre></div>    </div>
+  </li>
+</ol>
+
+<p>There you have it! You have succesfully remove the submodule from your local git
+repo.</p>
+
+</div>
+
+<div class="related">
+  <h2>Related Posts</h2>
+  <ul class="related-posts">
+    
+      <li>
+        <h3>
+          <a href="/blog/how-to-use-a-self-signed-certificate-with-gradle">
+            How to use a self signed certificate with Gradle
+            <small>29 Jul 2019</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/blog/how-to-enable-internet-access-on-centos7-virtualbox">
+            How to enable internet access of CentOS 7 on VirtualBox
+            <small>13 Jun 2019</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/blog/nodejs-debugging-and-fixing-https-ssl-issues-caused-by-changing-the-self-signed-certificate">
+            NodeJS: Debugging and fixing HTTPS/SSL issues caused by changing the self signed certificate.
+            <small>30 Apr 2019</small>
+          </a>
+        </h3>
+      </li>
+    
+  </ul>
+</div>
+
+
+  <div id="disqus_thread"></div>
+<script>
+
+/**
+*  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+*  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables*/
+/*
+var disqus_config = function () {
+this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
+this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+};
+*/
+(function() { // DON'T EDIT BELOW THIS LINE
+  var d = document, s = d.createElement('script');
+  s.src = 'https://emmanuel-corrales.disqus.com/embed.js';
+  s.setAttribute('data-timestamp', +new Date());
+  (d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+
+
+    </div>
+
+  </body>
+</html>

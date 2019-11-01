@@ -1,7 +1,0 @@
-.sass-cache
-.jekyll-metadata
-.DS_Store
-
-# Ignore vim files.
-*.swp
-*.swo

@@ -1,0 +1,6 @@
+[core]
+	repositoryformatversion = 0
+	filemode = true
+	bare = true
+[remote "origin"]
+	url = https://emcorrales:v1.ba3e52f340e9c6971f6996c08e792cb99b31ea8c@github.com/emcorrales/blog.git

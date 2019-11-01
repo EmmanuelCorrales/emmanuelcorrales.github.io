@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+  <head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  <!-- Enable responsiveness on mobile devices-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title>
+    
+      Building a mock location app for Android. | Emmanuel Corrales
+    
+  </title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="https://emcorrales.com/assets/css/poole.css">
+  <link rel="stylesheet" href="https://emcorrales.com/assets/css/syntax.css">
+  <link rel="stylesheet" href="https://emcorrales.com/assets/css/hyde.css">
+  <link rel="stylesheet" href="https://emcorrales.com/assets/css/cheatsheet.css">
+  <link rel="stylesheet" href="https://emcorrales.com/assets/css/sidebar.css">
+  
+    <link rel="stylesheet" href="https://emcorrales.com/assets/css/posts.css">
+  
+  <link rel="stylesheet" href="https://emcorrales.com/vendor/font-awesome/5.5.0/css/all.min.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
+
+  <!-- Favicons -->
+  <link rel="apple-touch-icon" sizes="57x57" href="https://emcorrales.com/assets/images/apple-icon-57x57.png">
+  <link rel="apple-touch-icon" sizes="60x60" href="https://emcorrales.com/assets/images/apple-icon-60x60.png">
+  <link rel="apple-touch-icon" sizes="72x72" href="https://emcorrales.com/assets/images/apple-icon-72x72.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="https://emcorrales.com/assets/images/apple-icon-76x76.png">
+  <link rel="apple-touch-icon" sizes="114x114" href="https://emcorrales.com/assets/images/apple-icon-114x114.png">
+  <link rel="apple-touch-icon" sizes="120x120" href="https://emcorrales.com/assets/images/apple-icon-120x120.png">
+  <link rel="apple-touch-icon" sizes="144x144" href="https://emcorrales.com/assets/images/apple-icon-144x144.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="https://emcorrales.com/assets/images/apple-icon-152x152.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="https://emcorrales.com/assets/images/apple-icon-180x180.png">
+  <link rel="icon" type="image/png" sizes="192x192"  href="https://emcorrales.com/assets/images/android-icon-192x192.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="https://emcorrales.com/assets/images/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="96x96" href="https://emcorrales.com/assets/images/favicon-96x96.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="https://emcorrales.com/assets/images/favicon-16x16.png">
+  <link rel="manifest" href="/manifest.json">
+  <meta name="msapplication-TileColor" content="#ffffff">
+  <meta name="msapplication-TileImage" content="https://emcorrales.com/assets/images/ms-icon-144x144.png">
+  <meta name="theme-color" content="#ffffff">
+
+  <!-- RSS -->
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="https://emcorrales.com/feed.xml">
+
+  
+  <!-- Google Analytics -->
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-80537045-1', 'auto');
+    ga('send', 'pageview');
+  </script>
+  
+
+  <!-- Begin Jekyll SEO tag v2.4.0 -->
+<title>Building a mock location app for Android. | Emmanuel Corrales</title>
+<meta name="generator" content="Jekyll v3.8.5" />
+<meta property="og:title" content="Building a mock location app for Android." />
+<meta name="author" content="Emmanuel Corrales" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Recently I&#39;ve been asked to test the android app I&#39;m developing for my client. The app is called SurveyBods and owned by the company called Researchbods and it is only available in the UK. A notification shows up whenever the user enters a place which is represented by a geofence. The notification would prompt the user with a survey or a quick poll. My problem with this is that I&#39;m not allowed to get out of my office and using DDMS is a very tedious task so I decided to make a mock location app to make it more exciting for me." />
+<meta property="og:description" content="Recently I&#39;ve been asked to test the android app I&#39;m developing for my client. The app is called SurveyBods and owned by the company called Researchbods and it is only available in the UK. A notification shows up whenever the user enters a place which is represented by a geofence. The notification would prompt the user with a survey or a quick poll. My problem with this is that I&#39;m not allowed to get out of my office and using DDMS is a very tedious task so I decided to make a mock location app to make it more exciting for me." />
+<link rel="canonical" href="https://emcorrales.com/blog/building-a-location-spoofer-app-for-android" />
+<meta property="og:url" content="https://emcorrales.com/blog/building-a-location-spoofer-app-for-android" />
+<meta property="og:site_name" content="Emmanuel Corrales" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2016-09-02T07:30:00+00:00" />
+<script type="application/ld+json">
+{"author":{"@type":"Person","name":"Emmanuel Corrales"},"description":"Recently I&#39;ve been asked to test the android app I&#39;m developing for my client. The app is called SurveyBods and owned by the company called Researchbods and it is only available in the UK. A notification shows up whenever the user enters a place which is represented by a geofence. The notification would prompt the user with a survey or a quick poll. My problem with this is that I&#39;m not allowed to get out of my office and using DDMS is a very tedious task so I decided to make a mock location app to make it more exciting for me.","headline":"Building a mock location app for Android.","dateModified":"2016-09-02T07:30:00+00:00","datePublished":"2016-09-02T07:30:00+00:00","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://emcorrales.com/blog/building-a-location-spoofer-app-for-android"},"url":"https://emcorrales.com/blog/building-a-location-spoofer-app-for-android","@context":"http://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+</head>
+
+
+  <body>
+
+    <div class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      <img src="https://www.gravatar.com/avatar/6b917878b9fccb87c8b1489813b755e2?s=500" alt="Emmanuel Corrales" />
+      <h1>
+        <a href="https://emcorrales.com">
+          Emmanuel Corrales
+        </a>
+      </h1>
+    </div>
+
+    <nav class="sidebar-nav">
+      <a class="sidebar-nav-item" href="https://emcorrales.com">Blog</a>
+
+      
+
+      
+      
+        
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+          
+        
+      
+        
+          
+        
+      
+        
+          
+        
+      
+        
+          
+            <a class="sidebar-nav-item" href="/cheatsheets">Cheat Sheets</a>
+          
+        
+      
+        
+          
+            <a class="sidebar-nav-item" href="/about">About</a>
+          
+        
+      
+    </nav>
+
+    <div class="social-icons">
+      <a href="https://twitter.com/em_corrales"
+        class="social fab fa-twitter" title="Twitter" target="_blank"></a>
+
+      <a href="https://linkedin.com/in/emmanuelcorrales"
+        class="social fab fa-linkedin" title="Linkedin" target="_blank"></a>
+
+      <a href="https://github.com/emcorrales"
+        class="social fab fa-github" title="Github" target="_blank"></a>
+
+      <a href="mailto:contact@emcorrales.com" class="social fa fa-envelope"
+        title="Email"></a>
+
+      <a href="/feed.xml" class="social fa fa-rss" title="RSS feed"
+        target="_blank"></a>
+    </div>
+
+    <p>&copy; 2019. All rights reserved.</p>
+  </div>
+</div>
+
+
+    <div class="content container">
+      <div class="post">
+  <h1 class="post-title">Building a mock location app for Android.</h1>
+  <span class="post-date">02 Sep 2016</span>
+  <br/>
+  <p>Recently I've been asked to test the android app I'm developing for my client.
+The app is called SurveyBods and owned by the company called Researchbods and it is only available in the UK.
+A notification shows up whenever the user enters a place which is represented by a geofence.
+The notification would prompt the user with a survey or a quick poll.
+My problem with this is that I'm not allowed to get out of my office and using DDMS is a very tedious task so I decided to make a mock location app to make it more exciting for me.</p>
+
+<p>In this article I will show you how to build a simple mock location app.
+First we will create the layout for our main activity.
+The layout will contain the required input for latitude,longitude and accuracy.</p>
+
+<h4>activity_main.xml</h4>
+
+<figure class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="cp">&lt;?xml version="1.0" encoding="utf-8"?&gt;</span>
+<span class="nt">&lt;LinearLayout</span> <span class="na">xmlns:android=</span><span class="s">"http://schemas.android.com/apk/res/android"</span>
+    <span class="na">xmlns:tools=</span><span class="s">"http://schemas.android.com/tools"</span>
+    <span class="na">android:layout_width=</span><span class="s">"match_parent"</span>
+    <span class="na">android:layout_height=</span><span class="s">"match_parent"</span>
+    <span class="na">android:orientation=</span><span class="s">"vertical"</span>
+    <span class="na">android:paddingBottom=</span><span class="s">"@dimen/activity_vertical_margin"</span>
+    <span class="na">android:paddingLeft=</span><span class="s">"@dimen/activity_horizontal_margin"</span>
+    <span class="na">android:paddingRight=</span><span class="s">"@dimen/activity_horizontal_margin"</span>
+    <span class="na">android:paddingTop=</span><span class="s">"@dimen/activity_vertical_margin"</span>
+    <span class="na">tools:context=</span><span class="s">"com.emmanuelcorrales.locationspoofer.MainActivity"</span><span class="nt">&gt;</span>
+
+    <span class="nt">&lt;android.support.design.widget.TextInputLayout</span>
+        <span class="na">android:layout_width=</span><span class="s">"match_parent"</span>
+        <span class="na">android:layout_height=</span><span class="s">"wrap_content"</span><span class="nt">&gt;</span>
+
+        <span class="nt">&lt;EditText</span>
+            <span class="na">android:id=</span><span class="s">"@+id/latitude"</span>
+            <span class="na">android:layout_width=</span><span class="s">"match_parent"</span>
+            <span class="na">android:layout_height=</span><span class="s">"wrap_content"</span>
+            <span class="na">android:ems=</span><span class="s">"10"</span>
+            <span class="na">android:hint=</span><span class="s">"@string/latitude"</span>
+            <span class="na">android:inputType=</span><span class="s">"numberDecimal|numberSigned"</span> <span class="nt">/&gt;</span>
+
+    <span class="nt">&lt;/android.support.design.widget.TextInputLayout&gt;</span>
+
+    <span class="nt">&lt;android.support.design.widget.TextInputLayout</span>
+        <span class="na">android:layout_width=</span><span class="s">"match_parent"</span>
+        <span class="na">android:layout_height=</span><span class="s">"wrap_content"</span><span class="nt">&gt;</span>
+
+        <span class="nt">&lt;EditText</span>
+            <span class="na">android:id=</span><span class="s">"@+id/longitude"</span>
+            <span class="na">android:layout_width=</span><span class="s">"match_parent"</span>
+            <span class="na">android:layout_height=</span><span class="s">"wrap_content"</span>
+            <span class="na">android:ems=</span><span class="s">"10"</span>
+            <span class="na">android:hint=</span><span class="s">"@string/longitude"</span>
+            <span class="na">android:inputType=</span><span class="s">"numberDecimal|numberSigned"</span> <span class="nt">/&gt;</span>
+
+    <span class="nt">&lt;/android.support.design.widget.TextInputLayout&gt;</span>
+
+    <span class="nt">&lt;android.support.design.widget.TextInputLayout</span>
+        <span class="na">android:layout_width=</span><span class="s">"match_parent"</span>
+        <span class="na">android:layout_height=</span><span class="s">"wrap_content"</span><span class="nt">&gt;</span>
+
+        <span class="nt">&lt;EditText</span>
+            <span class="na">android:id=</span><span class="s">"@+id/accuracy"</span>
+            <span class="na">android:layout_width=</span><span class="s">"match_parent"</span>
+            <span class="na">android:layout_height=</span><span class="s">"wrap_content"</span>
+            <span class="na">android:ems=</span><span class="s">"10"</span>
+            <span class="na">android:hint=</span><span class="s">"@string/accuracy"</span>
+            <span class="na">android:inputType=</span><span class="s">"numberDecimal"</span> <span class="nt">/&gt;</span>
+
+    <span class="nt">&lt;/android.support.design.widget.TextInputLayout&gt;</span>
+
+    <span class="nt">&lt;Button</span>
+        <span class="na">android:id=</span><span class="s">"@+id/mock_location"</span>
+        <span class="na">android:layout_width=</span><span class="s">"wrap_content"</span>
+        <span class="na">android:layout_height=</span><span class="s">"wrap_content"</span>
+        <span class="na">android:text=</span><span class="s">"OK"</span> <span class="nt">/&gt;</span>
+        
+<span class="nt">&lt;/LinearLayout&gt;</span></code></pre></figure>
+
+<p>Next we create our MainActivity.</p>
+
+<h4>MainActivity.java</h4>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">MainActivity</span> <span class="kd">extends</span> <span class="n">AppCompatActivity</span> <span class="kd">implements</span> <span class="n">View</span><span class="o">.</span><span class="na">OnClickListener</span> <span class="o">{</span>
+
+    <span class="kd">private</span> <span class="n">LocationManager</span> <span class="n">mLocationManager</span><span class="o">;</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">protected</span> <span class="kt">void</span> <span class="nf">onCreate</span><span class="o">(</span><span class="n">Bundle</span> <span class="n">savedInstanceState</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kd">super</span><span class="o">.</span><span class="na">onCreate</span><span class="o">(</span><span class="n">savedInstanceState</span><span class="o">);</span>
+        <span class="n">setContentView</span><span class="o">(</span><span class="n">R</span><span class="o">.</span><span class="na">layout</span><span class="o">.</span><span class="na">activity_main</span><span class="o">);</span>
+
+        <span class="n">Button</span> <span class="n">mockLocationBtn</span> <span class="o">=</span> <span class="o">(</span><span class="n">Button</span><span class="o">)</span> <span class="n">findViewById</span><span class="o">(</span><span class="n">R</span><span class="o">.</span><span class="na">id</span><span class="o">.</span><span class="na">mock_location</span><span class="o">);</span>
+        <span class="n">mockLocationBtn</span><span class="o">.</span><span class="na">setOnClickListener</span><span class="o">(</span><span class="k">this</span><span class="o">);</span>
+
+        <span class="n">mLocationManager</span> <span class="o">=</span> <span class="o">(</span><span class="n">LocationManager</span><span class="o">)</span> <span class="n">getSystemService</span><span class="o">(</span><span class="n">LOCATION_SERVICE</span><span class="o">);</span>
+        <span class="n">mLocationManager</span><span class="o">.</span><span class="na">addTestProvider</span><span class="o">(</span>
+                <span class="n">LocationManager</span><span class="o">.</span><span class="na">GPS_PROVIDER</span><span class="o">,</span>
+                <span class="kc">false</span><span class="o">,</span>
+                <span class="kc">false</span><span class="o">,</span>
+                <span class="kc">false</span><span class="o">,</span>
+                <span class="kc">false</span><span class="o">,</span>
+                <span class="kc">true</span><span class="o">,</span>
+                <span class="kc">true</span><span class="o">,</span>
+                <span class="kc">true</span><span class="o">,</span>
+                <span class="mi">0</span><span class="o">,</span>
+                <span class="mi">5</span>
+        <span class="o">);</span>
+        <span class="n">mLocationManager</span><span class="o">.</span><span class="na">setTestProviderEnabled</span><span class="o">(</span><span class="n">LocationManager</span><span class="o">.</span><span class="na">GPS_PROVIDER</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="kd">private</span> <span class="kt">void</span> <span class="nf">mockLocation</span><span class="o">(</span><span class="kt">double</span> <span class="n">latitude</span><span class="o">,</span> <span class="kt">double</span> <span class="n">longitude</span><span class="o">,</span> <span class="kt">float</span> <span class="n">accuracy</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">Location</span> <span class="n">mockLocation</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Location</span><span class="o">(</span><span class="n">LocationManager</span><span class="o">.</span><span class="na">GPS_PROVIDER</span><span class="o">);</span>
+        <span class="n">mockLocation</span><span class="o">.</span><span class="na">setLatitude</span><span class="o">(</span><span class="n">latitude</span><span class="o">);</span>
+        <span class="n">mockLocation</span><span class="o">.</span><span class="na">setLongitude</span><span class="o">(</span><span class="n">longitude</span><span class="o">);</span>
+        <span class="n">mockLocation</span><span class="o">.</span><span class="na">setAccuracy</span><span class="o">(</span><span class="n">accuracy</span><span class="o">);</span>
+        <span class="n">mockLocation</span><span class="o">.</span><span class="na">setTime</span><span class="o">(</span><span class="n">System</span><span class="o">.</span><span class="na">currentTimeMillis</span><span class="o">());</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">Build</span><span class="o">.</span><span class="na">VERSION</span><span class="o">.</span><span class="na">SDK_INT</span> <span class="o">&gt;</span> <span class="n">Build</span><span class="o">.</span><span class="na">VERSION_CODES</span><span class="o">.</span><span class="na">JELLY_BEAN</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">mockLocation</span><span class="o">.</span><span class="na">setElapsedRealtimeNanos</span><span class="o">(</span><span class="n">SystemClock</span><span class="o">.</span><span class="na">elapsedRealtimeNanos</span><span class="o">());</span>
+        <span class="o">}</span>
+        <span class="n">mLocationManager</span><span class="o">.</span><span class="na">setTestProviderLocation</span><span class="o">(</span><span class="n">LocationManager</span><span class="o">.</span><span class="na">GPS_PROVIDER</span><span class="o">,</span> <span class="n">mockLocation</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="kd">private</span> <span class="n">LocationManager</span> <span class="nf">getLocationManager</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="o">(</span><span class="n">LocationManager</span><span class="o">)</span> <span class="n">getSystemService</span><span class="o">(</span><span class="n">LOCATION_SERVICE</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onClick</span><span class="o">(</span><span class="n">View</span> <span class="n">v</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">EditText</span> <span class="n">latitudeEt</span> <span class="o">=</span> <span class="o">(</span><span class="n">EditText</span><span class="o">)</span> <span class="n">findViewById</span><span class="o">(</span><span class="n">R</span><span class="o">.</span><span class="na">id</span><span class="o">.</span><span class="na">latitude</span><span class="o">);</span>
+        <span class="n">EditText</span> <span class="n">longitudeEt</span> <span class="o">=</span> <span class="o">(</span><span class="n">EditText</span><span class="o">)</span> <span class="n">findViewById</span><span class="o">(</span><span class="n">R</span><span class="o">.</span><span class="na">id</span><span class="o">.</span><span class="na">longitude</span><span class="o">);</span>
+        <span class="n">EditText</span> <span class="n">accuracyEt</span> <span class="o">=</span> <span class="o">(</span><span class="n">EditText</span><span class="o">)</span> <span class="n">findViewById</span><span class="o">(</span><span class="n">R</span><span class="o">.</span><span class="na">id</span><span class="o">.</span><span class="na">accuracy</span><span class="o">);</span>
+        <span class="n">String</span> <span class="n">message</span><span class="o">;</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">validateEditText</span><span class="o">(</span><span class="n">latitudeEt</span><span class="o">)</span> <span class="o">|</span> <span class="n">validateEditText</span><span class="o">(</span><span class="n">longitudeEt</span><span class="o">))</span> <span class="o">{</span>
+            <span class="kt">double</span> <span class="n">latitude</span> <span class="o">=</span> <span class="n">Double</span><span class="o">.</span><span class="na">valueOf</span><span class="o">(</span><span class="n">latitudeEt</span><span class="o">.</span><span class="na">getText</span><span class="o">().</span><span class="na">toString</span><span class="o">());</span>
+            <span class="kt">double</span> <span class="n">longitude</span> <span class="o">=</span> <span class="n">Double</span><span class="o">.</span><span class="na">valueOf</span><span class="o">(</span><span class="n">longitudeEt</span><span class="o">.</span><span class="na">getText</span><span class="o">().</span><span class="na">toString</span><span class="o">());</span>
+            <span class="kt">float</span> <span class="n">accuracy</span> <span class="o">=</span> <span class="n">Float</span><span class="o">.</span><span class="na">valueOf</span><span class="o">(</span><span class="n">accuracyEt</span><span class="o">.</span><span class="na">getText</span><span class="o">().</span><span class="na">toString</span><span class="o">());</span>
+            <span class="n">mockLocation</span><span class="o">(</span><span class="n">latitude</span><span class="o">,</span> <span class="n">longitude</span><span class="o">,</span> <span class="n">accuracy</span><span class="o">);</span>
+            <span class="n">message</span> <span class="o">=</span> <span class="s">"The location has been changed to ("</span> <span class="o">+</span> <span class="n">latitude</span> <span class="o">+</span> <span class="s">","</span> <span class="o">+</span> <span class="n">longitude</span> <span class="o">+</span> <span class="s">")"</span><span class="o">;</span>
+        <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+            <span class="n">message</span> <span class="o">=</span> <span class="s">"Spoofing the location has failed."</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="n">Toast</span><span class="o">.</span><span class="na">makeText</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="n">message</span><span class="o">,</span> <span class="n">Toast</span><span class="o">.</span><span class="na">LENGTH_SHORT</span><span class="o">).</span><span class="na">show</span><span class="o">();</span>
+    <span class="o">}</span>
+
+    <span class="kd">private</span> <span class="kt">boolean</span> <span class="nf">validateEditText</span><span class="o">(</span><span class="n">EditText</span> <span class="n">editText</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">editText</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">throw</span> <span class="k">new</span> <span class="nf">IllegalArgumentException</span><span class="o">(</span><span class="s">"Argument 'editText' cannot be null."</span><span class="o">);</span>
+        <span class="o">}</span>
+
+        <span class="k">if</span> <span class="o">(</span><span class="n">editText</span><span class="o">.</span><span class="na">getText</span><span class="o">().</span><span class="na">toString</span><span class="o">().</span><span class="na">isEmpty</span><span class="o">())</span> <span class="o">{</span>
+            <span class="n">editText</span><span class="o">.</span><span class="na">setError</span><span class="o">(</span><span class="n">getString</span><span class="o">(</span><span class="n">R</span><span class="o">.</span><span class="na">string</span><span class="o">.</span><span class="na">validation_required</span><span class="o">));</span>
+            <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span></code></pre></figure>
+
+<p>Then on the manifest we add the mock location permission.</p>
+
+<figure class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="nt">&lt;uses-permission</span> <span class="na">android:name=</span><span class="s">"android.permission.ACCESS_MOCK_LOCATION"</span> <span class="nt">/&gt;</span></code></pre></figure>
+
+<p>Finally, you will need to enable mock locations for the device using Settings &gt; Developer options &gt; Allow mock locations. After building the app and trying it out, you can check if your location has changed using the Google Maps app.</p>
+
+</div>
+
+<div class="related">
+  <h2>Related Posts</h2>
+  <ul class="related-posts">
+    
+      <li>
+        <h3>
+          <a href="/blog/removing-git-submodules">
+            How to remove Git submodules.
+            <small>11 Oct 2019</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/blog/how-to-use-a-self-signed-certificate-with-gradle">
+            How to use a self signed certificate with Gradle
+            <small>29 Jul 2019</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/blog/how-to-enable-internet-access-on-centos7-virtualbox">
+            How to enable internet access of CentOS 7 on VirtualBox
+            <small>13 Jun 2019</small>
+          </a>
+        </h3>
+      </li>
+    
+  </ul>
+</div>
+
+
+  <div id="disqus_thread"></div>
+<script>
+
+/**
+*  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+*  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables*/
+/*
+var disqus_config = function () {
+this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
+this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+};
+*/
+(function() { // DON'T EDIT BELOW THIS LINE
+  var d = document, s = d.createElement('script');
+  s.src = 'https://emmanuel-corrales.disqus.com/embed.js';
+  s.setAttribute('data-timestamp', +new Date());
+  (d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+
+
+    </div>
+
+  </body>
+</html>

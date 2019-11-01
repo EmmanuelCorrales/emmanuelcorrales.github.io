@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+  <head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  <!-- Enable responsiveness on mobile devices-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title>
+    
+      AWS: What every developer should do with their new account | Emmanuel Corrales
+    
+  </title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="https://emcorrales.com/assets/css/poole.css">
+  <link rel="stylesheet" href="https://emcorrales.com/assets/css/syntax.css">
+  <link rel="stylesheet" href="https://emcorrales.com/assets/css/hyde.css">
+  <link rel="stylesheet" href="https://emcorrales.com/assets/css/cheatsheet.css">
+  <link rel="stylesheet" href="https://emcorrales.com/assets/css/sidebar.css">
+  
+    <link rel="stylesheet" href="https://emcorrales.com/assets/css/posts.css">
+  
+  <link rel="stylesheet" href="https://emcorrales.com/vendor/font-awesome/5.5.0/css/all.min.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
+
+  <!-- Favicons -->
+  <link rel="apple-touch-icon" sizes="57x57" href="https://emcorrales.com/assets/images/apple-icon-57x57.png">
+  <link rel="apple-touch-icon" sizes="60x60" href="https://emcorrales.com/assets/images/apple-icon-60x60.png">
+  <link rel="apple-touch-icon" sizes="72x72" href="https://emcorrales.com/assets/images/apple-icon-72x72.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="https://emcorrales.com/assets/images/apple-icon-76x76.png">
+  <link rel="apple-touch-icon" sizes="114x114" href="https://emcorrales.com/assets/images/apple-icon-114x114.png">
+  <link rel="apple-touch-icon" sizes="120x120" href="https://emcorrales.com/assets/images/apple-icon-120x120.png">
+  <link rel="apple-touch-icon" sizes="144x144" href="https://emcorrales.com/assets/images/apple-icon-144x144.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="https://emcorrales.com/assets/images/apple-icon-152x152.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="https://emcorrales.com/assets/images/apple-icon-180x180.png">
+  <link rel="icon" type="image/png" sizes="192x192"  href="https://emcorrales.com/assets/images/android-icon-192x192.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="https://emcorrales.com/assets/images/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="96x96" href="https://emcorrales.com/assets/images/favicon-96x96.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="https://emcorrales.com/assets/images/favicon-16x16.png">
+  <link rel="manifest" href="/manifest.json">
+  <meta name="msapplication-TileColor" content="#ffffff">
+  <meta name="msapplication-TileImage" content="https://emcorrales.com/assets/images/ms-icon-144x144.png">
+  <meta name="theme-color" content="#ffffff">
+
+  <!-- RSS -->
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="https://emcorrales.com/feed.xml">
+
+  
+  <!-- Google Analytics -->
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-80537045-1', 'auto');
+    ga('send', 'pageview');
+  </script>
+  
+
+  <!-- Begin Jekyll SEO tag v2.4.0 -->
+<title>AWS: What every developer should do with their new account | Emmanuel Corrales</title>
+<meta name="generator" content="Jekyll v3.8.5" />
+<meta property="og:title" content="AWS: What every developer should do with their new account" />
+<meta name="author" content="Emmanuel Corrales" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="This article is a compilation of what every developer learning AWS should do with their new account. I’ll demonstrate how to secure the root account by locking away the root user and applying all the best practices recommended by Amazon Web Services. I’ll also demonstrate how to install and configure the AWS Command Line Interface for development." />
+<meta property="og:description" content="This article is a compilation of what every developer learning AWS should do with their new account. I’ll demonstrate how to secure the root account by locking away the root user and applying all the best practices recommended by Amazon Web Services. I’ll also demonstrate how to install and configure the AWS Command Line Interface for development." />
+<link rel="canonical" href="https://emcorrales.com/blog/what-every-developer-should-do-with-their-new-aws-account" />
+<meta property="og:url" content="https://emcorrales.com/blog/what-every-developer-should-do-with-their-new-aws-account" />
+<meta property="og:site_name" content="Emmanuel Corrales" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2018-02-24T00:30:00+00:00" />
+<script type="application/ld+json">
+{"author":{"@type":"Person","name":"Emmanuel Corrales"},"description":"This article is a compilation of what every developer learning AWS should do with their new account. I’ll demonstrate how to secure the root account by locking away the root user and applying all the best practices recommended by Amazon Web Services. I’ll also demonstrate how to install and configure the AWS Command Line Interface for development.","headline":"AWS: What every developer should do with their new account","dateModified":"2018-02-24T00:30:00+00:00","datePublished":"2018-02-24T00:30:00+00:00","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://emcorrales.com/blog/what-every-developer-should-do-with-their-new-aws-account"},"url":"https://emcorrales.com/blog/what-every-developer-should-do-with-their-new-aws-account","@context":"http://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+</head>
+
+
+  <body>
+
+    <div class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      <img src="https://www.gravatar.com/avatar/6b917878b9fccb87c8b1489813b755e2?s=500" alt="Emmanuel Corrales" />
+      <h1>
+        <a href="https://emcorrales.com">
+          Emmanuel Corrales
+        </a>
+      </h1>
+    </div>
+
+    <nav class="sidebar-nav">
+      <a class="sidebar-nav-item" href="https://emcorrales.com">Blog</a>
+
+      
+
+      
+      
+        
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+          
+        
+      
+        
+          
+        
+      
+        
+          
+        
+      
+        
+          
+            <a class="sidebar-nav-item" href="/cheatsheets">Cheat Sheets</a>
+          
+        
+      
+        
+          
+            <a class="sidebar-nav-item" href="/about">About</a>
+          
+        
+      
+    </nav>
+
+    <div class="social-icons">
+      <a href="https://twitter.com/em_corrales"
+        class="social fab fa-twitter" title="Twitter" target="_blank"></a>
+
+      <a href="https://linkedin.com/in/emmanuelcorrales"
+        class="social fab fa-linkedin" title="Linkedin" target="_blank"></a>
+
+      <a href="https://github.com/emcorrales"
+        class="social fab fa-github" title="Github" target="_blank"></a>
+
+      <a href="mailto:contact@emcorrales.com" class="social fa fa-envelope"
+        title="Email"></a>
+
+      <a href="/feed.xml" class="social fa fa-rss" title="RSS feed"
+        target="_blank"></a>
+    </div>
+
+    <p>&copy; 2019. All rights reserved.</p>
+  </div>
+</div>
+
+
+    <div class="content container">
+      <div class="post">
+  <h1 class="post-title">AWS: What every developer should do with their new account</h1>
+  <span class="post-date">24 Feb 2018</span>
+  <br/>
+  <p>This article is a compilation of what every developer learning AWS should do
+with their new account. I’ll demonstrate how to secure the root account by
+locking away the root user and applying all the best practices recommended by
+Amazon Web Services. I’ll also demonstrate how to install and configure the AWS
+Command Line Interface for development.</p>
+
+<h3 id="table-of-contents">Table of Contents</h3>
+<ul>
+  <li><a href="#delete_access_keys">Delete the root access keys.</a></li>
+  <li><a href="#activate_mfa">Activate MFA on the root account.</a></li>
+  <li><a href="#replace_root_user">Prefer an admin user over a root user.</a></li>
+  <li><a href="#setup_aws_cli">Setup the AWS CLI</a></li>
+</ul>
+
+<h2 id="delete-the-root-access-keys"><a name="delete_access_keys"></a>Delete the root access keys.</h2>
+<p>Access keys are used to programatically access the AWS Services with your
+account. Root access keys have no restrictions and may fall to the wrong hands.
+There is no better way to prevent that by deleting it. Even if you are the only
+person in the world to have those access keys, there is a possibility that you
+may accidentally do something bad and irreversible to your account with root
+access. Practice granting any user even yourself with the <strong>least privilege</strong>.
+Below are the steps to delete the root access keys via AWS Management Console.</p>
+
+<ol>
+  <li>Login to the <a href="https://console.aws.amazon.com/console/home">AWS Management Console</a>,
+then open <strong>Services</strong> then select <strong>IAM</strong>.</li>
+  <li>Open the dropdown <strong>Security Status</strong>, then click
+<strong>Manage Secutiry Credentials</strong>.</li>
+  <li>Click <strong>Continue to Security Credentials</strong>.</li>
+  <li>Expand <strong>Access keys (access key ID and secret access key)</strong>.</li>
+  <li>Click the <strong>Delete</strong> button where the <strong>Status</strong> is <strong>Active</strong>.</li>
+  <li>A popup will show up to confirm if you want to delete your access key. Since
+this is a new account, we probably haven’t used this access key and it won’t
+compromise anything so we’ll click <strong>Yes</strong>.</li>
+</ol>
+
+<p>Root access keys can be created anytime however it isn’t recommended to be used
+unless really needed.</p>
+
+<h2 id="activate-mfa-on-your-root-account"><a name="activate_mfa"></a>Activate MFA on your root account.</h2>
+<p>Enable Multi-Factor Authentication for the root account so that even if
+anyone finds out the account’s password, it won’t be compromised unless they
+also have access to the device that has the authentication code. I recommend
+using the
+<a href="https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2">Google Authenticator</a>
+app as our virtual MFA. There are also other authenticators you can use like
+<a href="https://play.google.com/store/apps/details?id=com.authy.authy">Authy 2-Factor Authentication</a>.</p>
+
+<ol>
+  <li>Download the <strong>Google Authenticator</strong> app
+<a href="https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2">here</a>.</li>
+  <li>Login to the <a href="https://console.aws.amazon.com/console/home">AWS Management Console</a>,
+then open <strong>Services</strong> then select <strong>IAM</strong>.</li>
+  <li>Open the dropdown <strong>Activate MFA on your root account</strong>, then click the
+<strong>Manage MFA</strong> button.</li>
+  <li>Select <strong>A Virtual Device</strong>, then click <strong>Next Step</strong>.</li>
+  <li>A popup with a QR code will show up, scan it using your mobile phone. If you
+can’t scan it then click the <strong>show secret key for manual configuration</strong> and
+type the very long secret configuration key to the app manually.</li>
+  <li>Type the six digit number displayed by your mobile device to the
+<strong>Authentication Code 1</strong> box then wait up to 30 seconds for the device to
+generate a new number then type the next six digit number into the
+<strong>Authentication Code 2</strong> box.</li>
+  <li>Click <strong>Next Step</strong>, and the choose <strong>Finish</strong>.</li>
+</ol>
+
+<p>The next time you login, the app will require you to enter an authentication
+code from the google authenticator.</p>
+
+<h2 id="prefer-an-admin-user-over-a-root-user"><a name="replace_root_user"></a>Prefer an admin user over a root user.</h2>
+<p>We are trying to refrain from using the root user by creating an admin user as
+proxy. The admin user has less privileges than the root user but has enough to
+manage most of the AWS Services.</p>
+
+<h3 id="create-a-group-for-administrators">Create a group for Administrators.</h3>
+<p>There could be many administrators for a single AWS account. It is best practice
+to assign policies to a group instead of an individual user. If you ever want to
+revoke the user/users privilege as an admin then you’ll just have to remove that
+user from the group.</p>
+
+<ol>
+  <li>Click <strong>Groups</strong> under the <strong>Dashboard</strong>.</li>
+  <li>Click the <strong>Create New Group</strong> button.</li>
+  <li>Enter the group name then click the <strong>Next Step</strong> button.</li>
+  <li>Search for the <strong>AdmininstratorAccess</strong> policy, check it then click the
+<strong>Next Step</strong> button.
+Attaching this policy makes this group an Admin group.</li>
+  <li>Review if the <em>Group Name</em> and the attached policy is correct. There should
+be <strong>arn:aws:iam:aws:policy/AdministratorAccess</strong> in the policies.</li>
+</ol>
+
+<h3 id="create-an-admin-user">Create an admin user.</h3>
+<p>Below are the steps to create an admin user. It won’t cover securing it with
+MFA however it is still recommended to do it.</p>
+
+<ol>
+  <li>Click <strong>Users</strong> under the <strong>Dashboard</strong>.</li>
+  <li>Click <strong>Add user</strong> button. This will be a proxy for the root user.</li>
+  <li>Enter <strong>Admin</strong> as the user name. <strong>Admin</strong> is just my recommended user name,
+any user name will do.</li>
+  <li>Under the <strong>Select AWS access type</strong>, check both <strong>Programmatic access</strong> and
+<strong>AWS Management Console access</strong>.</li>
+  <li>Select <strong>Custom password</strong> then enter the desired password. Since this user
+is just a proxy for the root user and I’ll be the only one using it then I don’t
+need an autogenerated password, however if I ever need to create another admin
+user for someone else then I’ll check both the <strong>Autogenerated password</strong> and
+<strong>Require password reset</strong>.</li>
+  <li>Click the <strong>Next Permissons</strong> button.</li>
+  <li>Under <strong>Add user to group</strong> tab, check the <strong>Administrators</strong> group then
+click the <strong>Next: Review</strong> button.</li>
+  <li>Review the details of the user then click <strong>Create user</strong> button.</li>
+  <li>Click <strong>Download .csv</strong> to download the access keys and store it in a safe
+secure place. This will be used to access your AWS account programatically.</li>
+</ol>
+
+<h2 id="setup-the-aws-command-line-interface"><a name="setup_aws_cli"></a>Setup the AWS command line interface.</h2>
+<p>After downloading the access keys, the CLI should be configured to properly
+access AWS services programmatically.</p>
+
+<p>Install AWS CLI from the command line.</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">pip <span class="nb">install </span>awscli <span class="nt">--upgrade</span> <span class="nt">--user</span></code></pre></figure>
+
+<p>Check if it was installed properly.</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">aws <span class="nt">--version</span></code></pre></figure>
+
+<p>Configure the AWS CLI with the downloaded access keys.</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">aws configure</code></pre></figure>
+
+<p>It will ask for the <em>Access Key ID</em>, <em>Secret Access Key</em>, <em>default region</em> and
+the output format like below.</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">AWS Access Key ID <span class="o">[</span>None]: AKIAIOSFODNN7IWANHEL
+AWS Secret Access Key <span class="o">[</span>None]: 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
+Default region name <span class="o">[</span>None]: ap-southeast-1
+Default output format <span class="o">[</span>None]: json</code></pre></figure>
+
+<p>The <strong>access key id</strong> and <strong>secret access key</strong> above are not real access keys
+so nobody can use those. The default region should be the region nearest to you,
+see <a href="https://docs.aws.amazon.com/general/latest/gr/rande.html">Regions and Endpoints</a>.
+The output format can be be left blank since json is the default format.</p>
+
+<p>Run the command below to confirm if the AWS CLI was configured correctly.</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">aws iam get-user</code></pre></figure>
+
+<p>The result should be similar to the code below.</p>
+
+<figure class="highlight"><pre><code class="language-json" data-lang="json"><span class="p">{</span><span class="w">
+    </span><span class="s2">"User"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="s2">"UserName"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Admin"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"PasswordLastUsed"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2018-02-23T12:41:36Z"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"CreateDate"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2018-02-24T09:56:39Z"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"UserId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"UIRAIDNQRCOCONJBWUSHI"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"Path"</span><span class="p">:</span><span class="w"> </span><span class="s2">"/"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"Arn"</span><span class="p">:</span><span class="w"> </span><span class="s2">"arn:aws:iam::123456789012:user/admin"</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span></code></pre></figure>
+
+<p>Now we can develop applications using the AWS services.</p>
+
+</div>
+
+<div class="related">
+  <h2>Related Posts</h2>
+  <ul class="related-posts">
+    
+      <li>
+        <h3>
+          <a href="/blog/removing-git-submodules">
+            How to remove Git submodules.
+            <small>11 Oct 2019</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/blog/how-to-use-a-self-signed-certificate-with-gradle">
+            How to use a self signed certificate with Gradle
+            <small>29 Jul 2019</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/blog/how-to-enable-internet-access-on-centos7-virtualbox">
+            How to enable internet access of CentOS 7 on VirtualBox
+            <small>13 Jun 2019</small>
+          </a>
+        </h3>
+      </li>
+    
+  </ul>
+</div>
+
+
+  <div id="disqus_thread"></div>
+<script>
+
+/**
+*  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+*  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables*/
+/*
+var disqus_config = function () {
+this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
+this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+};
+*/
+(function() { // DON'T EDIT BELOW THIS LINE
+  var d = document, s = d.createElement('script');
+  s.src = 'https://emmanuel-corrales.disqus.com/embed.js';
+  s.setAttribute('data-timestamp', +new Date());
+  (d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+
+
+    </div>
+
+  </body>
+</html>

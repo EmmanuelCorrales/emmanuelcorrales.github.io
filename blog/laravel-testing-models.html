@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+  <head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  <!-- Enable responsiveness on mobile devices-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title>
+    
+      Laravel: Testing models | Emmanuel Corrales
+    
+  </title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="https://emcorrales.com/assets/css/poole.css">
+  <link rel="stylesheet" href="https://emcorrales.com/assets/css/syntax.css">
+  <link rel="stylesheet" href="https://emcorrales.com/assets/css/hyde.css">
+  <link rel="stylesheet" href="https://emcorrales.com/assets/css/cheatsheet.css">
+  <link rel="stylesheet" href="https://emcorrales.com/assets/css/sidebar.css">
+  
+    <link rel="stylesheet" href="https://emcorrales.com/assets/css/posts.css">
+  
+  <link rel="stylesheet" href="https://emcorrales.com/vendor/font-awesome/5.5.0/css/all.min.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
+
+  <!-- Favicons -->
+  <link rel="apple-touch-icon" sizes="57x57" href="https://emcorrales.com/assets/images/apple-icon-57x57.png">
+  <link rel="apple-touch-icon" sizes="60x60" href="https://emcorrales.com/assets/images/apple-icon-60x60.png">
+  <link rel="apple-touch-icon" sizes="72x72" href="https://emcorrales.com/assets/images/apple-icon-72x72.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="https://emcorrales.com/assets/images/apple-icon-76x76.png">
+  <link rel="apple-touch-icon" sizes="114x114" href="https://emcorrales.com/assets/images/apple-icon-114x114.png">
+  <link rel="apple-touch-icon" sizes="120x120" href="https://emcorrales.com/assets/images/apple-icon-120x120.png">
+  <link rel="apple-touch-icon" sizes="144x144" href="https://emcorrales.com/assets/images/apple-icon-144x144.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="https://emcorrales.com/assets/images/apple-icon-152x152.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="https://emcorrales.com/assets/images/apple-icon-180x180.png">
+  <link rel="icon" type="image/png" sizes="192x192"  href="https://emcorrales.com/assets/images/android-icon-192x192.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="https://emcorrales.com/assets/images/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="96x96" href="https://emcorrales.com/assets/images/favicon-96x96.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="https://emcorrales.com/assets/images/favicon-16x16.png">
+  <link rel="manifest" href="/manifest.json">
+  <meta name="msapplication-TileColor" content="#ffffff">
+  <meta name="msapplication-TileImage" content="https://emcorrales.com/assets/images/ms-icon-144x144.png">
+  <meta name="theme-color" content="#ffffff">
+
+  <!-- RSS -->
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="https://emcorrales.com/feed.xml">
+
+  
+  <!-- Google Analytics -->
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-80537045-1', 'auto');
+    ga('send', 'pageview');
+  </script>
+  
+
+  <!-- Begin Jekyll SEO tag v2.4.0 -->
+<title>Laravel: Testing models | Emmanuel Corrales</title>
+<meta name="generator" content="Jekyll v3.8.5" />
+<meta property="og:title" content="Laravel: Testing models" />
+<meta name="author" content="Emmanuel Corrales" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="This past week I’ve been using Laravel at work and has been trying to apply Test Driven Development. My first step was to learn how to test the models which I’ll be demonstrating in this tutorial using Laravel 5.6. We’ll create a new project which has an Article model with attributes title, content and views." />
+<meta property="og:description" content="This past week I’ve been using Laravel at work and has been trying to apply Test Driven Development. My first step was to learn how to test the models which I’ll be demonstrating in this tutorial using Laravel 5.6. We’ll create a new project which has an Article model with attributes title, content and views." />
+<link rel="canonical" href="https://emcorrales.com/blog/laravel-testing-models" />
+<meta property="og:url" content="https://emcorrales.com/blog/laravel-testing-models" />
+<meta property="og:site_name" content="Emmanuel Corrales" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2018-06-20T08:30:33+00:00" />
+<script type="application/ld+json">
+{"author":{"@type":"Person","name":"Emmanuel Corrales"},"description":"This past week I’ve been using Laravel at work and has been trying to apply Test Driven Development. My first step was to learn how to test the models which I’ll be demonstrating in this tutorial using Laravel 5.6. We’ll create a new project which has an Article model with attributes title, content and views.","headline":"Laravel: Testing models","dateModified":"2018-06-20T08:30:33+00:00","datePublished":"2018-06-20T08:30:33+00:00","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://emcorrales.com/blog/laravel-testing-models"},"url":"https://emcorrales.com/blog/laravel-testing-models","@context":"http://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+</head>
+
+
+  <body>
+
+    <div class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      <img src="https://www.gravatar.com/avatar/6b917878b9fccb87c8b1489813b755e2?s=500" alt="Emmanuel Corrales" />
+      <h1>
+        <a href="https://emcorrales.com">
+          Emmanuel Corrales
+        </a>
+      </h1>
+    </div>
+
+    <nav class="sidebar-nav">
+      <a class="sidebar-nav-item" href="https://emcorrales.com">Blog</a>
+
+      
+
+      
+      
+        
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+          
+        
+      
+        
+          
+        
+      
+        
+          
+        
+      
+        
+          
+            <a class="sidebar-nav-item" href="/cheatsheets">Cheat Sheets</a>
+          
+        
+      
+        
+          
+            <a class="sidebar-nav-item" href="/about">About</a>
+          
+        
+      
+    </nav>
+
+    <div class="social-icons">
+      <a href="https://twitter.com/em_corrales"
+        class="social fab fa-twitter" title="Twitter" target="_blank"></a>
+
+      <a href="https://linkedin.com/in/emmanuelcorrales"
+        class="social fab fa-linkedin" title="Linkedin" target="_blank"></a>
+
+      <a href="https://github.com/emcorrales"
+        class="social fab fa-github" title="Github" target="_blank"></a>
+
+      <a href="mailto:contact@emcorrales.com" class="social fa fa-envelope"
+        title="Email"></a>
+
+      <a href="/feed.xml" class="social fa fa-rss" title="RSS feed"
+        target="_blank"></a>
+    </div>
+
+    <p>&copy; 2019. All rights reserved.</p>
+  </div>
+</div>
+
+
+    <div class="content container">
+      <div class="post">
+  <h1 class="post-title">Laravel: Testing models</h1>
+  <span class="post-date">20 Jun 2018</span>
+  <br/>
+  <p>This past week I’ve been using Laravel at work and has been trying to apply
+<em>Test Driven Development</em>. My first step was to learn how to test the models
+which I’ll be demonstrating in this tutorial using Laravel 5.6. We’ll create a
+new project which has an Article model with attributes <em>title</em>, <em>content</em> and
+<em>views</em>.</p>
+
+<p>Let’s start creating a new Laravel project with:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">laravel new blog</code></pre></figure>
+
+<p>or</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">composer create-project <span class="nt">--prefer-dist</span> laravel/laravel blog</code></pre></figure>
+
+<h2 id="setup-the-article-model-and-the-database-table">Setup the Article model and the database table</h2>
+
+<p>Make an Article model with a migration.</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">php artisan make:model Article <span class="nt">-m</span></code></pre></figure>
+
+<p>The generated file for Article model will be at <em>app/Article.php</em>.</p>
+
+<figure class="highlight"><pre><code class="language-php" data-lang="php"><span class="cp">&lt;?php</span>
+<span class="k">namespace</span> <span class="nx">App</span><span class="p">;</span>
+
+<span class="k">use</span> <span class="nx">Illuminate\Database\Eloquent\Model</span><span class="p">;</span>
+
+<span class="k">class</span> <span class="nc">Article</span> <span class="k">extends</span> <span class="nx">Model</span>
+<span class="p">{</span>
+    <span class="c1">// No implementation yet</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>The articles table should have columns <em>title</em>, <em>content</em> and <em>views</em> so we’ll
+add those columns on our migration file at
+<em>database/migrations/create_articles_table.php</em>.</p>
+
+<figure class="highlight"><pre><code class="language-php" data-lang="php"><span class="cp">&lt;?php</span>
+
+<span class="k">use</span> <span class="nx">Illuminate\Support\Facades\Schema</span><span class="p">;</span>
+<span class="k">use</span> <span class="nx">Illuminate\Database\Schema\Blueprint</span><span class="p">;</span>
+<span class="k">use</span> <span class="nx">Illuminate\Database\Migrations\Migration</span><span class="p">;</span>
+
+<span class="k">class</span> <span class="nc">CreateArticlesTable</span> <span class="k">extends</span> <span class="nx">Migration</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="k">function</span> <span class="nf">up</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="nx">Schema</span><span class="o">::</span><span class="na">create</span><span class="p">(</span><span class="s1">'articles'</span><span class="p">,</span> <span class="k">function</span> <span class="p">(</span><span class="nx">Blueprint</span> <span class="nv">$table</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nv">$table</span><span class="o">-&gt;</span><span class="na">increments</span><span class="p">(</span><span class="s1">'id'</span><span class="p">);</span>
+            <span class="nv">$table</span><span class="o">-&gt;</span><span class="na">timestamps</span><span class="p">();</span>
+
+            <span class="nv">$table</span><span class="o">-&gt;</span><span class="na">string</span><span class="p">(</span><span class="s1">'title'</span><span class="p">);</span>
+            <span class="nv">$table</span><span class="o">-&gt;</span><span class="na">text</span><span class="p">(</span><span class="s1">'content'</span><span class="p">);</span>
+            <span class="nv">$table</span><span class="o">-&gt;</span><span class="na">integer</span><span class="p">(</span><span class="s1">'views'</span><span class="p">)</span><span class="o">-&gt;</span><span class="na">default</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+        <span class="p">});</span>
+    <span class="p">}</span>
+
+    <span class="k">public</span> <span class="k">function</span> <span class="nf">down</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="nx">Schema</span><span class="o">::</span><span class="na">dropIfExists</span><span class="p">(</span><span class="s1">'articles'</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>Then run the migration for creating the table for articles.</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">php artisan migrate</code></pre></figure>
+
+<h2 id="creating-tests-for-the-article-model">Creating tests for the Article model</h2>
+
+<p>Our Article model is now ready for testing and we’ll be making integration tests
+but before that let’s make a factory.</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">php artisan make:factory ArticleFactory <span class="nt">--model</span><span class="o">=</span>Article</code></pre></figure>
+
+<p>The generated factory for the model Article will be at
+<em>database/factories/ArticleFactory.php</em>.</p>
+
+<figure class="highlight"><pre><code class="language-php" data-lang="php"><span class="cp">&lt;?php</span>
+
+<span class="k">use</span> <span class="nx">Faker\Generator</span> <span class="k">as</span> <span class="nx">Faker</span><span class="p">;</span>
+
+<span class="nv">$factory</span><span class="o">-&gt;</span><span class="na">define</span><span class="p">(</span><span class="nx">App\Article</span><span class="o">::</span><span class="na">class</span><span class="p">,</span> <span class="k">function</span> <span class="p">(</span><span class="nx">Faker</span> <span class="nv">$faker</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="p">[</span>
+        <span class="s1">'title'</span> <span class="o">=&gt;</span> <span class="nv">$faker</span><span class="o">-&gt;</span><span class="na">name</span><span class="p">,</span>
+        <span class="s1">'content'</span> <span class="o">=&gt;</span> <span class="nv">$faker</span><span class="o">-&gt;</span><span class="na">sentence</span>
+    <span class="p">];</span>
+<span class="p">});</span></code></pre></figure>
+
+<p>Create an integration test for the Article model at
+<em>tests/Integration/models/ArticleTest.php</em> by running:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nb">touch </span>tests/Integration/models/ArticleTest.php</code></pre></figure>
+
+<p>Modify its contents to look like this:</p>
+
+<figure class="highlight"><pre><code class="language-php" data-lang="php"><span class="cp">&lt;?php</span>
+
+<span class="k">namespace</span> <span class="nx">Tests\Integration\models</span><span class="p">;</span>
+
+<span class="k">use</span> <span class="nx">App\Article</span><span class="p">;</span>
+<span class="k">use</span> <span class="nx">Tests\TestCase</span><span class="p">;</span>
+<span class="k">use</span> <span class="nx">Illuminate\Foundation\Testing\RefreshDatabase</span><span class="p">;</span>
+
+<span class="k">class</span> <span class="nc">ArticleTest</span> <span class="k">extends</span> <span class="nx">TestCase</span>
+<span class="p">{</span>
+    <span class="sd">/** @test */</span>
+    <span class="k">function</span> <span class="nf">it_fetches_most_viewed_articles</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="nx">factory</span><span class="p">(</span><span class="nx">Article</span><span class="o">::</span><span class="na">class</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span><span class="o">-&gt;</span><span class="na">create</span><span class="p">();</span>
+        <span class="nx">factory</span><span class="p">(</span><span class="nx">Article</span><span class="o">::</span><span class="na">class</span><span class="p">)</span><span class="o">-&gt;</span><span class="na">create</span><span class="p">([</span><span class="s1">'views'</span> <span class="o">=&gt;</span> <span class="mi">100</span><span class="p">]);</span>
+        <span class="nv">$mostViewed</span> <span class="o">=</span> <span class="nx">factory</span><span class="p">(</span><span class="nx">Article</span><span class="o">::</span><span class="na">class</span><span class="p">)</span><span class="o">-&gt;</span><span class="na">create</span><span class="p">([</span><span class="s1">'views'</span> <span class="o">=&gt;</span> <span class="mi">200</span><span class="p">]);</span>
+
+        <span class="nv">$articles</span> <span class="o">=</span> <span class="nx">Article</span><span class="o">::</span><span class="na">mostViewed</span><span class="p">();</span>
+
+        <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">assertEquals</span><span class="p">(</span><span class="nv">$mostViewed</span><span class="o">-&gt;</span><span class="na">id</span><span class="p">,</span> <span class="nv">$articles</span><span class="o">-&gt;</span><span class="na">first</span><span class="p">()</span><span class="o">-&gt;</span><span class="na">id</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>Our test creates 5 articles with 0 views, another article with 100 views and the
+most viewed article with 200 views. It checks if the method
+<em>Articke::mostViewed()</em> returns the same id as the most viewed article.</p>
+
+<h2 id="running-the-test-and-adjusting-the-model-based-on-the-results">Running the test and adjusting the model based on the results</h2>
+
+<p>Now we run phpunit:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">phpunit tests/Integration/models/ArticleTest</code></pre></figure>
+
+<p>or</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">./vendor/bin/phpunit tests/Integration/models/ArticleTest</code></pre></figure>
+
+<p>if the command above doesn’t work.</p>
+
+<p>The test would fail because the <em>Article::mostViewed()</em> method hasn’t been
+implemented. Let’s implement the <em>Article::mostViewed()</em> method by modifying the
+Article model to look like this:</p>
+
+<figure class="highlight"><pre><code class="language-php" data-lang="php"><span class="cp">&lt;?php</span>
+<span class="k">namespace</span> <span class="nx">App</span><span class="p">;</span>
+
+<span class="k">use</span> <span class="nx">Illuminate\Database\Eloquent\Model</span><span class="p">;</span>
+
+<span class="k">class</span> <span class="nc">Article</span> <span class="k">extends</span> <span class="nx">Model</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="k">function</span> <span class="nf">scopeMostViewed</span><span class="p">(</span><span class="nv">$query</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="nv">$query</span><span class="o">-&gt;</span><span class="na">orderBy</span><span class="p">(</span><span class="s1">'views'</span><span class="p">,</span><span class="s1">'desc'</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>If you run <em>phpunit</em> now it would still fail because the data from the last test
+persisted. We need to refresh the database everytime the test is executed. We
+refresh it by using <strong>RefreshDatabase</strong> from <em>“Illuminate\Foundation\Testing</em>”.
+ArticleTest should look like this:</p>
+
+<figure class="highlight"><pre><code class="language-php" data-lang="php"><span class="cp">&lt;?php</span>
+
+<span class="k">namespace</span> <span class="nx">Tests\Integration</span><span class="p">;</span>
+
+<span class="k">use</span> <span class="nx">App\Article</span><span class="p">;</span>
+<span class="k">use</span> <span class="nx">Tests\TestCase</span><span class="p">;</span>
+<span class="k">use</span> <span class="nx">Illuminate\Foundation\Testing\RefreshDatabase</span><span class="p">;</span>
+
+<span class="k">class</span> <span class="nc">ArticleTest</span> <span class="k">extends</span> <span class="nx">TestCase</span>
+<span class="p">{</span>
+    <span class="k">use</span> <span class="nx">RefreshDatabase</span><span class="p">;</span>
+
+    <span class="sd">/** @test */</span>
+    <span class="k">function</span> <span class="nf">it_fetches_most_viewed_articles</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="nx">factory</span><span class="p">(</span><span class="nx">Article</span><span class="o">::</span><span class="na">class</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span><span class="o">-&gt;</span><span class="na">create</span><span class="p">();</span>
+        <span class="nx">factory</span><span class="p">(</span><span class="nx">Article</span><span class="o">::</span><span class="na">class</span><span class="p">)</span><span class="o">-&gt;</span><span class="na">create</span><span class="p">([</span><span class="s1">'views'</span> <span class="o">=&gt;</span> <span class="mi">100</span><span class="p">]);</span>
+        <span class="nv">$mostViewed</span> <span class="o">=</span> <span class="nx">factory</span><span class="p">(</span><span class="nx">Article</span><span class="o">::</span><span class="na">class</span><span class="p">)</span><span class="o">-&gt;</span><span class="na">create</span><span class="p">([</span><span class="s1">'views'</span> <span class="o">=&gt;</span> <span class="mi">200</span><span class="p">]);</span>
+
+        <span class="nv">$articles</span> <span class="o">=</span> <span class="nx">Article</span><span class="o">::</span><span class="na">mostViewed</span><span class="p">();</span>
+
+        <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">assertEquals</span><span class="p">(</span><span class="nv">$mostViewed</span><span class="o">-&gt;</span><span class="na">id</span><span class="p">,</span> <span class="nv">$articles</span><span class="o">-&gt;</span><span class="na">first</span><span class="p">()</span><span class="o">-&gt;</span><span class="na">id</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>If you run <strong>phpunit</strong> the test would succeed.</p>
+
+</div>
+
+<div class="related">
+  <h2>Related Posts</h2>
+  <ul class="related-posts">
+    
+      <li>
+        <h3>
+          <a href="/blog/removing-git-submodules">
+            How to remove Git submodules.
+            <small>11 Oct 2019</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/blog/how-to-use-a-self-signed-certificate-with-gradle">
+            How to use a self signed certificate with Gradle
+            <small>29 Jul 2019</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/blog/how-to-enable-internet-access-on-centos7-virtualbox">
+            How to enable internet access of CentOS 7 on VirtualBox
+            <small>13 Jun 2019</small>
+          </a>
+        </h3>
+      </li>
+    
+  </ul>
+</div>
+
+
+  <div id="disqus_thread"></div>
+<script>
+
+/**
+*  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+*  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables*/
+/*
+var disqus_config = function () {
+this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
+this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+};
+*/
+(function() { // DON'T EDIT BELOW THIS LINE
+  var d = document, s = d.createElement('script');
+  s.src = 'https://emmanuel-corrales.disqus.com/embed.js';
+  s.setAttribute('data-timestamp', +new Date());
+  (d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+
+
+    </div>
+
+  </body>
+</html>

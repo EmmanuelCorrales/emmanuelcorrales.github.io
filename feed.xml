@@ -1,30 +1,1068 @@
----
-layout: null
----
 <?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>{{ site.title | xml_escape }}</title>
-    <description>{{ site.description | xml_escape }}</description>
-    <link>{{ site.url }}{{ site.baseurl }}/</link>
-    <atom:link href="{{ "/feed.xml" | prepend: site.baseurl | prepend: site.url }}" rel="self" type="application/rss+xml"/>
-    <pubDate>{{ site.time | date_to_rfc822 }}</pubDate>
-    <lastBuildDate>{{ site.time | date_to_rfc822 }}</lastBuildDate>
-    <generator>Jekyll v{{ jekyll.version }}</generator>
-    {% for post in site.posts limit:10 %}
+    <title>Emmanuel Corrales</title>
+    <description>I am Emmanuel Corrales, you may also call me Em. I've been in the technology industry for more than five years. I am currently working as a DevOps Consultant. I am also an experienced Software Engineer who is language agnostic. A jack of all trades guy. I'm a linux enthusiast and my favorite tool is the terminal. I code with it, work with it, live with it and will probably not survive without it. I am a big fan of open source and has always been trying to learn something new.</description>
+    <link>https://emcorrales.com/</link>
+    <atom:link href="https://emcorrales.com/feed.xml" rel="self" type="application/rss+xml"/>
+    <pubDate>Fri, 01 Nov 2019 19:39:39 +0000</pubDate>
+    <lastBuildDate>Fri, 01 Nov 2019 19:39:39 +0000</lastBuildDate>
+    <generator>Jekyll v3.8.5</generator>
+    
       <item>
-        <title>{{ post.title | xml_escape }}</title>
-        <description>{{ post.content | xml_escape }}</description>
-        <pubDate>{{ post.date | date_to_rfc822 }}</pubDate>
-        <link>{{ post.url | prepend: site.baseurl | prepend: site.url }}</link>
-        <guid isPermaLink="true">{{ post.url | prepend: site.baseurl | prepend: site.url }}</guid>
-        {% for tag in post.tags %}
-        <category>{{ tag | xml_escape }}</category>
-        {% endfor %}
-        {% for cat in post.categories %}
-        <category>{{ cat | xml_escape }}</category>
-        {% endfor %}
+        <title>How to remove Git submodules.</title>
+        <description>&lt;p&gt;I decided to write this post because I’ve been getting a lot of tickets
+regarding pipelines not working due to improper removal of git submodule/s in
+their repo. Here’s a simple guide on how to remove Git submodules.&lt;/p&gt;
+
+&lt;p&gt;Lets say I want to remove a Git submodule called &lt;strong&gt;drafts&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;Edit &lt;strong&gt;.gitmodules&lt;/strong&gt; to remove lines that are similar to the example below.
+    &lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;submodule &lt;span class=&quot;s2&quot;&gt;&quot;drafts&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;
+  path &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; drafts
+  url &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; git://github.com/emcorrales/drafts.git
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
+  &lt;/li&gt;
+  &lt;li&gt;Edit &lt;strong&gt;.git/config&lt;/strong&gt; and remove lines that are similar to the example below.
+    &lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;submodule &lt;span class=&quot;s2&quot;&gt;&quot;drafts&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;
+  url &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; git://github.com/emcorrales/drafts.git
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
+  &lt;/li&gt;
+  &lt;li&gt;Remove the submodule from the git index.
+    &lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;git &lt;span class=&quot;nb&quot;&gt;rm&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;--cached&lt;/span&gt; drafts
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
+  &lt;/li&gt;
+  &lt;li&gt;Remove submodule’s git repo. The command above will move the &lt;strong&gt;.git&lt;/strong&gt;
+directory of the submodule &lt;strong&gt;drafts&lt;/strong&gt; to &lt;strong&gt;.git/modules/drafts&lt;/strong&gt; to protect its
+history so we remove it as well.
+    &lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;rm&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-rf&lt;/span&gt; .git/modules/drafts
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
+  &lt;/li&gt;
+  &lt;li&gt;Remove submodule directory because git sees ./drafts as a new directory
+instead of a submodule.
+    &lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;rm&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-rf&lt;/span&gt; drafts
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
+  &lt;/li&gt;
+  &lt;li&gt;Commit changes then push.
+    &lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;git add &lt;span class=&quot;nb&quot;&gt;.&lt;/span&gt;
+git push origin master
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;There you have it! You have succesfully remove the submodule from your local git
+repo.&lt;/p&gt;
+</description>
+        <pubDate>Fri, 11 Oct 2019 00:30:00 +0000</pubDate>
+        <link>https://emcorrales.com/blog/removing-git-submodules</link>
+        <guid isPermaLink="true">https://emcorrales.com/blog/removing-git-submodules</guid>
+        
+        <category>git</category>
+        
+        
+        <category>git</category>
+        
       </item>
-    {% endfor %}
+    
+      <item>
+        <title>How to use a self signed certificate with Gradle</title>
+        <description>&lt;p&gt;Lately I’ve been getting a lot of issues regarding self-signed certificates with
+Java apps using Gradle as their build tool. The issues were mostly errors like
+&lt;em&gt;“Exception in thread “main” javax.net.ssl.SSLHandshakeException”&lt;/em&gt; or packages
+that can’t be downloaded because of an invalid certificate. This was caused by
+Gradle not importing the corporate certificiate pre-installed on my client’s
+company issued laptop by default. This post is a guide about using a self signed
+certificate with Gradle.&lt;/p&gt;
+
+&lt;p&gt;First find out where the certificate is stored. The certificate can be in any
+directory but if using OpenSSL it is good practice to put the certificate
+on its default directory. Depending on the operating system, the default
+directory may vary.&lt;/p&gt;
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;openssl version &lt;span class=&quot;nt&quot;&gt;-d&lt;/span&gt;
+OPENSSLDIR: &lt;span class=&quot;s2&quot;&gt;&quot;/private/etc/ssl&quot;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;Export the self signed certificate to the Java keystore.&lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;keytool -import -trustcacerts -alias root -file /private/etc/ssl/certs.pem -keystore $JAVA_HOME/jre/lib/security/cacerts -storepass changeit
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;The default trust store is located at &lt;em&gt;$JAVA_HOME/jre/lib/security/cacerts&lt;/em&gt;.
+On the project’s root directory create or edit the &lt;em&gt;gradle.properties&lt;/em&gt; file
+and add the line below.&lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;org.gradle.jvmargs=-Djavax.net.ssl.keyStore=&quot;$JAVA_HOME/jre/lib/security/cacerts&quot; -Djavax.net.ssl.keyStoreType=KeychainStore -Djavax.net.ssl.keyStorePassword=changeit
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;If you have properly done the steps above then there should no longer be any
+problem when running Gradle.&lt;/p&gt;
+</description>
+        <pubDate>Mon, 29 Jul 2019 00:30:00 +0000</pubDate>
+        <link>https://emcorrales.com/blog/how-to-use-a-self-signed-certificate-with-gradle</link>
+        <guid isPermaLink="true">https://emcorrales.com/blog/how-to-use-a-self-signed-certificate-with-gradle</guid>
+        
+        <category>java</category>
+        
+        <category>gradle</category>
+        
+        <category>ssl</category>
+        
+        <category>https</category>
+        
+        <category>openssl</category>
+        
+        
+        <category>java</category>
+        
+        <category>gradle</category>
+        
+        <category>ssl</category>
+        
+        <category>https</category>
+        
+        <category>openssl</category>
+        
+      </item>
+    
+      <item>
+        <title>How to enable internet access of CentOS 7 on VirtualBox</title>
+        <description>&lt;p&gt;I was setting up a CentOS 7 virtual machine using VirtualBox to replicate an
+existing setup when I discovered that I cannot access the internet even though
+my VM was setup to use a &lt;strong&gt;bridged adapter&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;h2 id=&quot;diagnosing-the-problem&quot;&gt;Diagnosing the problem&lt;/h2&gt;
+&lt;p&gt;I wanted to know the status of network interfaces on my virtual machine so I
+execute the &lt;strong&gt;nmcli&lt;/strong&gt; command.&lt;/p&gt;
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;nmcli
+enp0s3: disconnected
+        &lt;span class=&quot;s2&quot;&gt;&quot;Intel 82540EM&quot;&lt;/span&gt;
+        1 connection available
+        ethernet &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;e1000&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;, 08:00:27:A7:B4:52, autoconnect, hw, mtu 1500
+
+lo: unmanaged
+        &lt;span class=&quot;s2&quot;&gt;&quot;lo&quot;&lt;/span&gt;
+        loopback &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;unknown&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;, 00:00:00:00:00:00, sw, mtu 65536
+
+Use &lt;span class=&quot;s2&quot;&gt;&quot;nmcli device show&quot;&lt;/span&gt; to get &lt;span class=&quot;nb&quot;&gt;complete &lt;/span&gt;information about known devices and
+&lt;span class=&quot;s2&quot;&gt;&quot;nmcli connection show&quot;&lt;/span&gt; to get an overview on active connection profiles.
+
+Consult nmcli&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;1&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; and nmcli-examples&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;5&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; manual pages &lt;span class=&quot;k&quot;&gt;for &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;complete &lt;/span&gt;usage details.
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;The command shows that enp0s3 is diconnected so I checked its network
+configuration script.&lt;/p&gt;
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;cat&lt;/span&gt; /etc/sysconfig/network-scripts/ifcfg-enp0s3
+&lt;span class=&quot;nv&quot;&gt;TYPE&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;Ethernet
+&lt;span class=&quot;nv&quot;&gt;PROXY_METHOD&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;none
+&lt;span class=&quot;nv&quot;&gt;BROWSER_ONLY&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;no
+&lt;span class=&quot;nv&quot;&gt;BOOTPROTO&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;dhcp
+&lt;span class=&quot;nv&quot;&gt;DEFROUTE&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;yes
+&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;IPV4_FAILURE_FATAL&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;no
+&lt;span class=&quot;nv&quot;&gt;IPV6INIT&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;yes
+&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;IPV6_AUTOCONF&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;yes
+&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;IPV6_DEFROUTE&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;yes
+&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;IPV6_FAILURE_FATAL&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;no
+&lt;span class=&quot;nv&quot;&gt;IPV6_ADDR_GEN_MODE&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;stable-privacy
+&lt;span class=&quot;nv&quot;&gt;NAME&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;enp0s3
+&lt;span class=&quot;nv&quot;&gt;UUID&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;1056c9af-dc47-429b-958c-d0e83b99d60f
+&lt;span class=&quot;nv&quot;&gt;DEVICE&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;enp0s3
+&lt;span class=&quot;nv&quot;&gt;ONBOOT&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;no
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;I found out that the reason I have no access to the internet is because it is
+not configured to be activated on boot. The last line &lt;strong&gt;ONBOOT=no&lt;/strong&gt; means that
+this network interface won’t be activated on startup.&lt;/p&gt;
+
+&lt;h2 id=&quot;configuring-the-network-interface&quot;&gt;Configuring the network interface&lt;/h2&gt;
+
+&lt;p&gt;To resolve this I opened a text editor to edit the network configuration and
+changed the last line to &lt;strong&gt;ONBOOT=yes&lt;/strong&gt;.&lt;/p&gt;
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;sudo &lt;/span&gt;vi /etc/sysconfig/network-scripts/ifcfg-enp0s3
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;I have to restart the network and apply the changes.&lt;/p&gt;
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;sudo &lt;/span&gt;systemctl restart network.service
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;Now if I check the interface, it would show that it is connected.&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;nmcli
+enp0s3: connected to enp0s3
+        &lt;span class=&quot;s2&quot;&gt;&quot;Intel 82540EM&quot;&lt;/span&gt;
+        ethernet &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;e1000&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;, 08:00:27:A7:B4:52, hw, mtu 1500
+        ip4 default
+        inet4 10.0.2.15/24
+        route4 0.0.0.0/0
+        route4 10.0.2.0/24
+        inet6 fe80::f63f:8611:805b:579d/64
+        route6 fe80::/64
+        route6 ff00::/8
+
+lo: unmanaged
+        &lt;span class=&quot;s2&quot;&gt;&quot;lo&quot;&lt;/span&gt;
+        loopback &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;unknown&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;, 00:00:00:00:00:00, sw, mtu 65536
+
+DNS configuration:
+        servers: 17.83.200.200 17.83.200.202
+        domains: apple.com
+        interface: enp0s3
+
+Use &lt;span class=&quot;s2&quot;&gt;&quot;nmcli device show&quot;&lt;/span&gt; to get &lt;span class=&quot;nb&quot;&gt;complete &lt;/span&gt;information about known devices and
+&lt;span class=&quot;s2&quot;&gt;&quot;nmcli connection show&quot;&lt;/span&gt; to get an overview on active connection profiles.
+
+Consult nmcli&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;1&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; and nmcli-examples&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;5&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; manual pages &lt;span class=&quot;k&quot;&gt;for &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;complete &lt;/span&gt;usage details.
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;testing-access-to-the-internet&quot;&gt;Testing access to the internet&lt;/h2&gt;
+&lt;p&gt;Now to check if my virtual machine has access to the internet.&lt;/p&gt;
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;ping google.com
+PING google.com &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;74.125.24.138&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; 56&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;84&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; bytes of data.
+64 bytes from 74.125.24.138 &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;74.125.24.138&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;: &lt;span class=&quot;nv&quot;&gt;icmp_seq&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;1 &lt;span class=&quot;nv&quot;&gt;ttl&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;41 &lt;span class=&quot;nb&quot;&gt;time&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;71.7 ms
+64 bytes from 74.125.24.138 &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;74.125.24.138&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;: &lt;span class=&quot;nv&quot;&gt;icmp_seq&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;2 &lt;span class=&quot;nv&quot;&gt;ttl&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;41 &lt;span class=&quot;nb&quot;&gt;time&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;73.8 ms
+64 bytes from 74.125.24.138 &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;74.125.24.138&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;: &lt;span class=&quot;nv&quot;&gt;icmp_seq&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;3 &lt;span class=&quot;nv&quot;&gt;ttl&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;41 &lt;span class=&quot;nb&quot;&gt;time&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;73.1 ms
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;The command above shows that my virtual machine can now successfully connect to
+the internet.&lt;/p&gt;
+</description>
+        <pubDate>Thu, 13 Jun 2019 15:30:33 +0000</pubDate>
+        <link>https://emcorrales.com/blog/how-to-enable-internet-access-on-centos7-virtualbox</link>
+        <guid isPermaLink="true">https://emcorrales.com/blog/how-to-enable-internet-access-on-centos7-virtualbox</guid>
+        
+        <category>centos virtualbox</category>
+        
+        
+        <category>centos,</category>
+        
+        <category>virtualbox</category>
+        
+      </item>
+    
+      <item>
+        <title>NodeJS: Debugging and fixing HTTPS/SSL issues caused by changing the self signed certificate.</title>
+        <description>&lt;p&gt;This past month I’ve been bombarded with lots of issues regarding HTTPS/SSL.
+The internal Certificate Authority of the company I’m servicing recently changed
+their root certicate. This caused the services that communicate with other
+services in their network through HTTPS/SSL to break and receive errors. I’ve
+been debugging a NodeJS app that is being plagued by these issues. In this post
+I’ll show you the steps I took to fix this.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://images.emcorrales.com/NodeJS-SSL-old-architecture.png&quot; alt=&quot;alt text&quot; title=&quot;The NodeJs app that depend on a third party app broke after changing certificate&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;The image above shows that the NodeJS app uses an API on their internal network.
+The NodeJS app is the client of the third party API and is having trouble getting
+a response through HTTPS even though the admin has installed the latest
+certificate on every server’s trust store and is ready for use.&lt;/p&gt;
+
+&lt;h3 id=&quot;checking-if-the-certificate-is-installed-on-the-server&quot;&gt;Checking if the certificate is installed on the server.&lt;/h3&gt;
+&lt;p&gt;The first thing I did is to check if the new certificate is installed on the
+server of the client app. I looked for the directory where the certificates are
+stored:&lt;/p&gt;
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;openssl version &lt;span class=&quot;nt&quot;&gt;-d&lt;/span&gt;
+OPENSSLDIR: &lt;span class=&quot;s2&quot;&gt;&quot;/usr/lib/ssl&quot;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;then I looked for the certifcate in that directory. Below is the command I used
+to look for a certificate called &lt;em&gt;example.pem&lt;/em&gt;.&lt;/p&gt;
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;ls&lt;/span&gt; /usr/lib/ssl/certs | &lt;span class=&quot;nb&quot;&gt;grep &lt;/span&gt;example.pem
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;verifying-the-connection-to-the-third-party-api&quot;&gt;Verifying the connection to the third party API.&lt;/h3&gt;
+&lt;p&gt;I needed to figure out if there is a problem with the new certificate. The first
+thing that comes to my mind is to check if I can establish a HTTPS connection
+with the third party API so I executed this:&lt;/p&gt;
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;openssl s_client &lt;span class=&quot;nt&quot;&gt;-connect&lt;/span&gt; api.example.com:443
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;Once I verified the HTTPS/SSL connection with the third party API, I proceeded
+to running the client app.&lt;/p&gt;
+
+&lt;h3 id=&quot;running-the-client-app&quot;&gt;Running the client app.&lt;/h3&gt;
+&lt;p&gt;The Node app I was debugging is too big and I just need to test the part that
+uses the API so I created a simple app that uses the same API. This will
+serve as proxy. Below are the contents of the file &lt;em&gt;client.js&lt;/em&gt;. A simple
+NodeJS app that uses the third party API.&lt;/p&gt;
+&lt;div class=&quot;language-javascript highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;// client.js&lt;/span&gt;
+&lt;span class=&quot;kd&quot;&gt;const&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;https&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;require&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'https'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+
+&lt;span class=&quot;nx&quot;&gt;https&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;kd&quot;&gt;get&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;https://api.example.com&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;res&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;nx&quot;&gt;console&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;log&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;res&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;statusCode&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;res&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;statusCode&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;!==&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;200&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;throw&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;Error&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;`Expected 200, got &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;res&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;statusCode&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;`&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+  &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+  &lt;span class=&quot;nx&quot;&gt;res&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;on&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'data'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;data&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;process&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;stdout&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;write&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;));&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;});&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;When I run the app I  get error messages like these:&lt;/p&gt;
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;node client.js
+Error: unable to verify the first certificate
+    at TLSSocket.onConnectSecure &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;_tls_wrap.js:1036:34&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+    at TLSSocket.emit &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;events.js:159:13&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+    at TLSSocket._finishInit &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;_tls_wrap.js:637:8&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;The app is having verification errors with the API’s certificate because Node
+doesn’t load the corresponding certificate that can verify it when creating a
+ HTTPS request. The new certificate is installed on the server’s trust store but
+Node doesn’t use it because it already has a default list of CA’s built into its
+&lt;a href=&quot;https://github.com/joyent/node/blob/master/src/node_root_certs.h&quot;&gt;source&lt;/a&gt;.
+Thus, while it is true that it doesn’t do a lookup on the system hosted CA’s
+and that there is no “store” per se, there is a default list of CA’s that it
+accepts.&lt;/p&gt;
+
+&lt;p&gt;In order to use the new certificate, the app must be configured to load the CA
+upon deployment by passing the environment variable &lt;strong&gt;NODE_EXTRA_CA_CERTS&lt;/strong&gt; like
+this:&lt;/p&gt;
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;NODE_EXTRA_CA_CERTS&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;/usr/lib/ssl/certs node client.js Hello, world
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;This time the app will no longer show an error because it knows where to find
+the new certificate.&lt;/p&gt;
+</description>
+        <pubDate>Tue, 30 Apr 2019 00:30:00 +0000</pubDate>
+        <link>https://emcorrales.com/blog/nodejs-debugging-and-fixing-https-ssl-issues-caused-by-changing-the-self-signed-certificate</link>
+        <guid isPermaLink="true">https://emcorrales.com/blog/nodejs-debugging-and-fixing-https-ssl-issues-caused-by-changing-the-self-signed-certificate</guid>
+        
+        <category>nodejs</category>
+        
+        <category>javascript</category>
+        
+        <category>ssl</category>
+        
+        
+        <category>nodejs</category>
+        
+        <category>javascript</category>
+        
+        <category>ssl</category>
+        
+      </item>
+    
+      <item>
+        <title>How to properly debug shell scripts</title>
+        <description>&lt;p&gt;I recently learned the proper way to debug shell scripts. It seems shell
+scripting has built-in features that can help developers find problems in their
+script. In this post I will be sharing how I debug scripts before and what is
+wrong with it while also showing the proper way to do it.&lt;/p&gt;
+
+&lt;h3 id=&quot;contents&quot;&gt;Contents&lt;/h3&gt;
+&lt;ol&gt;
+  &lt;li&gt;&lt;a href=&quot;#print_commands&quot;&gt;Printing commands upon execution.&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#running_script_on_debug_mode&quot;&gt;Running the entire script on debug mode.&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#terminate_script_on_exit&quot;&gt;Terminating the entire script upon error.&lt;/a&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h2 id=&quot;printing-commands-upon-execution&quot;&gt;&lt;a name=&quot;print_commands&quot;&gt;&lt;/a&gt;Printing commands upon execution&lt;/h2&gt;
+
+&lt;p&gt;Before, to debug a script I’m developing, I would do it like this.&lt;/p&gt;
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;ls pictures&quot;&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;ls &lt;/span&gt;pictures
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;This prints a message before the command is executed. This worked out well for
+me before however this means I have to run &lt;em&gt;echo&lt;/em&gt; for every command that I want
+to debug. What if I am debugging multiple consecutive lines of a script?
+Suppose I have a script called &lt;em&gt;foo.sh&lt;/em&gt; with contents like these:&lt;/p&gt;
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;#!/bin/bash&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;pwd
+whoami
+ls &lt;/span&gt;pictures
+&lt;span class=&quot;nb&quot;&gt;uname&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;If I’m just interested to see if the first three commands, &lt;em&gt;pwd&lt;/em&gt;, &lt;em&gt;whoami&lt;/em&gt; and
+&lt;em&gt;ls&lt;/em&gt; are being executed then with my previous way of debugging I would edit its
+contents to look like this.&lt;/p&gt;
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;#!/bin/bash&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;pwd&quot;&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;pwd
+echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;whoami&quot;&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;whoami
+echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;ls pictures&quot;&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;ls &lt;/span&gt;pictures
+&lt;span class=&quot;nb&quot;&gt;uname&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;Thats a lot of &lt;em&gt;echo&lt;/em&gt; and it looks tedious even though I’m just debugging the
+first three commands.&lt;/p&gt;
+
+&lt;p&gt;A better way to do this is to execute&lt;/p&gt;
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;set&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-x&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;before the commands I want to print. This command prints all the commands upon
+execution in the script until it is disabled by executing&lt;/p&gt;
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;set&lt;/span&gt; +x
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;The contents of &lt;em&gt;foo.sh&lt;/em&gt; would look like this&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;#!/bin/bash&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;set&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-x&lt;/span&gt; &lt;span class=&quot;c&quot;&gt;# Start printing commands upon execution.&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;pwd
+whoami
+ls &lt;/span&gt;pictures
+&lt;span class=&quot;nb&quot;&gt;set&lt;/span&gt; +x &lt;span class=&quot;c&quot;&gt;# Stop printing commands upon execution.&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;uname&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;This is better because I only need to execute two commands to print all the
+commands being executed and I don’t have to execute &lt;em&gt;echo&lt;/em&gt; which is another
+command that may potentially introduce some bugs upon execution of the script.&lt;/p&gt;
+
+&lt;h2 id=&quot;running-the-entire-script-on-debug-mode&quot;&gt;&lt;a name=&quot;running_script_on_debug_mode&quot;&gt;&lt;/a&gt;Running the entire script on Debug mode.&lt;/h2&gt;
+
+&lt;p&gt;I can run the entire script on debug mode upon its execution from the command
+line if I pass the parameter “&lt;em&gt;-x&lt;/em&gt;” to the script’s shebang which is always at
+the first line. Executing the command “&lt;em&gt;set -x&lt;/em&gt;” is no longer necessary. The
+script &lt;em&gt;foo.sh&lt;/em&gt; would look like this.&lt;/p&gt;
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;#!/bin/bash -x&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;pwd
+whoami
+ls &lt;/span&gt;pictures
+&lt;span class=&quot;nb&quot;&gt;uname&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;terminating-the-script-on-error&quot;&gt;&lt;a name=&quot;terminate_script_on_exit&quot;&gt;&lt;/a&gt;Terminating the script on error&lt;/h2&gt;
+
+&lt;p&gt;There are times that if a command the script is executing fails, I want it to
+terminate the script immediately, preventing the execution of subsequent
+commands.&lt;/p&gt;
+
+&lt;p&gt;Suppose that I run the script &lt;em&gt;foo.sh&lt;/em&gt; and the &lt;em&gt;pictures&lt;/em&gt; directory doesn’t
+exist. The command “&lt;em&gt;ls pictures&lt;/em&gt;” will not execute properly and will result an
+error but will still execute the &lt;em&gt;uname&lt;/em&gt; command. If I don’t want to execute
+&lt;em&gt;uname&lt;/em&gt; if an error occurs, I will insert the line below after the &lt;em&gt;ls&lt;/em&gt; command.&lt;/p&gt;
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;!&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$?&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-eq&lt;/span&gt; 0 &lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;exit &lt;/span&gt;1
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;and the script to to look like this&lt;/p&gt;
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;#!/bin/bash&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;set&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-x&lt;/span&gt; &lt;span class=&quot;c&quot;&gt;# Start printing commands upon execution.&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;pwd
+whoami
+ls &lt;/span&gt;pictures
+&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;!&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$?&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-eq&lt;/span&gt; 0 &lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;exit &lt;/span&gt;1
+&lt;span class=&quot;nb&quot;&gt;uname
+set&lt;/span&gt; +x &lt;span class=&quot;c&quot;&gt;# Stop printing commands upon execution.&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;This is how I used to do it but this also has the same problem from the previous
+section. Do I have to add this statement after every command that should
+terminate the script upon error? That is a tedious task, fortunately I can just
+add another parameter “-e” on the &lt;em&gt;set&lt;/em&gt; command to achieve the same result and 
+the script would look like this.&lt;/p&gt;
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;#!/bin/bash&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;set&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-xe&lt;/span&gt; &lt;span class=&quot;c&quot;&gt;# Start printing commands upon execution.&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;pwd
+whoami
+ls &lt;/span&gt;pictures
+&lt;span class=&quot;nb&quot;&gt;set&lt;/span&gt; +xe &lt;span class=&quot;c&quot;&gt;# Stop printing commands upon execution.&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;uname&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;I can also add “&lt;em&gt;-e&lt;/em&gt;” as a parameter for the script’s shebang if I want the
+script to exit upon error of any command like this:&lt;/p&gt;
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;#!/bin/bash -xe&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;pwd
+whoami
+ls &lt;/span&gt;pictures
+&lt;span class=&quot;nb&quot;&gt;uname&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;That’s it! These are the better and proper ways I learned to debug my scripts.&lt;/p&gt;
+</description>
+        <pubDate>Sun, 24 Feb 2019 22:30:00 +0000</pubDate>
+        <link>https://emcorrales.com/blog/how-to-properly-debug-shell-scripts</link>
+        <guid isPermaLink="true">https://emcorrales.com/blog/how-to-properly-debug-shell-scripts</guid>
+        
+        <category>shell bash  debugging</category>
+        
+        
+        <category>shell</category>
+        
+        <category>bash</category>
+        
+        <category>debugging</category>
+        
+      </item>
+    
+      <item>
+        <title>Installing Oracle JDK for MacOS via Homebrew</title>
+        <description>&lt;p&gt;MacOS has OpenJDK installed by default however I prefer to use Oracle’s version
+of JDK because its the official version. I don’t want to install it the same way
+Oracle instructs it on their docs as I find it very tedious. I’m a guy who loves
+automating stuff so I prefer to install it via Homebrew. I frequently do a clean
+install on my Mac every time there is a new version of OSX so I have to install
+JDK again and again. I’d rather just run a single installation script instead of
+heading over to Oracle’s website and following their instructions.&lt;/p&gt;
+
+&lt;h3 id=&quot;steps-to-install-and-configure-the-oracle-jdk&quot;&gt;Steps to install and configure the Oracle JDK:&lt;/h3&gt;
+&lt;ol&gt;
+  &lt;li&gt;&lt;a href=&quot;#install_homebrew_and_cask&quot;&gt;Install Homebrew and Cask&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#install_jdk&quot;&gt;Install Oracle JDK&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#setup_the_java_home_environment_variable&quot;&gt;Setup the JAVA_HOME environment variable&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#verifying_installation&quot;&gt;Verifying installation&lt;/a&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h2 id=&quot;homebrew-and-cask&quot;&gt;&lt;a name=&quot;install_homebrew_and_cask&quot;&gt;&lt;/a&gt;Homebrew and Cask&lt;/h2&gt;
+&lt;p&gt;&lt;em&gt;Homebrew&lt;/em&gt; is a package manager for Mac and has always been my preferred way to
+install my command line tools because I can integrate it with my setup scripts.
+To install it I’ll run&lt;/p&gt;
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;ruby &lt;span class=&quot;nt&quot;&gt;-e&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;$(&lt;/span&gt;curl &lt;span class=&quot;nt&quot;&gt;-fsSL&lt;/span&gt; https://raw.githubusercontent.com/Homebrew/install/master/install&lt;span class=&quot;k&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;then I’ll install &lt;em&gt;Homebrew Cask&lt;/em&gt; which is an extension of &lt;em&gt;Homebrew&lt;/em&gt;. It makes
+the installation of large binaries and graphical applications simpler.&lt;/p&gt;
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;brew tap caskroom/versions
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;h2 id=&quot;jdk-installation&quot;&gt;&lt;a name=&quot;install_jdk&quot;&gt;&lt;/a&gt;JDK Installation&lt;/h2&gt;
+&lt;p&gt;Before I install the JDK, I’ll check first which version it will install by
+default. I’m very picky about the version because most of the time I just use
+Java for Android development. I also prefer the older and more stable version of
+JDK so I run&lt;/p&gt;
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;brew cask info java
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;which will output&lt;/p&gt;
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;java: 11.0.2,9
+https://jdk.java.net/
+Not installed
+From: https://github.com/Homebrew/homebrew-cask/blob/master/Casks/java.rb
+&lt;span class=&quot;o&quot;&gt;==&amp;gt;&lt;/span&gt; Name
+OpenJDK
+&lt;span class=&quot;o&quot;&gt;==&amp;gt;&lt;/span&gt; Artifacts
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;This means that the latest version is JDK 11. I can install it now by running&lt;/p&gt;
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;brew cask &lt;span class=&quot;nb&quot;&gt;install &lt;/span&gt;java
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;but I prefer to install JDK 8 over 11 so instead I’ll run&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;brew cask &lt;span class=&quot;nb&quot;&gt;install &lt;/span&gt;java8
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;h2 id=&quot;setup-java_home-environment-variable&quot;&gt;&lt;a name=&quot;setup_the_java_home_environment_variable&quot;&gt;&lt;/a&gt;Setup Java_HOME environment variable&lt;/h2&gt;
+&lt;p&gt;Once installed, I will set the &lt;strong&gt;JAVA_HOME&lt;/strong&gt; environment variable by editing my
+&lt;em&gt;.bash_profile&lt;/em&gt;&lt;/p&gt;
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;vim ~/.bash_profile
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;and inserting this line&lt;/p&gt;
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;export &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;JAVA_HOME&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;$(&lt;/span&gt;/usr/libexec/java_home&lt;span class=&quot;k&quot;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;and applying these changes by running&lt;/p&gt;
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;source&lt;/span&gt; ~/.bash_profile
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;verifying-installation&quot;&gt;&lt;a name=&quot;verifying_installation&quot;&gt;&lt;/a&gt;Verifying Installation&lt;/h2&gt;
+
+&lt;p&gt;Now to confirm if the installation was sucessful I’ll run this command.&lt;/p&gt;
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;java &lt;span class=&quot;nt&quot;&gt;-version&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;If the installation is successful, its output would be similiar to this&lt;/p&gt;
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;java version &lt;span class=&quot;s2&quot;&gt;&quot;1.8.0_202&quot;&lt;/span&gt;
+Java&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;TM&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; SE Runtime Environment &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;build 1.8.0_202-b08&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+Java HotSpot&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;TM&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; 64-Bit Server VM &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;build 25.202-b08, mixed mode&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;This tells me that I have installed the Oracle version of the JDK. However if
+the output is like this&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;java version &lt;span class=&quot;s2&quot;&gt;&quot;1.8.0_202&quot;&lt;/span&gt;
+OpenJDK Runtime Environment &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;build 1.8.0_202-b08&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+OpenJDK 64-Bit Server VM &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;build 25.202-b08, mixed mode&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;then I may have failed to install the JDK properly or the changes may not have
+been applied yet because I can see that OpenJDK is still being used. I’ll try to
+fix this by restarting my Mac then running “&lt;em&gt;java -version&lt;/em&gt;” again.&lt;/p&gt;
+
+&lt;h2 id=&quot;automating-installation-with-a-script&quot;&gt;Automating installation with a script&lt;/h2&gt;
+&lt;p&gt;Below is a simple script to automate the installation of the latest Oracle JDK.&lt;/p&gt;
+&lt;noscript&gt;&lt;pre&gt;400: Invalid request
+&lt;/pre&gt;&lt;/noscript&gt;
+&lt;script src=&quot;https://gist.github.com/86bf0f9a189114ec8cf1219288e7d280.js?file=jdk-oracle-macos-setup.bash&quot;&gt; &lt;/script&gt;
+
+&lt;p&gt;That’s it! Now you can automate your JDK installation on you Mac by running the
+script.&lt;/p&gt;
+</description>
+        <pubDate>Tue, 05 Feb 2019 00:30:00 +0000</pubDate>
+        <link>https://emcorrales.com/blog/install-oracle-jdk-macos-homebrew</link>
+        <guid isPermaLink="true">https://emcorrales.com/blog/install-oracle-jdk-macos-homebrew</guid>
+        
+        <category>jdk java</category>
+        
+        
+        <category>jdk</category>
+        
+        <category>java</category>
+        
+      </item>
+    
+      <item>
+        <title>How I install and configure Docker for my Mac via Homebrew</title>
+        <description>&lt;p&gt;This is the best way I can come up with to install Docker on my Mac. I never
+liked manually downloading the “&lt;em&gt;.dmg&lt;/em&gt;” file and then moving it to the
+&lt;em&gt;Applications&lt;/em&gt; directory. I will be sharing in this post how I installed it via
+Homebrew while also configuring bash completion for Docker.&lt;/p&gt;
+
+&lt;h3 id=&quot;steps-to-install-and-configure-docker&quot;&gt;Steps to install and configure Docker:&lt;/h3&gt;
+&lt;ol&gt;
+  &lt;li&gt;&lt;a href=&quot;#install_homebrew_and_cask&quot;&gt;Install Homebrew and Cask&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#install_docker&quot;&gt;Install Docker&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#setup_bash_auto_completion&quot;&gt;Setup Bash auto completion&lt;/a&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h2 id=&quot;install-homebrew-and-cask&quot;&gt;&lt;a name=&quot;install_homebrew_and_cask&quot;&gt;&lt;/a&gt;Install Homebrew and Cask&lt;/h2&gt;
+&lt;p&gt;Homebrew is a package manager for Mac and has always been my preferred way to
+install my tools because I can integrate it with my setup scripts. To install it
+execute&lt;/p&gt;
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;ruby &lt;span class=&quot;nt&quot;&gt;-e&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;$(&lt;/span&gt;curl &lt;span class=&quot;nt&quot;&gt;-fsSL&lt;/span&gt; https://raw.githubusercontent.com/Homebrew/install/master/install&lt;span class=&quot;k&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;then install &lt;em&gt;Homebrew Cask&lt;/em&gt; which is an extension of &lt;em&gt;Homebrew&lt;/em&gt;. It makes the
+installation of large binaries and graphical applications simpler.&lt;/p&gt;
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;brew tap caskroom/versions
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;install-docker&quot;&gt;&lt;a name=&quot;install_docker&quot;&gt;&lt;/a&gt;Install Docker&lt;/h2&gt;
+&lt;p&gt;To install Docker via Homebrew run&lt;/p&gt;
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;brew cask &lt;span class=&quot;nb&quot;&gt;install &lt;/span&gt;docker
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;then after installation run&lt;/p&gt;
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;docker &lt;span class=&quot;nt&quot;&gt;--version&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;to confirm its installation.&lt;/p&gt;
+
+&lt;h2 id=&quot;setup-bash-auto-completion&quot;&gt;&lt;a name=&quot;setup_bash_auto_completion&quot;&gt;&lt;/a&gt;Setup Bash auto completion&lt;/h2&gt;
+
+&lt;p&gt;Install bash completion via Homebrew.&lt;/p&gt;
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;brew &lt;span class=&quot;nb&quot;&gt;install &lt;/span&gt;bash-completion
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;Create symlinks for Docker’s completion on Bash.&lt;/p&gt;
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;etc&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;/Applications/Docker.app/Contents/Resources/etc
+&lt;span class=&quot;nb&quot;&gt;ln&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-s&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$etc&lt;/span&gt;/docker.bash-completion &lt;span class=&quot;k&quot;&gt;$(&lt;/span&gt;brew &lt;span class=&quot;nt&quot;&gt;--prefix&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;)&lt;/span&gt;/etc/bash_completion.d/docker
+&lt;span class=&quot;nb&quot;&gt;ln&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-s&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$etc&lt;/span&gt;/docker-machine.bash-completion &lt;span class=&quot;k&quot;&gt;$(&lt;/span&gt;brew &lt;span class=&quot;nt&quot;&gt;--prefix&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;)&lt;/span&gt;/etc/bash_completion.d/docker-machine
+&lt;span class=&quot;nb&quot;&gt;ln&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-s&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$etc&lt;/span&gt;/docker-compose.bash-completion &lt;span class=&quot;k&quot;&gt;$(&lt;/span&gt;brew &lt;span class=&quot;nt&quot;&gt;--prefix&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;)&lt;/span&gt;/etc/bash_completion.d/docker-compose
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;Add this line to your &lt;strong&gt;~/.bash_profile&lt;/strong&gt;.&lt;/p&gt;
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-f&lt;/span&gt; /usr/local/etc/bash_completion &lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;.&lt;/span&gt; /usr/local/etc/bash_completion
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;Apply the changes by running&lt;/p&gt;
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;source&lt;/span&gt; ~/.bash_profile
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;Thats it! Now you have installed Docker while also enabling completion for Bash.
+If you know a better way to install it please don’t hesitate to comment below.&lt;/p&gt;
+</description>
+        <pubDate>Tue, 29 Jan 2019 02:30:00 +0000</pubDate>
+        <link>https://emcorrales.com/blog/how-i-install-and-configure-docker-for-my-mac-via-homebrew</link>
+        <guid isPermaLink="true">https://emcorrales.com/blog/how-i-install-and-configure-docker-for-my-mac-via-homebrew</guid>
+        
+        <category>docker</category>
+        
+        
+        <category>docker</category>
+        
+      </item>
+    
+      <item>
+        <title>How I redirected all the web traffic for my old domain to the new one</title>
+        <description>&lt;p&gt;I recently decided to change the domain name of my personal website from
+&lt;em&gt;emmanuelcorrales.com&lt;/em&gt; to &lt;em&gt;emcorrales.com&lt;/em&gt; because it is shorter and easier to
+remember. I don’t want visitors of &lt;em&gt;emmanuelcorrales.com&lt;/em&gt; to receive a
+&lt;em&gt;404 Not Found&lt;/em&gt; or any other error so I redirected all the traffic to
+&lt;em&gt;emcorrales.com&lt;/em&gt;. In this article I’ll be sharing the steps I took to
+accomplish this.&lt;/p&gt;
+
+&lt;h3 id=&quot;steps-to-redirect-web-traffic-from-old-domain-to-the-new-one&quot;&gt;Steps to redirect web traffic from old domain to the new one:&lt;/h3&gt;
+&lt;ol&gt;
+  &lt;li&gt;&lt;a href=&quot;#launch_a_server_for_the_old_domain&quot;&gt;Launch a server for my old domain.&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#setup_virtual_hosts_with_apache&quot;&gt;Setup virtual hosts for the old domain with Apache.&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#configure_virtual_host_to_redirect_to_the_new_domain&quot;&gt;Configure the virtual host to redirect to the new domain.&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#enable_https_for_apache&quot;&gt;Enable HTTPS for Apache&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#install_lets_encrypt&quot;&gt;Install Let’s Encrypt SSL Self Signed Certificate for Apache&lt;/a&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h2 id=&quot;launch-a-server-for-my-old-domain&quot;&gt;&lt;a name=&quot;launch_a_server_for_the_old_domain&quot;&gt;&lt;/a&gt;Launch a server for my old domain&lt;/h2&gt;
+&lt;p&gt;To assign a server to my old domain, I launched a new instance of an Ubuntu
+Server then configured the DNS A records of &lt;em&gt;emmanuelcorrales.com&lt;/em&gt; which was
+hosted at GoDaddy to point to the server’s external IP address. This article
+will not cover how I configured my DNS records to point to my server since every
+registrar provides a unique way of changing their DNS records. You must already
+have knowledge on how to configure the DNS with your registrar.&lt;/p&gt;
+
+&lt;h2 id=&quot;setup-virtual-hosts-for-the-old-domain-with-apache&quot;&gt;&lt;a name=&quot;setup_virtual_hosts_with_apache&quot;&gt;&lt;/a&gt;Setup virtual hosts for the old domain with Apache&lt;/h2&gt;
+&lt;p&gt;Next I created a virtual host for &lt;em&gt;emmanuelcorrales.com&lt;/em&gt; using the same steps
+from a &lt;a href=&quot;../blog/apache-setup-a-virtual-host-on-ubuntu&quot;&gt;guide&lt;/a&gt; I recently wrote.&lt;/p&gt;
+
+&lt;h2 id=&quot;configure-the-virtual-host-to-redirect-to-the-new-domain&quot;&gt;&lt;a name=&quot;configure_virtual_host_to_redirect_to_the_new_domain&quot;&gt;&lt;/a&gt;Configure the virtual host to redirect to the new domain.&lt;/h2&gt;
+&lt;p&gt;I configured the virtual host for &lt;em&gt;emmanuelcorrales.com&lt;/em&gt; to redirect to
+&lt;em&gt;https://emcorrales.com&lt;/em&gt; by editing
+&lt;em&gt;/etc/apache2/sites-available/emmanuelcorrales.com.conf&lt;/em&gt;&lt;/p&gt;
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;sudo &lt;/span&gt;vim /etc/apache2/sites-available/emmanuelcorrales.conf
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;to look like this&lt;/p&gt;
+&lt;div class=&quot;language-conf highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&amp;lt;&lt;span class=&quot;n&quot;&gt;VirtualHost&lt;/span&gt; *:&lt;span class=&quot;m&quot;&gt;80&lt;/span&gt;&amp;gt;
+    &lt;span class=&quot;n&quot;&gt;ServerAdmin&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;admin&lt;/span&gt;@&lt;span class=&quot;n&quot;&gt;emmanuelcorrales&lt;/span&gt;.&lt;span class=&quot;n&quot;&gt;com&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;ServerName&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;emmanuelcorrales&lt;/span&gt;.&lt;span class=&quot;n&quot;&gt;com&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;ServerAlias&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;emmanuelcorrales&lt;/span&gt;.&lt;span class=&quot;n&quot;&gt;com&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;DocumentRoot&lt;/span&gt; /&lt;span class=&quot;n&quot;&gt;var&lt;/span&gt;/&lt;span class=&quot;n&quot;&gt;www&lt;/span&gt;/&lt;span class=&quot;n&quot;&gt;emmanuelcorrales&lt;/span&gt;.&lt;span class=&quot;n&quot;&gt;com&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;ErrorLog&lt;/span&gt; ${&lt;span class=&quot;n&quot;&gt;APACHE_LOG_DIR&lt;/span&gt;}/&lt;span class=&quot;n&quot;&gt;error&lt;/span&gt;.&lt;span class=&quot;n&quot;&gt;log&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;CustomLog&lt;/span&gt; ${&lt;span class=&quot;n&quot;&gt;APACHE_LOG_DIR&lt;/span&gt;}/&lt;span class=&quot;n&quot;&gt;access&lt;/span&gt;.&lt;span class=&quot;n&quot;&gt;log&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;combined&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;RedirectMatch&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;permanent&lt;/span&gt; ^/(.*)$ &lt;span class=&quot;n&quot;&gt;https&lt;/span&gt;://&lt;span class=&quot;n&quot;&gt;emcorrales&lt;/span&gt;.&lt;span class=&quot;n&quot;&gt;com&lt;/span&gt;/$&lt;span class=&quot;m&quot;&gt;1&lt;/span&gt;
+&amp;lt;/&lt;span class=&quot;n&quot;&gt;VirtualHost&lt;/span&gt;&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;The important part to note  here is the line with the &lt;em&gt;RedirectMatch&lt;/em&gt;. This line
+is the configuration I need to redirect traffic from  &lt;em&gt;emmanuelcorrales.com&lt;/em&gt;
+to &lt;em&gt;https://emcorrales.com&lt;/em&gt;.&lt;/p&gt;
+
+&lt;p&gt;I restarted the Apache web server to apply the changes I’ve made to the
+configuration.&lt;/p&gt;
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;sudo &lt;/span&gt;service apache2 restart
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;After restarting, visiting &lt;em&gt;http://emmanuelcorrales.com&lt;/em&gt; will redirect me to
+&lt;em&gt;https://emcorrales.com&lt;/em&gt;.&lt;/p&gt;
+
+&lt;h2 id=&quot;enable-https-for-apache&quot;&gt;&lt;a name=&quot;enable_https_for_apache&quot;&gt;&lt;/a&gt;Enable HTTPS for Apache&lt;/h2&gt;
+&lt;p&gt;At this point HTTPS request is still not supported and visiting
+&lt;em&gt;https://emmanuelcorrales.com&lt;/em&gt; causes an error on my browser. To support HTTPS
+request I configured Apache to enable SSL for my old domain by running the
+following commands:&lt;/p&gt;
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;sudo &lt;/span&gt;a2enmod ssl
+&lt;span class=&quot;nb&quot;&gt;sudo &lt;/span&gt;a2ensite default-ssl.conf
+&lt;span class=&quot;nb&quot;&gt;sudo &lt;/span&gt;service apache2 restart
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;After that I was able to access &lt;em&gt;https://emmanuelcorrales.com&lt;/em&gt; through my
+browser. However, the browser warns me that my connection is not private because
+I have an invalid certificate. To remove this, I needed to install a certificate
+issued by a trusted Certificate Authority but unfortunately I don’t want to buy
+one so I installed the free certificate provided by &lt;em&gt;Let’s Encrypt&lt;/em&gt;.&lt;/p&gt;
+
+&lt;h2 id=&quot;install-lets-encrypt-ssl-self-signed-certificate-for-apache&quot;&gt;&lt;a name=&quot;install_lets_encrypt&quot;&gt;&lt;/a&gt;Install Let’s Encrypt SSL Self Signed Certificate for Apache&lt;/h2&gt;
+&lt;p&gt;I cloned the repo of &lt;em&gt;Let’s Encrypt&lt;/em&gt; to a directory on my server using Git.&lt;/p&gt;
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;sudo &lt;/span&gt;apt-get &lt;span class=&quot;nt&quot;&gt;-y&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;install &lt;/span&gt;git
+&lt;span class=&quot;nb&quot;&gt;cd&lt;/span&gt; /usr/local
+&lt;span class=&quot;nb&quot;&gt;sudo &lt;/span&gt;git clone https://github.com/letsencrypt/letsencrypt
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;Then I generated an SSL certifacte for my old domain by running the following
+commands below and entering all the required credentials.&lt;/p&gt;
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;cd&lt;/span&gt; /usr/local/letsencrypt
+&lt;span class=&quot;nb&quot;&gt;sudo&lt;/span&gt; ./letsencrypt-auto &lt;span class=&quot;nt&quot;&gt;--apache&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-d&lt;/span&gt; emmanuelcorrales.com
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;After this the certificate was installed at &lt;em&gt;/etc/letsencrypt/live&lt;/em&gt; and I
+confirmed the status of my SSL certificate by visiting the link below.&lt;/p&gt;
+
+&lt;p&gt;https://www.ssllabs.com/ssltest/analyze.html?d=emmanuelcorrales.com&amp;amp;latest&lt;/p&gt;
+
+&lt;p&gt;And that’s it. I have successfully redirected all urls from my old domain to the
+new one. If you know a better way to do this please don’t hesitate to approach
+me.&lt;/p&gt;
+</description>
+        <pubDate>Tue, 15 Jan 2019 00:30:00 +0000</pubDate>
+        <link>https://emcorrales.com/blog/how-I-redirected-all-the-web-traffic-for-my-old-domain-to-the-new-one</link>
+        <guid isPermaLink="true">https://emcorrales.com/blog/how-I-redirected-all-the-web-traffic-for-my-old-domain-to-the-new-one</guid>
+        
+        <category>ubuntu</category>
+        
+        <category>linux</category>
+        
+        <category>apache</category>
+        
+        <category>ssl</category>
+        
+        
+        <category>ubuntu,</category>
+        
+        <category>linux,</category>
+        
+        <category>apache,</category>
+        
+        <category>ssl</category>
+        
+      </item>
+    
+      <item>
+        <title>Apache: Setup a virtual host on Ubuntu 18.04 LTS</title>
+        <description>&lt;p&gt;This guide is about setting up a virtual host on Ubuntu 18.04 LTS with Apache as
+the web server. We’ll assume that we want to host a simple site where the domain
+name will be &lt;em&gt;example.com&lt;/em&gt;.&lt;/p&gt;
+
+&lt;p&gt;Install the Apache Web Server.&lt;/p&gt;
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;sudo &lt;/span&gt;apt-get update
+&lt;span class=&quot;nb&quot;&gt;sudo &lt;/span&gt;apt-get &lt;span class=&quot;nb&quot;&gt;install &lt;/span&gt;apache2
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Create a directory called &lt;em&gt;example.com&lt;/em&gt; inside the &lt;em&gt;/var/www&lt;/em&gt; and make sure that
+the current user can access it by changing its owner and permission.&lt;/p&gt;
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;sudo mkdir&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-p&lt;/span&gt; /var/www/example.com
+&lt;span class=&quot;nb&quot;&gt;sudo chown&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-R&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$USER&lt;/span&gt;:&lt;span class=&quot;nv&quot;&gt;$USER&lt;/span&gt; /var/www/example.com
+&lt;span class=&quot;nb&quot;&gt;sudo chmod&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-R&lt;/span&gt; 755 /var/www
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;Create an index file which will be the entry point of the website. Run the
+command below to open an editor.&lt;/p&gt;
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;vim /var/www/example.com/index.html
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Edit the contents to look like the code below.&lt;/p&gt;
+&lt;div class=&quot;language-html highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;html&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;body&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;h1&amp;gt;&lt;/span&gt;The virtual host is working&lt;span class=&quot;nt&quot;&gt;&amp;lt;/h1&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;/body&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;/html&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Make the site available for Apache by copying the default configuration to our
+site’s own configuration.&lt;/p&gt;
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;sudo cp&lt;/span&gt; /etc/apache2/sites-available/000-default.conf /etc/apache2/sites-available/example.com.conf
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Open the copied configuration file with a text editor.&lt;/p&gt;
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;sudo &lt;/span&gt;vim /etc/apache2/sites-available/example.com.conf
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;Edit the contents to look like below.&lt;/p&gt;
+&lt;div class=&quot;language-conf highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&amp;lt;&lt;span class=&quot;n&quot;&gt;VirtualHost&lt;/span&gt; *:&lt;span class=&quot;m&quot;&gt;80&lt;/span&gt;&amp;gt;
+    &lt;span class=&quot;n&quot;&gt;ServerAdmin&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;webmaster&lt;/span&gt;@&lt;span class=&quot;n&quot;&gt;example&lt;/span&gt;.&lt;span class=&quot;n&quot;&gt;com&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;DocumentRoot&lt;/span&gt; /&lt;span class=&quot;n&quot;&gt;var&lt;/span&gt;/&lt;span class=&quot;n&quot;&gt;www&lt;/span&gt;/&lt;span class=&quot;n&quot;&gt;example&lt;/span&gt;.&lt;span class=&quot;n&quot;&gt;com&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;ErrorLog&lt;/span&gt; ${&lt;span class=&quot;n&quot;&gt;APACHE_LOG_DIR&lt;/span&gt;}/&lt;span class=&quot;n&quot;&gt;error&lt;/span&gt;.&lt;span class=&quot;n&quot;&gt;log&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;CustomLog&lt;/span&gt; ${&lt;span class=&quot;n&quot;&gt;APACHE_LOG_DIR&lt;/span&gt;}/&lt;span class=&quot;n&quot;&gt;access&lt;/span&gt;.&lt;span class=&quot;n&quot;&gt;log&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;combined&lt;/span&gt;
+&amp;lt;/&lt;span class=&quot;n&quot;&gt;VirtualHost&lt;/span&gt;&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;We need to disable Apache’s default configuration so it won’t have any conflict
+with our configuration.&lt;/p&gt;
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;sudo &lt;/span&gt;a2dissite 000-default.conf
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;Enable our own config file by running the command below.&lt;/p&gt;
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;sudo &lt;/span&gt;a2ensite example.com.conf
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;Restart the Apache web server to apply the changes.&lt;/p&gt;
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;sudo &lt;/span&gt;systemctl restart apache2
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Add &lt;em&gt;example.com&lt;/em&gt; to the virtual hosts by editing &lt;em&gt;/etc/hosts&lt;/em&gt;.&lt;/p&gt;
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;sudo &lt;/span&gt;vim /etc/hosts
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;and add this line&lt;/p&gt;
+&lt;div class=&quot;language-conf highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;m&quot;&gt;127&lt;/span&gt;.&lt;span class=&quot;m&quot;&gt;0&lt;/span&gt;.&lt;span class=&quot;m&quot;&gt;0&lt;/span&gt;.&lt;span class=&quot;m&quot;&gt;1&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;example&lt;/span&gt;.&lt;span class=&quot;n&quot;&gt;com&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;Test by using the curl command.&lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;curl --header &quot;hostname: example.com&quot; example.com
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;It should respond with the contents of &lt;em&gt;/var/www/example.com/index.html&lt;/em&gt;.&lt;/p&gt;
+
+&lt;p&gt;You may also type &lt;em&gt;example.com&lt;/em&gt; in the browser and see the message “&lt;em&gt;The virtual
+host is working.&lt;/em&gt;” if you set it up correctly.&lt;/p&gt;
+</description>
+        <pubDate>Wed, 09 Jan 2019 00:30:00 +0000</pubDate>
+        <link>https://emcorrales.com/blog/apache-setup-a-virtual-host-on-ubuntu</link>
+        <guid isPermaLink="true">https://emcorrales.com/blog/apache-setup-a-virtual-host-on-ubuntu</guid>
+        
+        <category>ubuntu</category>
+        
+        <category>linux</category>
+        
+        <category>apache</category>
+        
+        
+        <category>ubuntu,</category>
+        
+        <category>linux</category>
+        
+      </item>
+    
+      <item>
+        <title>Ruby on Rails: Capistrano for easy deployment and configuration to Ubuntu with Nginx and Puma</title>
+        <description>&lt;p&gt;Capistrano is a tool written in ruby to automate the deployment of multiple
+versions of an application. In this post I’ll demonstrate how to use Capistrano
+to deploy and configure a Rails app to an Ubuntu Server with Nginx and Puma.&lt;/p&gt;
+
+&lt;h3 id=&quot;table-of-contents&quot;&gt;Table of Contents&lt;/h3&gt;
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;#setup_ubuntu&quot;&gt;Setup the Ubuntu Server.&lt;/a&gt;
+    &lt;ul&gt;
+      &lt;li&gt;&lt;a href=&quot;#setup_ruby_on_rails&quot;&gt;Setup Ruby on Rails environment.&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#setup_ssh&quot;&gt;Setup SSH.&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#setup_capistrano&quot;&gt;Setup Capistrano.&lt;/a&gt;
+    &lt;ul&gt;
+      &lt;li&gt;&lt;a href=&quot;#capify_rails&quot;&gt;Capify the Rails app.&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#add_ror_tasks&quot;&gt;Add Ruby on Rails deployment tasks.&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#configure_puma&quot;&gt;Configure Puma.&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#configure_nginx&quot;&gt;Configure Nginx.&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#deploy&quot;&gt;Deploying the Rails app with Capistrano.&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;setup-the-ubuntu-server&quot;&gt;&lt;a name=&quot;setup_ubuntu&quot;&gt;&lt;/a&gt;Setup the Ubuntu Server&lt;/h2&gt;
+&lt;p&gt;Login to the server as &lt;strong&gt;root&lt;/strong&gt; user.&lt;/p&gt;
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;ssh root@example.emmanuelcorrales.com
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;Create a super user called &lt;strong&gt;deploy&lt;/strong&gt;.&lt;/p&gt;
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;useradd &lt;span class=&quot;nt&quot;&gt;-m&lt;/span&gt; deploy &lt;span class=&quot;nt&quot;&gt;-G&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;sudo&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;Login as &lt;strong&gt;deploy&lt;/strong&gt;.&lt;/p&gt;
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;su - deploy
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;Update Ubuntu then install Curl, Git and Nginx.&lt;/p&gt;
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;sudo &lt;/span&gt;apt-get update
+&lt;span class=&quot;nb&quot;&gt;sudo &lt;/span&gt;apt-get &lt;span class=&quot;nb&quot;&gt;install &lt;/span&gt;curl git-core nginx &lt;span class=&quot;nt&quot;&gt;-y&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;h3 id=&quot;setup-ruby-on-rails-environment&quot;&gt;&lt;a name=&quot;setup_ruby_on_rails&quot;&gt;&lt;/a&gt;Setup Ruby on Rails environment&lt;/h3&gt;
+&lt;p&gt;Install RVM.&lt;/p&gt;
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;gpg &lt;span class=&quot;nt&quot;&gt;--keyserver&lt;/span&gt; hkp://keys.gnupg.net &lt;span class=&quot;nt&quot;&gt;--recv-keys&lt;/span&gt; 409B6B1796C275462A1703113804BB82D39DC0E3
+curl &lt;span class=&quot;nt&quot;&gt;-sSL&lt;/span&gt; https://get.rvm.io | bash &lt;span class=&quot;nt&quot;&gt;-s&lt;/span&gt; stable
+&lt;span class=&quot;nb&quot;&gt;source&lt;/span&gt; /home/deploy/.rvm/scripts/rvm
+rvm requirements
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;Install Ruby via RVM.&lt;/p&gt;
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;rvm &lt;span class=&quot;nb&quot;&gt;install &lt;/span&gt;2.2.2
+rvm use 2.2.2 &lt;span class=&quot;nt&quot;&gt;--default&lt;/span&gt;
+ruby &lt;span class=&quot;nt&quot;&gt;--version&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;Install Rails and Bundler without docs to save space and nobody needs docs on
+the server.&lt;/p&gt;
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;deploy@server:~:&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;gem &lt;span class=&quot;nb&quot;&gt;install &lt;/span&gt;rails &lt;span class=&quot;nt&quot;&gt;-v&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'5.2.0'&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-V&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;--no-ri&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;--no-rdoc&lt;/span&gt;
+deploy@server:~:&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;gem &lt;span class=&quot;nb&quot;&gt;install &lt;/span&gt;bundler &lt;span class=&quot;nt&quot;&gt;-V&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;--no-ri&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;--no-rdoc&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;h3 id=&quot;setup-ssh&quot;&gt;&lt;a name=&quot;setup_ssh&quot;&gt;&lt;/a&gt;Setup SSH&lt;/h3&gt;
+
+&lt;p&gt;Create .ssh directory&lt;/p&gt;
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;deploy@server:~:&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;mkdir&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-m&lt;/span&gt; 700 .ssh
+deploy@server:~:&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;touch&lt;/span&gt; ~/.ssh/authorized_keys
+deploy@server:~:&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;chmod &lt;/span&gt;600 ~/.ssh/authorized_keys
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;Setup SSH access to the server. Create key pairs from your local machine.&lt;/p&gt;
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;ssh-keygen &lt;span class=&quot;nt&quot;&gt;-t&lt;/span&gt; rsa
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;This will generate two files &lt;strong&gt;~/.ssh/id_rsa&lt;/strong&gt; and &lt;strong&gt;~/.ssh/id_rsa.pub&lt;/strong&gt;. Copy
+ the public key &lt;strong&gt;~/.ssh/id_rsa&lt;/strong&gt; it to the server.&lt;/p&gt;
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;ssh-copy-id deploy@example.emmanuelcorrales.com
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;The server will also use the same public key to pull changes to the Rails from
+the repository. Add the newly created public key (~/.ssh/id_rsa.pub) to your
+repository’s deployment keys. If you are using Github you can find the
+instructions &lt;a href=&quot;https://developer.github.com/v3/guides/managing-deploy-keys/&quot;&gt;here&lt;/a&gt;.&lt;/p&gt;
+&lt;h2 id=&quot;setup-capistrano&quot;&gt;&lt;a name=&quot;setup_capistrano&quot;&gt;&lt;/a&gt;Setup Capistrano&lt;/h2&gt;
+&lt;h3 id=&quot;capify-the-rails-app&quot;&gt;&lt;a name=&quot;capify_rails&quot;&gt;&lt;/a&gt;“Capify” the Rails app&lt;/h3&gt;
+&lt;p&gt;Add this gem to your Gemfile.&lt;/p&gt;
+&lt;div class=&quot;language-ruby highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;group&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:development&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;gem&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'capistrano'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'~&amp;gt;3.10'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;require: &lt;/span&gt;&lt;span class=&quot;kp&quot;&gt;false&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;Then install it.&lt;/p&gt;
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;bundle &lt;span class=&quot;nb&quot;&gt;install&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;From your apps local root directory generate the necessary configuration files.&lt;/p&gt;
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;bundle &lt;span class=&quot;nb&quot;&gt;exec &lt;/span&gt;cap &lt;span class=&quot;nb&quot;&gt;install&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;This command will generate four files &lt;strong&gt;Capfile&lt;/strong&gt;, &lt;strong&gt;config/deploy.rb&lt;/strong&gt;
+&lt;strong&gt;config/deploy/staging.rb&lt;/strong&gt; and &lt;strong&gt;config/deploy/production.rb&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;p&gt;We want to deploy the Rails app called &lt;strong&gt;example.emmanuelcorrales.com&lt;/strong&gt; whose
+repository is hosted at &lt;strong&gt;git@github.com:EmmanuelCorrales/example.git&lt;/strong&gt;.
+Different verisons of the app would be stored at the
+&lt;strong&gt;/home/default/example.emmanuelcorrales.com&lt;/strong&gt; directory. Configure Capistrano
+to install it there by changing the contents of  &lt;strong&gt;config/deploy.rb&lt;/strong&gt; to look
+like the code below.&lt;/p&gt;
+&lt;div class=&quot;language-ruby highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;# config valid for current version and patch releases of Capistrano&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;lock&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;~&amp;gt; 3.11.0&quot;&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;set&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:application&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'example.emmanuelcorrales.com'&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;set&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:repo_url&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'git@github.com:EmmanuelCorrales/example.git'&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;# Deploy configurations&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;set&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:deploy_via&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;      &lt;span class=&quot;ss&quot;&gt;:remote_cache&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;set&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:deploy_to&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;       &lt;span class=&quot;s2&quot;&gt;&quot;/home/&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;#{&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;fetch&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:user&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;/apps/&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;#{&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;fetch&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:application&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;h3 id=&quot;add-ruby-on-rails-deployment-tasks&quot;&gt;&lt;a name=&quot;add_ror_tasks&quot;&gt;&lt;/a&gt;Add Ruby on Rails deployment tasks&lt;/h3&gt;
+&lt;p&gt;Add this gem to your Gemfile under the capistrano gem.&lt;/p&gt;
+&lt;div class=&quot;language-ruby highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;gem&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'capistrano-rails'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'~&amp;gt;1.4'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;require: &lt;/span&gt;&lt;span class=&quot;kp&quot;&gt;false&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;Then install it.&lt;/p&gt;
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;bundle &lt;span class=&quot;nb&quot;&gt;install&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;Edit the &lt;strong&gt;Capfile&lt;/strong&gt; to look like this:&lt;/p&gt;
+&lt;div class=&quot;language-conf highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;# Load DSL and set up stages
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;require&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;capistrano/setup&quot;&lt;/span&gt;
+
+&lt;span class=&quot;c&quot;&gt;# Include default deployment tasks
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;require&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;capistrano/deploy&quot;&lt;/span&gt;
+
+&lt;span class=&quot;c&quot;&gt;# Load the git SCM plugin appropriate to your project:
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;require&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;capistrano/scm/git&quot;&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;install_plugin&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Capistrano&lt;/span&gt;::&lt;span class=&quot;n&quot;&gt;SCM&lt;/span&gt;::&lt;span class=&quot;n&quot;&gt;Git&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;require&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;capistrano/rails&quot;&lt;/span&gt;
+
+&lt;span class=&quot;c&quot;&gt;# Load custom tasks from `lib/capistrano/tasks` if you have any defined
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Dir&lt;/span&gt;.&lt;span class=&quot;n&quot;&gt;glob&lt;/span&gt;(&lt;span class=&quot;s2&quot;&gt;&quot;lib/capistrano/tasks/*.rake&quot;&lt;/span&gt;).&lt;span class=&quot;n&quot;&gt;each&lt;/span&gt; { |&lt;span class=&quot;n&quot;&gt;r&lt;/span&gt;| &lt;span class=&quot;n&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;r&lt;/span&gt; }
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;Symlink Rails shared files and directories like log, tmp and public/uploads.
+Enable it by setting the &lt;strong&gt;linked_dirs&lt;/strong&gt; and &lt;strong&gt;linked_files&lt;/strong&gt; options at the
+&lt;strong&gt;deploy.rb&lt;/strong&gt;.&lt;/p&gt;
+&lt;div class=&quot;language-ruby highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;## Linked Files &amp;amp; Directories (Default None):&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;append&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:linked_dirs&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'log'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'tmp/pids'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'tmp/cache'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'tmp/sockets'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'vendor/bundle'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'.bundle'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'public/system'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'public/uploads'&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;append&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:linked_files&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'config/database.yml'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'config/secrets.yml'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'config/application.yml'&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;h3 id=&quot;configure-puma&quot;&gt;&lt;a name=&quot;configure_puma&quot;&gt;&lt;/a&gt;Configure Puma&lt;/h3&gt;
+&lt;p&gt;Add this gem to your Gemfile under the capistrano gem.&lt;/p&gt;
+&lt;div class=&quot;language-ruby highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;gem&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'capistrano3-puma'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;require: &lt;/span&gt;&lt;span class=&quot;kp&quot;&gt;false&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;Then install it.&lt;/p&gt;
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;bundle &lt;span class=&quot;nb&quot;&gt;install&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;Add these lines to your Capfile.&lt;/p&gt;
+&lt;div class=&quot;language-ruby highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;require&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'capistrano/puma'&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;install_plugin&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Capistrano&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;Puma&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;Add these lines to the &lt;strong&gt;config/deploy.rb&lt;/strong&gt;.&lt;/p&gt;
+&lt;div class=&quot;language-ruby highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;# Puma configurations&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;set&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:puma_threads&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;4&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;16&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;set&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:puma_workers&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;set&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:puma_bind&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;unix://&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;#{&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;shared_path&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;/tmp/sockets/&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;#{&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;fetch&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:application&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;-puma.sock&quot;&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;set&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:puma_state&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;#{&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;shared_path&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;/tmp/pids/puma.state&quot;&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;set&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:puma_pid&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;#{&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;shared_path&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;/tmp/pids/puma.pid&quot;&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;set&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:puma_access_log&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;#{&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;release_path&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;/log/puma.error.log&quot;&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;set&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:puma_error_log&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;#{&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;release_path&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;/log/puma.access.log&quot;&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;set&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:puma_preload_app&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;true&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;set&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:puma_worker_timeout&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;nil&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;set&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:puma_init_active_record&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;true&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;h3 id=&quot;configure-nginx&quot;&gt;&lt;a name=&quot;configure_nginx&quot;&gt;&lt;/a&gt;Configure Nginx&lt;/h3&gt;
+&lt;p&gt;Add this line to your Capfile below the line &lt;em&gt;install_plugin Capistrano::Puma&lt;/em&gt;.&lt;/p&gt;
+&lt;div class=&quot;language-ruby highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;install_plugin&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Capistrano&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;Puma&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;Add these lines to the &lt;strong&gt;config/deploy.rb&lt;/strong&gt;. These are the parameters for the
+Nginx configurations that will be uploaded to the server.&lt;/p&gt;
+&lt;div class=&quot;language-ruby highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;# Nginx configurations&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;set&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:nginx_config_name&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;#{&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;fetch&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:application&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;_&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;#{&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;fetch&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:stage&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;set&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:nginx_flags&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'fail_timeout=0'&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;set&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:nginx_http_flags&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;fetch&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:nginx_flags&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;set&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:nginx_server_name&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;localhost &lt;/span&gt;&lt;span class=&quot;si&quot;&gt;#{&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;fetch&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:application&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;.local&quot;&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;set&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:nginx_sites_available_path&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'/etc/nginx/sites-available'&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;set&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:nginx_sites_enabled_path&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'/etc/nginx/sites-enabled'&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;set&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:nginx_socket_flags&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;fetch&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:nginx_flags&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;set&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:nginx_ssl_certificate&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;/etc/ssl/certs/&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;#{&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;fetch&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:nginx_config_name&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;.crt&quot;&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;set&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:nginx_ssl_certificate_key&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;/etc/ssl/private/&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;#{&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;fetch&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:nginx_config_name&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;.key&quot;&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;set&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:nginx_use_ssl&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;false&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;Upload the nginx configuration to the server.&lt;/p&gt;
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;bundle &lt;span class=&quot;nb&quot;&gt;exec &lt;/span&gt;cap production puma_nginx:config
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;h2 id=&quot;deploying-the-rails-app-with-capistrano&quot;&gt;&lt;a name=&quot;deploy&quot;&gt;&lt;/a&gt;Deploying the Rails app with Capistrano&lt;/h2&gt;
+&lt;p&gt;Edit the contents of &lt;strong&gt;config/deploy/production.rb&lt;/strong&gt; to look like this:&lt;/p&gt;
+&lt;div class=&quot;language-ruby highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;server&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;example.emmanuelcorrales.com&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;user: &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;deploy&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;roles: &lt;/span&gt;&lt;span class=&quot;sx&quot;&gt;%w{web app db}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;Deploy to the server.&lt;/p&gt;
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;bundle &lt;span class=&quot;nb&quot;&gt;exec &lt;/span&gt;cap production deploy
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+</description>
+        <pubDate>Wed, 26 Sep 2018 00:30:00 +0000</pubDate>
+        <link>https://emcorrales.com/blog/deploy-rails-with-capistrano-nginx-puma-to-ubuntu</link>
+        <guid isPermaLink="true">https://emcorrales.com/blog/deploy-rails-with-capistrano-nginx-puma-to-ubuntu</guid>
+        
+        <category>rails</category>
+        
+        <category>ruby</category>
+        
+        <category>ubuntu</category>
+        
+        <category>capistrano</category>
+        
+        <category>puma</category>
+        
+        <category>nginx</category>
+        
+        
+        <category>rails</category>
+        
+        <category>ruby</category>
+        
+        <category>ubuntu</category>
+        
+        <category>capistrano</category>
+        
+        <category>puma</category>
+        
+        <category>nginx</category>
+        
+      </item>
+    
   </channel>
 </rss>
