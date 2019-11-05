@@ -29,9 +29,7 @@ Lets say I want to remove a Git submodule called **drafts**.
 git rm --cached drafts
 ```
 
-4. Remove submodule's git repo. The command above will move the **.git**
-directory of the submodule **drafts** to **.git/modules/drafts** to protect its
-history so we remove it as well.
+4. Remove the copy of the submodule's git repo.
 ```bash
 rm -rf .git/modules/drafts
 ```
