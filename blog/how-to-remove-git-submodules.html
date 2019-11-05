@@ -187,9 +187,7 @@ their repo. Here’s a simple guide on how to remove Git submodules.</p>
     <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git <span class="nb">rm</span> <span class="nt">--cached</span> drafts
 </code></pre></div>    </div>
   </li>
-  <li>Remove submodule’s git repo. The command above will move the <strong>.git</strong>
-directory of the submodule <strong>drafts</strong> to <strong>.git/modules/drafts</strong> to protect its
-history so we remove it as well.
+  <li>Remove the copy of the submodule’s git repo.
     <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">rm</span> <span class="nt">-rf</span> .git/modules/drafts
 </code></pre></div>    </div>
   </li>

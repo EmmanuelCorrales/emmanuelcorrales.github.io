@@ -5,8 +5,8 @@
     <description>I am Emmanuel Corrales, you may also call me Em. I've been in the technology industry for more than five years. I am currently working as a DevOps Consultant. I am also an experienced Software Engineer who is language agnostic. A jack of all trades guy. I'm a linux enthusiast and my favorite tool is the terminal. I code with it, work with it, live with it and will probably not survive without it. I am a big fan of open source and has always been trying to learn something new.</description>
     <link>https://emcorrales.com/</link>
     <atom:link href="https://emcorrales.com/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Tue, 05 Nov 2019 01:15:06 +0000</pubDate>
-    <lastBuildDate>Tue, 05 Nov 2019 01:15:06 +0000</lastBuildDate>
+    <pubDate>Tue, 05 Nov 2019 01:34:02 +0000</pubDate>
+    <lastBuildDate>Tue, 05 Nov 2019 01:34:02 +0000</lastBuildDate>
     <generator>Jekyll v3.8.5</generator>
     
       <item>
@@ -33,9 +33,7 @@ their repo. Here’s a simple guide on how to remove Git submodules.&lt;/p&gt;
     &lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;git &lt;span class=&quot;nb&quot;&gt;rm&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;--cached&lt;/span&gt; drafts
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
   &lt;/li&gt;
-  &lt;li&gt;Remove submodule’s git repo. The command above will move the &lt;strong&gt;.git&lt;/strong&gt;
-directory of the submodule &lt;strong&gt;drafts&lt;/strong&gt; to &lt;strong&gt;.git/modules/drafts&lt;/strong&gt; to protect its
-history so we remove it as well.
+  &lt;li&gt;Remove the copy of the submodule’s git repo.
     &lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;rm&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-rf&lt;/span&gt; .git/modules/drafts
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
   &lt;/li&gt;
