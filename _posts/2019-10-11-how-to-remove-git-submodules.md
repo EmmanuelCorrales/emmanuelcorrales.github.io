@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "How to remove Git submodules."
+title:  "How to remove Git submodules"
 date:   2019-10-11 08:30:00 +0800
 categories:  git
 tags: [ git ]
