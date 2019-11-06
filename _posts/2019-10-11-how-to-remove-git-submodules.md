@@ -60,5 +60,5 @@ git commit -m "Remove draft submodule.".
 ```bash
 rm -rf .git/modules/drafts
 ```
-There you have it, You have succesfully removed the submodule from your local
+There you have it, you have succesfully removed the submodule from your local
 git repo.
