@@ -20,43 +20,22 @@ git add .gitmodules
 ```
 3. Remove the submodule from the git index. Ensure that there is no trailing slash. We're deleting the reference to the submodule and not the directory.
 ```bash
-# Do it like this.
 git rm --cached drafts
-
-# Not like this.
-git rm --cached drafts/
 ```
-4. If you look at your repo's status, you'll see that the **drafts/** directory is now untracked.
-```bash
-$ git status
-On branch dev
-Your branch is up to date with 'origin/dev'.
-
-Changes to be committed:
-  (use "git reset HEAD <file>..." to unstage)
-
-        modified:   .gitmodules
-        deleted:    drafts
-
-Untracked files:
-  (use "git add <file>..." to include in what will be committed)
-
-        drafts/
-```
-5. Remove the untracked files left by the submodule.
+4. Remove the untracked files left by the submodule.
 ```bash
 rm -rf drafts
 ```
-6. Commit changes.
+5. Commit changes.
 ```bash
 git commit -m "Remove draft submodule.".
 ```
-7. There are still references to the drafts submodule. Edit **.git/config** and remove lines that are similar to the example below.
+6. There are still references to the drafts submodule. Edit **.git/config** and remove lines that are similar to the example below.
 ```bash
 [submodule "drafts"]
   url = git://github.com/emcorrales/drafts.git
 ```
-8. Remove the copy of the submodule's git repo.
+7. Remove the copy of the submodule's git repo.
 ```bash
 rm -rf .git/modules/drafts
 ```
