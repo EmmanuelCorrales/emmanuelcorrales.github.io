@@ -68,15 +68,15 @@
 <meta property="og:title" content="How to remove Git submodules" />
 <meta name="author" content="Emmanuel Corrales" />
 <meta property="og:locale" content="en_US" />
-<meta name="description" content="I decided to write this post because I’ve been getting a lot of tickets regarding pipelines not working due to improper removal of git submodule/s in their repo. Here’s a simple guide on how to remove Git submodules." />
-<meta property="og:description" content="I decided to write this post because I’ve been getting a lot of tickets regarding pipelines not working due to improper removal of git submodule/s in their repo. Here’s a simple guide on how to remove Git submodules." />
+<meta name="description" content="Here’s a simple guide on how to remove Git submodules. Lets say I want to remove a Git submodule called drafts." />
+<meta property="og:description" content="Here’s a simple guide on how to remove Git submodules. Lets say I want to remove a Git submodule called drafts." />
 <link rel="canonical" href="https://emcorrales.com/blog/how-to-remove-git-submodules" />
 <meta property="og:url" content="https://emcorrales.com/blog/how-to-remove-git-submodules" />
 <meta property="og:site_name" content="Emmanuel Corrales" />
 <meta property="og:type" content="article" />
 <meta property="article:published_time" content="2019-10-11T00:30:00+00:00" />
 <script type="application/ld+json">
-{"author":{"@type":"Person","name":"Emmanuel Corrales"},"description":"I decided to write this post because I’ve been getting a lot of tickets regarding pipelines not working due to improper removal of git submodule/s in their repo. Here’s a simple guide on how to remove Git submodules.","headline":"How to remove Git submodules","dateModified":"2019-10-11T00:30:00+00:00","datePublished":"2019-10-11T00:30:00+00:00","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://emcorrales.com/blog/how-to-remove-git-submodules"},"url":"https://emcorrales.com/blog/how-to-remove-git-submodules","@context":"http://schema.org"}</script>
+{"author":{"@type":"Person","name":"Emmanuel Corrales"},"description":"Here’s a simple guide on how to remove Git submodules. Lets say I want to remove a Git submodule called drafts.","headline":"How to remove Git submodules","dateModified":"2019-10-11T00:30:00+00:00","datePublished":"2019-10-11T00:30:00+00:00","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://emcorrales.com/blog/how-to-remove-git-submodules"},"url":"https://emcorrales.com/blog/how-to-remove-git-submodules","@context":"http://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
 
 </head>
@@ -165,11 +165,7 @@
   <h1 class="post-title">How to remove Git submodules</h1>
   <span class="post-date">11 Oct 2019</span>
   <br/>
-  <p>I decided to write this post because I’ve been getting a lot of tickets
-regarding pipelines not working due to improper removal of git submodule/s in
-their repo. Here’s a simple guide on how to remove Git submodules.</p>
-
-<p>Lets say I want to remove a Git submodule called <strong>drafts</strong>.</p>
+  <p>Here’s a simple guide on how to remove Git submodules. Lets say I want to remove a Git submodule called <strong>drafts</strong>.</p>
 
 <ol>
   <li>Edit <strong>.gitmodules</strong> to remove lines that are similar to the example below.
@@ -178,33 +174,57 @@ their repo. Here’s a simple guide on how to remove Git submodules.</p>
   url <span class="o">=</span> git://github.com/emcorrales/drafts.git
 </code></pre></div>    </div>
   </li>
-  <li>Edit <strong>.git/config</strong> and remove lines that are similar to the example below.
-    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">[</span>submodule <span class="s2">"drafts"</span><span class="o">]</span>
-  url <span class="o">=</span> git://github.com/emcorrales/drafts.git
+  <li>Stage the <strong>.gitmodules</strong> file.
+    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git add .gitmodules
 </code></pre></div>    </div>
   </li>
-  <li>Remove the submodule from the git index.
-    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git <span class="nb">rm</span> <span class="nt">--cached</span> drafts
+  <li>Remove the submodule from the git index. Ensure that there is no trailing slash. We’re deleting the reference to the submodule and not the directory.
+```bash
+    <h1 id="do-it-like-this">Do it like this.</h1>
+    <p>git rm –cached drafts</p>
+  </li>
+</ol>
+
+<h1 id="not-like-this">Not like this.</h1>
+<p>git rm –cached drafts/</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>4. If you look at your repo's status, you'll see that the **drafts/** directory is now untracked.
+```bash
+$ git status
+On branch dev
+Your branch is up to date with 'origin/dev'.
+
+Changes to be committed:
+  (use "git reset HEAD &lt;file&gt;..." to unstage)
+
+        modified:   .gitmodules
+        deleted:    drafts
+
+Untracked files:
+  (use "git add &lt;file&gt;..." to include in what will be committed)
+
+        drafts/
+</code></pre></div></div>
+<ol>
+  <li>Remove the untracked files left by the submodule.
+    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">rm</span> <span class="nt">-rf</span> drafts
+</code></pre></div>    </div>
+  </li>
+  <li>Commit changes.
+    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git commit <span class="nt">-m</span> <span class="s2">"Remove draft submodule."</span><span class="nb">.</span>
+</code></pre></div>    </div>
+  </li>
+  <li>There are still references to the drafts submodule. Edit <strong>.git/config</strong> and remove lines that are similar to the example below.
+    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">[</span>submodule <span class="s2">"drafts"</span><span class="o">]</span>
+  url <span class="o">=</span> git://github.com/emcorrales/drafts.git
 </code></pre></div>    </div>
   </li>
   <li>Remove the copy of the submodule’s git repo.
     <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">rm</span> <span class="nt">-rf</span> .git/modules/drafts
 </code></pre></div>    </div>
-  </li>
-  <li>Remove submodule directory because git sees ./drafts as a new directory
-instead of a submodule.
-    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">rm</span> <span class="nt">-rf</span> drafts
-</code></pre></div>    </div>
-  </li>
-  <li>Commit changes then push.
-    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git add <span class="nb">.</span>
-git push origin master
-</code></pre></div>    </div>
+    <p>There you have it, you have succesfully removed the submodule from your local
+git repo.</p>
   </li>
 </ol>
-
-<p>There you have it, You have succesfully removed the submodule from your local
-git repo.</p>
 
 </div>
 
