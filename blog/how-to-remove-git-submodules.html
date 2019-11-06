@@ -179,32 +179,9 @@
 </code></pre></div>    </div>
   </li>
   <li>Remove the submodule from the git index. Ensure that there is no trailing slash. We’re deleting the reference to the submodule and not the directory.
-```bash
-    <h1 id="do-it-like-this">Do it like this.</h1>
-    <p>git rm –cached drafts</p>
+    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git <span class="nb">rm</span> <span class="nt">--cached</span> drafts
+</code></pre></div>    </div>
   </li>
-</ol>
-
-<h1 id="not-like-this">Not like this.</h1>
-<p>git rm –cached drafts/</p>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>4. If you look at your repo's status, you'll see that the **drafts/** directory is now untracked.
-```bash
-$ git status
-On branch dev
-Your branch is up to date with 'origin/dev'.
-
-Changes to be committed:
-  (use "git reset HEAD &lt;file&gt;..." to unstage)
-
-        modified:   .gitmodules
-        deleted:    drafts
-
-Untracked files:
-  (use "git add &lt;file&gt;..." to include in what will be committed)
-
-        drafts/
-</code></pre></div></div>
-<ol>
   <li>Remove the untracked files left by the submodule.
     <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">rm</span> <span class="nt">-rf</span> drafts
 </code></pre></div>    </div>
